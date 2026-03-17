@@ -1,0 +1,6 @@
+@BGS.Backend_HostAddress = http://localhost:5235
+
+GET {{BGS.Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
