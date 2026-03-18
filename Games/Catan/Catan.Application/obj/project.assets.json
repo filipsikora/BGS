@@ -1,11 +1,102 @@
 {
   "version": 3,
   "targets": {
-    "net9.0": {}
+    "net9.0": {
+      "QuikGraph/2.5.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/QuikGraph.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/QuikGraph.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "BGS.GameAbstractions/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/BGS.GameAbstractions.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BGS.GameAbstractions.dll": {}
+        }
+      },
+      "Catan.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "Catan.Shared": "1.0.0",
+          "QuikGraph": "2.5.0"
+        },
+        "compile": {
+          "bin/placeholder/Catan.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Catan.Core.dll": {}
+        }
+      },
+      "Catan.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Catan.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Catan.Shared.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "QuikGraph/2.5.0": {
+      "sha512": "sG+mrPpXwxlXknRK5VqWUGiOmDACa9X+3ftlkQIMgOZUqxVOQSe0+HIU9PTjwqazy0pqSf8MPDXYFGl0GYWcKw==",
+      "type": "package",
+      "path": "quikgraph/2.5.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "lib/net35/QuikGraph.dll",
+        "lib/net35/QuikGraph.xml",
+        "lib/net40/QuikGraph.dll",
+        "lib/net40/QuikGraph.xml",
+        "lib/net45/QuikGraph.dll",
+        "lib/net45/QuikGraph.xml",
+        "lib/netstandard1.3/QuikGraph.dll",
+        "lib/netstandard1.3/QuikGraph.xml",
+        "lib/netstandard2.0/QuikGraph.dll",
+        "lib/netstandard2.0/QuikGraph.xml",
+        "quikgraph.2.5.0.nupkg.sha512",
+        "quikgraph.nuspec",
+        "quikgraph_logo.png"
+      ]
+    },
+    "BGS.GameAbstractions/1.0.0": {
+      "type": "project",
+      "path": "../../../GameAbstractions/BGS.GameAbstractions/BGS.GameAbstractions.csproj",
+      "msbuildProject": "../../../GameAbstractions/BGS.GameAbstractions/BGS.GameAbstractions.csproj"
+    },
+    "Catan.Core/1.0.0": {
+      "type": "project",
+      "path": "../Catan.Core/Catan.Core.csproj",
+      "msbuildProject": "../Catan.Core/Catan.Core.csproj"
+    },
+    "Catan.Shared/1.0.0": {
+      "type": "project",
+      "path": "../Catan.Shared/Catan.Shared.csproj",
+      "msbuildProject": "../Catan.Shared/Catan.Shared.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net9.0": []
+    "net9.0": [
+      "BGS.GameAbstractions >= 1.0.0",
+      "Catan.Core >= 1.0.0",
+      "Catan.Shared >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\borgw\\.nuget\\packages\\": {}
@@ -33,7 +124,17 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\borgw\\source\\repos\\BGS\\GameAbstractions\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj": {
+              "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\GameAbstractions\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj"
+            },
+            "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Core\\Catan.Core.csproj": {
+              "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Core\\Catan.Core.csproj"
+            },
+            "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Shared\\Catan.Shared.csproj": {
+              "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Shared\\Catan.Shared.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

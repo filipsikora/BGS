@@ -4,6 +4,10 @@
     <ProjectReference Include="..\Catan.Shared\Catan.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="QuikGraph" Version="2.5.0" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
