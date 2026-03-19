@@ -1,25 +1,44 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using BGS.GameAbstractions.Interfaces;
-using Catan.Shared.Commands;
+using BGS.Backend.GameManagement;
 
 namespace BGS.Backend.Controllers
 {
     [ApiController]
-    [Route("game")]
-
+    [Route("api/[controller]")]
     public class GameController : ControllerBase
     {
-        private readonly IGameInstance _game;
+        private readonly IGameManager _gameManager;
 
-        public GameController(IGameInstance game)
+        public GameController(IGameManager gameManager)
         {
-            _game = game;
+            _gameManager = gameManager;
         }
 
-        [HttpGet("test")]
-        public object Start()
+        [HttpPost]
+        public IActionResult CreateGame()
         {
-            return _game.Execute(new StartGameCommand());
+            var gameId = _gameManager.CreateGame();
+
+            return Ok(new { gameId });
+        }
+
+        [HttpPost("{gameId}/commands")]
+        public IActionResult Execute(Guid gameId, [FromBody] object request)
+        {
+            if (!_gameManager.TryGetGame(gameId, out var game))
+                return NotFound();
+
+            var result = game.Execute(request);
+
+            return Ok(result);
+        }
+
+        [HttpGet("allGames")]
+        public IActionResult GetAllGamesIds()
+        {
+            var ids = _gameManager.GetAllGamesIds();
+
+            return Ok(ids);
         }
     }
 }
