@@ -10,10 +10,10 @@ namespace Catan.Shared.Commands
 
     public class CardSelectionAcceptedCommand : ICommand { }
 
-    public class DevelopmentCardClickedPlayed : ICommand
+    public class DevelopmentCardClickedPlayedCommand : ICommand
     {
         public int DevelopmentCardId;
-        public DevelopmentCardClickedPlayed(int devCardId)
+        public DevelopmentCardClickedPlayedCommand(int devCardId)
         {
             DevelopmentCardId = devCardId;
         }

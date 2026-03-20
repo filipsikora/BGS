@@ -6,6 +6,7 @@ namespace Catan.Application;
 public class CatanGameInstance : IGameInstance
 {
     private readonly GameApplication _gameApplication;
+    private readonly object _lock = new();
 
     public CatanGameInstance(GameApplication gameApplication)
     {
@@ -14,6 +15,9 @@ public class CatanGameInstance : IGameInstance
 
     public object Execute(object command)
     {
-        return _gameApplication.Execute((ICommand)command);
+        lock (_lock)
+        {
+            return _gameApplication.Execute((ICommand)command);
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace Catan.Application.Phases
         {
             switch (command)
             {
-                case DevelopmentCardClickedPlayed c:
+                case DevelopmentCardClickedPlayedCommand c:
                     return HandlePlayDevCard(c);
 
                 case DevelopmentCardsCanceledCommand c:
@@ -24,7 +24,7 @@ namespace Catan.Application.Phases
             }
         }
 
-        private GameResult HandlePlayDevCard(DevelopmentCardClickedPlayed signal)
+        private GameResult HandlePlayDevCard(DevelopmentCardClickedPlayedCommand signal)
         {
             var result = Facade.UseDevCard(signal.DevelopmentCardId);
             var playerId = Facade.GetCurrentPlayerId();

@@ -5,19 +5,19 @@ namespace Catan.Shared.Commands
 {
     public class BankTradeCanceledCommand : ICommand { }
 
-    public class BankTradeOfferedResourceSelected : ICommand
+    public class BankTradeOfferedResourceSelectedCommand : ICommand
     {
-        public EnumResourceTypes Type;
-        public BankTradeOfferedResourceSelected(EnumResourceTypes type)
+        public EnumResourceTypes Type { get; }
+        public BankTradeOfferedResourceSelectedCommand(EnumResourceTypes type)
         {
             Type = type;
         }
     }
 
-    public class BankTradeDesiredResourceSelected : ICommand
+    public class BankTradeDesiredResourceSelectedCommand : ICommand
     {
-        public EnumResourceTypes? Type;
-        public BankTradeDesiredResourceSelected(EnumResourceTypes? type)
+        public EnumResourceTypes? Type { get; }
+        public BankTradeDesiredResourceSelectedCommand(EnumResourceTypes? type)
         {
             Type = type;
         }

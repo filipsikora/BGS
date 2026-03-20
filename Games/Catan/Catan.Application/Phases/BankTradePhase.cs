@@ -15,13 +15,13 @@ namespace Catan.Application.Phases
         {
             switch (command)
             {
-                case BankTradeOfferedResourceSelected c:
+                case BankTradeOfferedResourceSelectedCommand c:
                     return HandleOfferedResourceSelected(c);
 
                 case BankTradeCanceledCommand c:
                     return GameResult.Ok(EnumGamePhases.NormalRound);
 
-                case BankTradeDesiredResourceSelected c:
+                case BankTradeDesiredResourceSelectedCommand c:
                     return HandleBankTrade(c);
 
                 default:
@@ -29,7 +29,7 @@ namespace Catan.Application.Phases
             }
         }
 
-        private GameResult HandleOfferedResourceSelected(BankTradeOfferedResourceSelected signal)
+        private GameResult HandleOfferedResourceSelected(BankTradeOfferedResourceSelectedCommand signal)
         {
             _offered = signal.Type;
             var ratio = Facade.GetCurrentPlayerTradeRatio(signal.Type);
@@ -40,7 +40,7 @@ namespace Catan.Application.Phases
             return GameResult.Ok().AddUIMessage(new BankTradeRatioChangedMessage(ratio, possibleForPlayer, _offered));
         }
 
-        private GameResult HandleBankTrade(BankTradeDesiredResourceSelected signal)
+        private GameResult HandleBankTrade(BankTradeDesiredResourceSelectedCommand signal)
         {
             var desired = signal.Type;
 

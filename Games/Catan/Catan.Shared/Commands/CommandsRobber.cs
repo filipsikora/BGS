@@ -16,7 +16,7 @@ namespace Catan.Shared.Commands
 
     public class StolenCardSelectedCommand : ICommand
     {
-        public EnumResourceTypes Type;
+        public EnumResourceTypes Type { get; }
         public StolenCardSelectedCommand(EnumResourceTypes type)
         {
             Type = type;

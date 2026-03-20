@@ -5,7 +5,7 @@ namespace Catan.Shared.Commands
 {
     public class ResourceCardSelectedCommand : ICommand
     {
-        public EnumResourceTypes Type;
+        public EnumResourceTypes Type { get; }
         public bool IsSelected { get; }
         public ResourceCardSelectedCommand(bool isSelected, EnumResourceTypes type)
         {
