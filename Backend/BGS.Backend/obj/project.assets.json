@@ -146,6 +146,21 @@
           "bin/placeholder/Catan.Application.dll": {}
         }
       },
+      "Catan.Backend/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "Catan.Application": "1.0.0",
+          "Catan.Core": "1.0.0",
+          "Catan.Shared": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Catan.Backend.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Catan.Backend.dll": {}
+        }
+      },
       "Catan.Core/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
@@ -558,6 +573,11 @@
       "path": "../../Games/Catan/Catan.Application/Catan.Application.csproj",
       "msbuildProject": "../../Games/Catan/Catan.Application/Catan.Application.csproj"
     },
+    "Catan.Backend/1.0.0": {
+      "type": "project",
+      "path": "../../Catan.Backend/Catan.Backend.csproj",
+      "msbuildProject": "../../Catan.Backend/Catan.Backend.csproj"
+    },
     "Catan.Core/1.0.0": {
       "type": "project",
       "path": "../../Games/Catan/Catan.Core/Catan.Core.csproj",
@@ -572,9 +592,7 @@
   "projectFileDependencyGroups": {
     "net9.0": [
       "BGS.GameAbstractions >= 1.0.0",
-      "Catan.Application >= 1.0.0",
-      "Catan.Core >= 1.0.0",
-      "Catan.Shared >= 1.0.0",
+      "Catan.Backend >= 1.0.0",
       "Microsoft.AspNetCore.OpenApi >= 9.0.12",
       "Swashbuckle.AspNetCore >= 6.5.0"
     ]
@@ -606,17 +624,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
+            "C:\\Users\\borgw\\source\\repos\\BGS\\Catan.Backend\\Catan.Backend.csproj": {
+              "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Catan.Backend\\Catan.Backend.csproj"
+            },
             "C:\\Users\\borgw\\source\\repos\\BGS\\GameAbstractions\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj": {
               "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\GameAbstractions\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj"
-            },
-            "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Application\\Catan.Application.csproj": {
-              "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Application\\Catan.Application.csproj"
-            },
-            "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Core\\Catan.Core.csproj": {
-              "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Core\\Catan.Core.csproj"
-            },
-            "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Shared\\Catan.Shared.csproj": {
-              "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Shared\\Catan.Shared.csproj"
             }
           }
         }

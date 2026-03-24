@@ -1,7 +1,7 @@
 ﻿using BGS.GameAbstractions.Interfaces;
 using System.Collections.Concurrent;
 
-namespace BGS.Backend.GameManagement
+namespace BGS.Backend
 {
     public class GameManager : IGameManager
     {

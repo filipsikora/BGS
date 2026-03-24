@@ -1,8 +1,15 @@
-using BGS.Backend.GameManagement;
+using BGS.Backend;
+using BGS.GameAbstractions.Interfaces;
+using Catan.Backend.GameManagement;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddSingleton<IGameFactory, CatanGameFactory>();
 builder.Services.AddSingleton<IGameManager, GameManager>();

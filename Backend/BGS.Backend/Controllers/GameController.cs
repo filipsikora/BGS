@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using BGS.Backend.GameManagement;
+using BGS.GameAbstractions.Interfaces;
+using Catan.Backend.Models;
 
 namespace BGS.Backend.Controllers
 {
@@ -23,14 +24,25 @@ namespace BGS.Backend.Controllers
         }
 
         [HttpPost("{gameId}/commands")]
-        public IActionResult Execute(Guid gameId, [FromBody] object request)
+        public IActionResult Execute(Guid gameId, [FromBody] CommandRequestDto request)
         {
             if (!_gameManager.TryGetGame(gameId, out var game))
                 return NotFound();
 
-            var result = game.Execute(request);
+            try
+            {
+                var result = game.Execute(request);
+                return Ok(result);
+            }
 
-            return Ok(result);
+            catch (BadRequestException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Internal server error" });
+            }
         }
 
         [HttpGet("allGames")]
