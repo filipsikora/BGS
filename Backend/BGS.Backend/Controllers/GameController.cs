@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BGS.GameAbstractions.Interfaces;
 using Catan.Backend.Models;
+using Catan.Shared;
 
 namespace BGS.Backend.Controllers
 {
@@ -23,11 +24,14 @@ namespace BGS.Backend.Controllers
             return Ok(new { gameId });
         }
 
-        [HttpPost("{gameId}/commands")]
+        [HttpPost("{gameId}/command")]
         public IActionResult Execute(Guid gameId, [FromBody] CommandRequestDto request)
         {
             if (!_gameManager.TryGetGame(gameId, out var game))
                 return NotFound();
+
+            if (request == null)
+                return BadRequest("Request body is missing");
 
             try
             {
