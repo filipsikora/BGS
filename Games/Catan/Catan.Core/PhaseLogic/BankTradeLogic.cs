@@ -8,7 +8,7 @@ namespace Catan.Core.PhaseLogic
     {
         public BankTradeLogic(GameSession session) : base(session) { }
 
-        public ResultBankTrade Handle(EnumResourceTypes offered, EnumResourceTypes desired)
+        public ResultBankTrade Handle(EnumResourceType offered, EnumResourceType desired)
         {
             var player = Session.GetCurrentPlayer();
             var ratio = Session.GetCurrentPlayerTradeRatio(offered);

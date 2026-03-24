@@ -5,8 +5,8 @@ namespace Catan.Core.Snapshots
 {
     public sealed class PlayerResourcesSnapshot
     {
-        public Dictionary<EnumResourceTypes, int> PlayerResources;
-        public PlayerResourcesSnapshot(Dictionary<EnumResourceTypes, int> playerResources)
+        public Dictionary<EnumResourceType, int> PlayerResources;
+        public PlayerResourcesSnapshot(Dictionary<EnumResourceType, int> playerResources)
         {
             PlayerResources = playerResources;
         }

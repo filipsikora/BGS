@@ -34,10 +34,10 @@ namespace Catan.Application.Controllers
         public EnumGamePhases GetNextPhaseFromAfterRoll() => _session.GetNextPhaseFromAfterRoll();
         public EnumGamePhases? GetNextPhaseAfterDiscarding() => _session.GetNextPhaseAfterDiscarding();
 
-        public int GetCurrentPlayerTradeRatio(EnumResourceTypes resource) => _session.GetCurrentPlayerTradeRatio(resource);
+        public int GetCurrentPlayerTradeRatio(EnumResourceType resource) => _session.GetCurrentPlayerTradeRatio(resource);
         public bool PlayerHasEnoughResources(int playerAmount, int neededAmount) => _session.PlayerHasEnoughResources(playerAmount, neededAmount);
         public int GetCurrentPlayersRoadsLeft() => _session.GetCurrentPlayersRoadsLeft();
-        public int GetCurrentPlayerResourceAmount(EnumResourceTypes resource) => _session.GetCurrentPlayerResourceAmount(resource);
+        public int GetCurrentPlayerResourceAmount(EnumResourceType resource) => _session.GetCurrentPlayerResourceAmount(resource);
         public int GetCurrentPlayerId() => _session.GetCurrentPlayerId();
 
         public List<int> GetAdjacentToHexPlayersIds(int hexId) => _session.GetAdjacentToHexPlayersIds(hexId);
@@ -64,12 +64,12 @@ namespace Catan.Application.Controllers
 
         // use cases//
 
-        public ResultBankTrade UseBankTrade(EnumResourceTypes offered, EnumResourceTypes desired) => _session.UseBankTrade(offered, desired);
+        public ResultBankTrade UseBankTrade(EnumResourceType offered, EnumResourceType desired) => _session.UseBankTrade(offered, desired);
         public ResultBlockHex UseBlockHex(int hexId) => _session.UseBlockHex(hexId);
         public ResultCondition UseSelectVictim(int victimId) => _session.UseSelectVictim(victimId);
         public ResultRollDice UseRollDice() => _session.UseRollDice();
         public ResultCondition UseDiscard(int discardingPlayerId, ResourceCostOrStock resourcesSelected) => _session.UseDiscard(discardingPlayerId, resourcesSelected);
-        public ResultStealResource UseSteal(int victimId, EnumResourceTypes resource) => _session.UseSteal(victimId, resource);
+        public ResultStealResource UseSteal(int victimId, EnumResourceType resource) => _session.UseSteal(victimId, resource);
         public ResultPlayDevCard UseDevCard(int cardId) => _session.UseDevCard(cardId);
         public ResultBuildInitialRoad UseBuildInitialRoad(int edgeId, int vertexId) => _session.UseBuildInitialRoad(edgeId, vertexId);
         public ResultBuildInitialVillage UseBuildInitialVillage(int vertexId) => _session.UseBuildInitialVillage(vertexId);
@@ -77,7 +77,7 @@ namespace Catan.Application.Controllers
         public ResultBuildVillage UseBuildVillage(int vertexId) => _session.UseBuildVillage(vertexId);
         public ResultBuildFreeRoad UseBuildFreeRoad(int edgeId) => _session.UseBuildFreeRoad(edgeId);
         public ResultFinishTurn UseFinishTurn() => _session.UseFinishTurn();
-        public ResultMonopolyCard UseMonopolyCard(EnumResourceTypes resource) => _session.UseMonopolyCard(resource);
+        public ResultMonopolyCard UseMonopolyCard(EnumResourceType resource) => _session.UseMonopolyCard(resource);
         public ResultBuyDevCard UseBuyDevCard() => _session.UseBuyDevCard();
         public ResultUpgradeVillage UseUpgradeVillage(int vertexId) => _session.UseUpgradeVillage(vertexId);
         public ResultCondition UsePrepareTrade(ResourceCostOrStock offered) => _session.UsePrepareTrade(offered);

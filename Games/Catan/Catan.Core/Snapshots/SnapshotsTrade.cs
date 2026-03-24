@@ -9,11 +9,11 @@ namespace Catan.Core.Snapshots
         public int BuyerId { get; }
         public string SellerName { get; }
         public string BuyerName { get; }
-        public Dictionary<EnumResourceTypes, int> Offered { get; }
-        public Dictionary<EnumResourceTypes, int> Desired { get; }
+        public Dictionary<EnumResourceType, int> Offered { get; }
+        public Dictionary<EnumResourceType, int> Desired { get; }
         public bool CanTrade { get; }
 
-        public TradeOfferedSnapshot(int sellerId, int buyerId, string sellerName, string buyerName, Dictionary<EnumResourceTypes, int> offered, Dictionary<EnumResourceTypes, int> desired, bool canTrade)
+        public TradeOfferedSnapshot(int sellerId, int buyerId, string sellerName, string buyerName, Dictionary<EnumResourceType, int> offered, Dictionary<EnumResourceType, int> desired, bool canTrade)
         {
             SellerId = sellerId;
             BuyerId = buyerId;

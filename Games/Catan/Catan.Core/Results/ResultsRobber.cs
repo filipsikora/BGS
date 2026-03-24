@@ -11,9 +11,9 @@ namespace Catan.Core.Results
 
         public int ThiefId { get; }
         public int VictimId { get; }
-        public EnumResourceTypes Resource { get; }
+        public EnumResourceType Resource { get; }
 
-        private ResultStealResource(bool success, ConditionFailureReason reason, int thiefId, int victimId, EnumResourceTypes resource, EnumGamePhases? nextPhase) :
+        private ResultStealResource(bool success, ConditionFailureReason reason, int thiefId, int victimId, EnumResourceType resource, EnumGamePhases? nextPhase) :
             base(success, nextPhase)
         {
             Reason = reason;
@@ -22,7 +22,7 @@ namespace Catan.Core.Results
             Resource = resource;
         }
 
-        public static ResultStealResource Ok(int thiefId, int victimId, EnumResourceTypes resource, EnumGamePhases nextPhase)
+        public static ResultStealResource Ok(int thiefId, int victimId, EnumResourceType resource, EnumGamePhases nextPhase)
         {
             return new ResultStealResource(true, ConditionFailureReason.None, thiefId, victimId, resource, nextPhase);
         }

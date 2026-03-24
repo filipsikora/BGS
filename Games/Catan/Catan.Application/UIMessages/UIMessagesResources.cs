@@ -5,9 +5,9 @@ namespace Catan.Application.UIMessages
 {
     public sealed class ResourceSelectedMessage : IUIMessages
     {
-        public EnumResourceTypes? Type { get; }
+        public EnumResourceType? Type { get; }
         public bool Selected { get; }
-        public ResourceSelectedMessage(bool selected, EnumResourceTypes type)
+        public ResourceSelectedMessage(bool selected, EnumResourceType type)
         {
             Type = type;
             Selected = selected;

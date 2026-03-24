@@ -298,7 +298,7 @@ namespace Catan.Core.Engine
 
             int index = 0;
 
-            foreach (EnumResourceTypes type in Enum.GetValues(typeof(EnumResourceTypes)))
+            foreach (EnumResourceType type in Enum.GetValues(typeof(EnumResourceType)))
             {
                 Port port = CreatePort(index);
                 port.Type = type;

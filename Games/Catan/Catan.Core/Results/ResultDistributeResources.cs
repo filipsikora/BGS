@@ -6,10 +6,10 @@ namespace Catan.Core.Results
     {
         public int PlayerId { get; }
         public string PlayerName { get; }
-        public EnumResourceTypes Type { get; }
+        public EnumResourceType Type { get; }
         public int Requested { get; }
         public int Granted { get; }
-        public ResultDistributeResources(int playerId, string playerName, EnumResourceTypes type, int requested, int granted)
+        public ResultDistributeResources(int playerId, string playerName, EnumResourceType type, int requested, int granted)
         {
             PlayerId = playerId;
             PlayerName = playerName;

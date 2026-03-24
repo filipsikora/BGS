@@ -8,7 +8,7 @@ namespace Catan.Core.PhaseLogic
     {
         public UseMonopolyLogic(GameSession session) : base(session) { }
 
-        public ResultMonopolyCard Handle(EnumResourceTypes resource)
+        public ResultMonopolyCard Handle(EnumResourceType resource)
         {
             var player = Session.GetCurrentPlayer();
 

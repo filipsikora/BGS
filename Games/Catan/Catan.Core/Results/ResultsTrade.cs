@@ -8,11 +8,11 @@ namespace Catan.Core.Results
         public ConditionFailureReason Reason { get; }
 
         public int PlayerId { get; }
-        public EnumResourceTypes Offered { get; }
-        public EnumResourceTypes Desired { get; }
+        public EnumResourceType Offered { get; }
+        public EnumResourceType Desired { get; }
         public int Ratio { get; }
 
-        private ResultBankTrade(bool success, ConditionFailureReason reason, int playerId, EnumResourceTypes offered, EnumResourceTypes desired, int ratio, EnumGamePhases? nextPhase) : 
+        private ResultBankTrade(bool success, ConditionFailureReason reason, int playerId, EnumResourceType offered, EnumResourceType desired, int ratio, EnumGamePhases? nextPhase) : 
             base(success, nextPhase)
         {
             Reason = reason;
@@ -28,7 +28,7 @@ namespace Catan.Core.Results
             return new ResultBankTrade(false, reason, playerId, default, default, 0, null);
         }
 
-        public static ResultBankTrade Ok(int playerId, EnumResourceTypes offered, EnumResourceTypes desired, int ratio, EnumGamePhases nextPhase)
+        public static ResultBankTrade Ok(int playerId, EnumResourceType offered, EnumResourceType desired, int ratio, EnumGamePhases nextPhase)
         {
             return new ResultBankTrade(true, ConditionFailureReason.None, playerId, offered, desired, ratio, nextPhase);
         }

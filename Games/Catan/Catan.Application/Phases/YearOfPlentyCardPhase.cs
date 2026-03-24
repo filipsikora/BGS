@@ -30,7 +30,7 @@ namespace Catan.Application.Phases
 
         private GameResult HandleResourceCardClicked(ResourceCardSelectedCommand signal)
         {
-            EnumResourceTypes type = signal.Type;
+            EnumResourceType type = signal.Type;
 
             if (!signal.IsSelected)
             {

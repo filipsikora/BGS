@@ -1,6 +1,5 @@
 ﻿#nullable enable
 using Catan.Shared.Data;
-using System;
 using System.Diagnostics;
 
 namespace Catan.Shared.Models
@@ -9,26 +8,26 @@ namespace Catan.Shared.Models
     {
         public ResourceCostOrStock(int Wheat = 0, int Wood = 0, int Wool = 0, int Stone = 0, int Clay = 0)
         {
-            ResourceDictionary = new Dictionary<EnumResourceTypes, int>()
+            ResourceDictionary = new Dictionary<EnumResourceType, int>()
             {
-                { EnumResourceTypes.Wheat, Wheat },
-                { EnumResourceTypes.Wood, Wood },
-                { EnumResourceTypes.Wool, Wool },
-                { EnumResourceTypes.Stone, Stone },
-                { EnumResourceTypes.Clay, Clay }
+                { EnumResourceType.Wheat, Wheat },
+                { EnumResourceType.Wood, Wood },
+                { EnumResourceType.Wool, Wool },
+                { EnumResourceType.Stone, Stone },
+                { EnumResourceType.Clay, Clay }
             };
         }
 
-        public Dictionary<EnumResourceTypes, int> ResourceDictionary { get; }
+        public Dictionary<EnumResourceType, int> ResourceDictionary { get; }
 
         public string? Name { get; set; } = null;
 
-        public int Get(EnumResourceTypes type)
+        public int Get(EnumResourceType type)
         {
             return ResourceDictionary.TryGetValue(type, out var v) ? v : 0;
         }
 
-        public void Set(EnumResourceTypes resource, int amount)
+        public void Set(EnumResourceType resource, int amount)
         {
             if (amount < 0)
             {
@@ -38,7 +37,7 @@ namespace Catan.Shared.Models
             ResourceDictionary[resource] = amount;
         }
 
-        public int SubtractUpTo(EnumResourceTypes type, int amountWanted)
+        public int SubtractUpTo(EnumResourceType type, int amountWanted)
         {
             if (amountWanted < 0)
                 return (0);
@@ -51,7 +50,7 @@ namespace Catan.Shared.Models
             return actualAmount;
         }
 
-        public void AddExactAmount(EnumResourceTypes type, int amount)
+        public void AddExactAmount(EnumResourceType type, int amount)
         {
             if (amount < 0)
                 return;
@@ -59,7 +58,7 @@ namespace Catan.Shared.Models
             ResourceDictionary[type] += amount;
         }
 
-        public void SubtractExactAmount(EnumResourceTypes type, int amount)
+        public void SubtractExactAmount(EnumResourceType type, int amount)
         {
             if (amount < 0)
                 return;
@@ -99,7 +98,7 @@ namespace Catan.Shared.Models
         {
             foreach (var entry in other.ResourceDictionary)
             {
-                EnumResourceTypes type = entry.Key;
+                EnumResourceType type = entry.Key;
                 int required = entry.Value;
 
                 if (required <= 0)
@@ -139,9 +138,9 @@ namespace Catan.Shared.Models
             return ResourceDictionary.Values.Sum();
         }
 
-        public Dictionary<EnumResourceTypes, int> ToDictionary()
+        public Dictionary<EnumResourceType, int> ToDictionary()
         {
-            var toDictionary = new Dictionary<EnumResourceTypes, int>();
+            var toDictionary = new Dictionary<EnumResourceType, int>();
 
             foreach (var (key, value) in ResourceDictionary)
             {

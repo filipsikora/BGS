@@ -68,9 +68,9 @@ namespace Catan.Core.Snapshots
     public sealed class PortSnapshot
     {
         public int EdgeId;
-        public EnumResourceTypes? Type;
+        public EnumResourceType? Type;
 
-        public PortSnapshot(int edgeId, EnumResourceTypes? type)
+        public PortSnapshot(int edgeId, EnumResourceType? type)
         {
             EdgeId = edgeId;
             Type = type;

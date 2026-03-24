@@ -9,7 +9,7 @@ namespace Catan.Core.Conditions
 {
     public static class ConditionsTrade
     {
-        public static ResultCondition PlayerHasEnoughResources(Player player, EnumResourceTypes type, int amount)
+        public static ResultCondition PlayerHasEnoughResources(Player player, EnumResourceType type, int amount)
         {
             if (player.Resources.Get(type) < amount)
             {
@@ -27,7 +27,7 @@ namespace Catan.Core.Conditions
             return ResultCondition.Fail(ConditionFailureReason.NotEnoughResources);
         }
 
-        public static ResultCondition BankHasEnoughResources(ResourceCostOrStock bank, EnumResourceTypes type)
+        public static ResultCondition BankHasEnoughResources(ResourceCostOrStock bank, EnumResourceType type)
         {
             if (bank.Get(type) < 1)
             {

@@ -13,7 +13,7 @@ namespace Catan.Core.Models
 
         public Edge Edge;
 
-        public EnumResourceTypes? Type;
+        public EnumResourceType? Type;
 
         public Port(Vertex a, Vertex b, Edge edge)
         {

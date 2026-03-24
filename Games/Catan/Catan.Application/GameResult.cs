@@ -1,7 +1,6 @@
 ﻿using Catan.Application.Interfaces;
 using Catan.Core.Interfaces;
 using Catan.Shared.Data;
-using Catan.Shared.Models;
 
 namespace Catan.Application
 {

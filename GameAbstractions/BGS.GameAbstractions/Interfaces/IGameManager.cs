@@ -1,6 +1,4 @@
-﻿using BGS.GameAbstractions.Interfaces;
-
-namespace BGS.Backend.GameManagement
+﻿namespace BGS.GameAbstractions.Interfaces
 {
     public interface IGameManager
     {

@@ -8,7 +8,7 @@ namespace Catan.Core.PhaseLogic
     {
         public StealCardLogic(GameSession session) : base(session) { }
 
-        public  ResultStealResource Handle(int victimId, EnumResourceTypes resource)
+        public  ResultStealResource Handle(int victimId, EnumResourceType resource)
         {
             var thief = Session.GetCurrentPlayer();
             var victim = Session.GetPlayerById(victimId);

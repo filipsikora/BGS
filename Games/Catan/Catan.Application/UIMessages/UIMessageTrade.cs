@@ -7,9 +7,9 @@ namespace Catan.Application.UIMessages
     {
         public int Ratio { get; }
         public bool PossibleForPlayer { get; }
-        public EnumResourceTypes? Resource { get; }
+        public EnumResourceType? Resource { get; }
 
-        public BankTradeRatioChangedMessage(int ratio, bool possibleForPlayer, EnumResourceTypes? resource)
+        public BankTradeRatioChangedMessage(int ratio, bool possibleForPlayer, EnumResourceType? resource)
         {
             Ratio = ratio;
             PossibleForPlayer = possibleForPlayer;

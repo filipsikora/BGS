@@ -9,7 +9,7 @@ namespace Catan.Core.Rules
 {
     public static class RulesTrade
     {
-        public static ResultCondition CanTradeWithBank(Player player, ResourceCostOrStock bank, EnumResourceTypes offered, EnumResourceTypes desired, int ratio)
+        public static ResultCondition CanTradeWithBank(Player player, ResourceCostOrStock bank, EnumResourceType offered, EnumResourceType desired, int ratio)
         {
             return ResultCondition.Combine(
                 ConditionsTrade.PlayerHasEnoughResources(player, offered, ratio),

@@ -25,7 +25,7 @@ namespace Catan.Core.Conditions
             return ResultCondition.Ok();
         }
 
-        public static ResultCondition HasSpecificResource(Player player, EnumResourceTypes type)
+        public static ResultCondition HasSpecificResource(Player player, EnumResourceType type)
         {
             if (player.Resources.Get(type) == 0)
             {
@@ -55,9 +55,9 @@ namespace Catan.Core.Conditions
             return ResultCondition.Ok();
         }
 
-        public static ResultCondition ResourceExists(EnumResourceTypes resource)
+        public static ResultCondition ResourceExists(EnumResourceType resource)
         {
-            if (Enum.IsDefined(typeof(EnumResourceTypes), resource))
+            if (Enum.IsDefined(typeof(EnumResourceType), resource))
             {
                 return ResultCondition.Ok();
             }

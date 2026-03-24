@@ -1,6 +1,6 @@
 ﻿namespace Catan.Shared.Data
 {
-    public enum EnumResourceTypes
+    public enum EnumResourceType
     {
         Wheat,
         Wood,

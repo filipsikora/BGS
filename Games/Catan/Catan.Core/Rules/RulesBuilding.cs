@@ -9,6 +9,10 @@ namespace Catan.Core.Rules
     {
         public static ResultCondition CanBuildInitialVillage(Player player, Vertex vertex, GameSession session)
         {
+            if (player == null) throw new Exception("Player is null");
+            if (vertex == null) throw new Exception("Vertex is null");
+
+            if (session == null) throw new Exception("Session is null");
             return ResultCondition.Combine(
                 ConditionsMap.PositionExists(vertex.Id, id => session.GetVertexById(id)),
                 ConditionsBuildings.HasAvailable(EnumBuildings.Village, player),

@@ -16,7 +16,7 @@ namespace Catan.Core.Queries.InMemory
 
         public ResourcesAvailabilitySnapshot GetResourcesAvailability()
         {
-            var resourcesAvailability = new Dictionary<EnumResourceTypes, bool>();
+            var resourcesAvailability = new Dictionary<EnumResourceType, bool>();
 
             foreach (var (type, amount) in _session.GetBank().ResourceDictionary)
             {

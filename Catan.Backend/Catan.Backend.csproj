@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Games\Catan\Catan.Application\Catan.Application.csproj" />
+    <ProjectReference Include="..\Games\Catan\Catan.Core\Catan.Core.csproj" />
+    <ProjectReference Include="..\Games\Catan\Catan.Shared\Catan.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

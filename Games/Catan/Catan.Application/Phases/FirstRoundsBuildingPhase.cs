@@ -49,6 +49,8 @@ namespace Catan.Application.Phases
 
         private GameResult HandleVertexClicked(VertexClickedCommand signal)
         {
+            Console.WriteLine($"Phase instance (vertex): {GetHashCode()}");
+
             if (villagePlaced)
                 return GameResult.Fail().AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, "Build a road now"));
 
@@ -80,6 +82,9 @@ namespace Catan.Application.Phases
 
         private GameResult HandleBuildVillage(BuildVillageCommand signal)
         {
+            Console.WriteLine($"Phase instance (build): {GetHashCode()}");
+            Console.WriteLine($"SelectedVertexId: {SelectedVertexId}");
+
             int id = SelectedVertexId.Value;
             var result = Facade.UseBuildInitialVillage(id);
 

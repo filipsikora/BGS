@@ -5,8 +5,8 @@ namespace Catan.Core.Snapshots
 {
     public sealed class ResourcesAvailabilitySnapshot
     {
-        public Dictionary<EnumResourceTypes, bool> ResourcesAvailability;
-        public ResourcesAvailabilitySnapshot(Dictionary<EnumResourceTypes, bool> resourcesAvailability)
+        public Dictionary<EnumResourceType, bool> ResourcesAvailability;
+        public ResourcesAvailabilitySnapshot(Dictionary<EnumResourceType, bool> resourcesAvailability)
         {
             ResourcesAvailability = resourcesAvailability;
         }

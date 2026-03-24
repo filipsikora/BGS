@@ -7,7 +7,7 @@ namespace Catan.Application.Phases
 {
     public sealed class BankTradePhase : BasePhase
     {
-        private EnumResourceTypes? _offered;
+        private EnumResourceType? _offered;
 
         public BankTradePhase(Facade facade) : base(facade) { }
 

@@ -1,6 +1,6 @@
-﻿namespace Catan.Shared.Data
+﻿namespace Catan.Backend.Data
 {
-    public enum EnumGamePhases
+    public enum EnumGamePhasesDto
     {
         BankTrade,
         BeforeRoll,

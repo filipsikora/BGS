@@ -7,8 +7,8 @@ namespace Catan.Shared.Commands
 
     public class BankTradeOfferedResourceSelectedCommand : ICommand
     {
-        public EnumResourceTypes Type { get; }
-        public BankTradeOfferedResourceSelectedCommand(EnumResourceTypes type)
+        public EnumResourceType Type { get; }
+        public BankTradeOfferedResourceSelectedCommand(EnumResourceType type)
         {
             Type = type;
         }
@@ -16,8 +16,8 @@ namespace Catan.Shared.Commands
 
     public class BankTradeDesiredResourceSelectedCommand : ICommand
     {
-        public EnumResourceTypes? Type { get; }
-        public BankTradeDesiredResourceSelectedCommand(EnumResourceTypes? type)
+        public EnumResourceType? Type { get; }
+        public BankTradeDesiredResourceSelectedCommand(EnumResourceType? type)
         {
             Type = type;
         }

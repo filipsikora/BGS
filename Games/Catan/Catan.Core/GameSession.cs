@@ -64,7 +64,7 @@ namespace Catan.Core
 
         // phase logic //
 
-        public ResultBankTrade UseBankTrade(EnumResourceTypes offered, EnumResourceTypes desired) => _bankTrade.Handle(offered, desired);
+        public ResultBankTrade UseBankTrade(EnumResourceType offered, EnumResourceType desired) => _bankTrade.Handle(offered, desired);
         public ResultBlockHex UseBlockHex(int hexId) => _blockHex.Handle(hexId);
         public ResultCondition UseSelectVictim(int victimId) => _selectVictim.Handle(victimId);
         public ResultBuildFreeRoad UseBuildFreeRoad(int edgeId) => _buildFreeRoad.Handle(edgeId);
@@ -75,10 +75,10 @@ namespace Catan.Core
         public ResultUpgradeVillage UseUpgradeVillage(int vertexId) => _upgradeVillage.Handle(vertexId);
         public ResultRollDice UseRollDice() => _rollDice.Handle();
         public ResultCondition UseDiscard(int discardingPlayerId, ResourceCostOrStock resourcesSelected) => _discardCards.Handle(discardingPlayerId, resourcesSelected);
-        public ResultStealResource UseSteal(int victimId, EnumResourceTypes resource) => _stealCard.Handle(victimId, resource);
+        public ResultStealResource UseSteal(int victimId, EnumResourceType resource) => _stealCard.Handle(victimId, resource);
         public ResultPlayDevCard UseDevCard(int cardId) => _playDevCard.Handle(cardId);
         public ResultFinishTurn UseFinishTurn() => _finishTurn.Handle();
-        public ResultMonopolyCard UseMonopolyCard(EnumResourceTypes resource) => _useMonopoly.Handle(resource);
+        public ResultMonopolyCard UseMonopolyCard(EnumResourceType resource) => _useMonopoly.Handle(resource);
         public ResultBuyDevCard UseBuyDevCard() => _buyDevCard.Handle();
         public ResultCondition UsePrepareTrade(ResourceCostOrStock offered) => _prepareTrade.Handle(offered);
         public ResultPlayerTrade UseOfferTrade(int buyerId, ResourceCostOrStock desired) => _offerTrade.Handle(buyerId, desired);
@@ -90,7 +90,7 @@ namespace Catan.Core
 
         public int GetCurrentPlayerId() => _game.CurrentPlayer.ID;
         public int GetCurrentPlayersRoadsLeft() => _game.CurrentPlayer.BuildingCount(EnumBuildings.Road);
-        public int GetCurrentPlayerResourceAmount(EnumResourceTypes resource) => _game.CurrentPlayer.Resources.Get(resource);
+        public int GetCurrentPlayerResourceAmount(EnumResourceType resource) => _game.CurrentPlayer.Resources.Get(resource);
 
         public EnumGamePhases GetNextPhaseFromAfterRoll() => GetAfterRoll() ? EnumGamePhases.NormalRound : EnumGamePhases.BeforeRoll;
         public EnumGamePhases? GetNextPhaseAfterDiscarding() => _game.GetCardDiscardingProgress() == 0 ? EnumGamePhases.RobberPlacing : null;
@@ -130,7 +130,7 @@ namespace Catan.Core
 
         public int GetLastRoll() => _game.LastRoll;
 
-        public int GetCurrentPlayerTradeRatio(EnumResourceTypes resource)
+        public int GetCurrentPlayerTradeRatio(EnumResourceType resource)
         {
             if (_game.CurrentPlayer.Ports.Count != 0)
             {
@@ -285,9 +285,9 @@ namespace Catan.Core
 
         // internal setters //
 
-        internal void BankTradeMutation(EnumResourceTypes offered, EnumResourceTypes desired, int ratio) => _game.BankTradeMutation(offered, desired, ratio);
+        internal void BankTradeMutation(EnumResourceType offered, EnumResourceType desired, int ratio) => _game.BankTradeMutation(offered, desired, ratio);
         internal void BlockHexMutation(HexTile hex) => _game.BlockHexMutation(hex);
-        internal Dictionary<int, int> UseMonopolyMutation(EnumResourceTypes resource) => _game.UseMonopolyMutation(resource);
+        internal Dictionary<int, int> UseMonopolyMutation(EnumResourceType resource) => _game.UseMonopolyMutation(resource);
         internal void UseYearOfPlentyMutation(ResourceCostOrStock resource) => _game.UseYearOfPlentyMutation(resource);
         internal void RoadBuiltMutation(Edge edge) => _game.RoadBuiltMutation(edge);
         internal void VillageBuiltMutation(Vertex vertex, bool secondVillage) => _game.VillageBuiltMutation(vertex, secondVillage);
@@ -304,7 +304,7 @@ namespace Catan.Core
     _game.PlayerTradeDoneMutation(seller, buyer, offered, desired);
         internal List<ResultDistributeResources> ServePlayersMutation() => _game.ServePlayersMutation();
         internal int DiceRolledMutation() => _game.DiceRolledMutation();
-        internal void CardStolenMutation(Player victim, EnumResourceTypes resource) => _game.CardStolenMutation(victim, resource);
+        internal void CardStolenMutation(Player victim, EnumResourceType resource) => _game.CardStolenMutation(victim, resource);
 
         internal void CreateCardsStealingContext(int victimId) => _game.CreateCardsStealingContext(victimId);
         internal void CreatePlayerTradeOfferedContext(int sellerId, int buyerId, string sellerName, string buyerName, ResourceCostOrStock offered, ResourceCostOrStock desired) =>

@@ -36,9 +36,9 @@ namespace Catan.Core.Results
 
         public int ThiefId { get; }
         public Dictionary<int, int> VictimsIdsAndAmounts { get; }
-        public EnumResourceTypes Resource { get; }
+        public EnumResourceType Resource { get; }
 
-        private ResultMonopolyCard(bool success, ConditionFailureReason reason, int thiefId, Dictionary<int, int> victimsIsdAndAmounts, EnumResourceTypes resource, EnumGamePhases? nextPhase) : 
+        private ResultMonopolyCard(bool success, ConditionFailureReason reason, int thiefId, Dictionary<int, int> victimsIsdAndAmounts, EnumResourceType resource, EnumGamePhases? nextPhase) : 
             base(success, nextPhase)
         {
             Reason = reason;
@@ -47,12 +47,12 @@ namespace Catan.Core.Results
             Resource = resource;
         }
 
-        public static ResultMonopolyCard Fail(ConditionFailureReason reason, int thiefId, EnumResourceTypes resource)
+        public static ResultMonopolyCard Fail(ConditionFailureReason reason, int thiefId, EnumResourceType resource)
         {
             return new ResultMonopolyCard(false, reason, thiefId, default, resource, null);
         }
 
-        public static ResultMonopolyCard Ok(int thiefId, Dictionary<int, int> victimsIdsAndAmounts, EnumResourceTypes resource, EnumGamePhases nextPhase)
+        public static ResultMonopolyCard Ok(int thiefId, Dictionary<int, int> victimsIdsAndAmounts, EnumResourceType resource, EnumGamePhases nextPhase)
         {
             return new ResultMonopolyCard(true, ConditionFailureReason.None, thiefId, victimsIdsAndAmounts, resource, nextPhase);
         }

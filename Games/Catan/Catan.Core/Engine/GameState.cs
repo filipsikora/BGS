@@ -310,9 +310,9 @@ namespace Catan.Core.Engine
             return result;
         }
 
-        public Dictionary<EnumResourceTypes, bool> CheckResourcesAvailabilityAfterChange(ResourceCostOrStock cardsAlreadySelected)
+        public Dictionary<EnumResourceType, bool> CheckResourcesAvailabilityAfterChange(ResourceCostOrStock cardsAlreadySelected)
         {
-            var availability = new Dictionary<EnumResourceTypes, bool>();
+            var availability = new Dictionary<EnumResourceType, bool>();
 
             foreach (var (type, amount) in Bank.ResourceDictionary)
             {
@@ -438,7 +438,7 @@ namespace Catan.Core.Engine
             return card;
         }
 
-        public void BankTradeMutation(EnumResourceTypes offered, EnumResourceTypes desired, int ratio)
+        public void BankTradeMutation(EnumResourceType offered, EnumResourceType desired, int ratio)
         {
             var player = GetCurrentPlayer();
 
@@ -517,7 +517,7 @@ namespace Catan.Core.Engine
             CardStealingProgress = new CardStealingContext(victimId);
         }
 
-        public void CardStolenMutation(Player victim, EnumResourceTypes resource)
+        public void CardStolenMutation(Player victim, EnumResourceType resource)
         {
             var thief = CurrentPlayer;
 
@@ -636,7 +636,7 @@ namespace Catan.Core.Engine
             devCard.IsNew = true;
         }
 
-        public Dictionary<int, int> UseMonopolyMutation(EnumResourceTypes resource)
+        public Dictionary<int, int> UseMonopolyMutation(EnumResourceType resource)
         {
             var victimsIdsAndAmounts = new Dictionary<int, int>();
             var currentPlayer = GetCurrentPlayer();
@@ -710,7 +710,7 @@ namespace Catan.Core.Engine
                         {
                             int requested = vertex.HasVillage ? 1 : 2;
                             Player owner = vertex.Owner;
-                            EnumResourceTypes type = hex.GetResourceType().GetValueOrDefault();
+                            EnumResourceType type = hex.GetResourceType().GetValueOrDefault();
 
                             int granted = Bank.SubtractUpTo(type, requested);
                             owner.Resources.AddExactAmount(type, granted);

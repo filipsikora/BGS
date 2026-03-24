@@ -41,15 +41,15 @@ namespace Catan.Core.Models
             return $"Hex ({Q}, {R}) - {FieldNumber}, {FieldType}";
         }
 
-        public EnumResourceTypes? GetResourceType()
+        public EnumResourceType? GetResourceType()
         {
             return FieldType switch
             {
-                EnumFieldTypes.Wheat => EnumResourceTypes.Wheat,
-                EnumFieldTypes.Wood => EnumResourceTypes.Wood,
-                EnumFieldTypes.Wool => EnumResourceTypes.Wool,
-                EnumFieldTypes.Stone => EnumResourceTypes.Stone,
-                EnumFieldTypes.Clay => EnumResourceTypes.Clay,
+                EnumFieldTypes.Wheat => EnumResourceType.Wheat,
+                EnumFieldTypes.Wood => EnumResourceType.Wood,
+                EnumFieldTypes.Wool => EnumResourceType.Wool,
+                EnumFieldTypes.Stone => EnumResourceType.Stone,
+                EnumFieldTypes.Clay => EnumResourceType.Clay,
                 EnumFieldTypes.Desert => null,
                 _ => null
             };

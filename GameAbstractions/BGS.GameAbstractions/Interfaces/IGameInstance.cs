@@ -2,6 +2,6 @@
 {
     public interface IGameInstance
     {
-        object Execute(object command);
+        object Execute(object request);
     }
 }

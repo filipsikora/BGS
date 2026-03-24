@@ -7,7 +7,7 @@ namespace Catan.Application.Phases
 {
     public class MonopolyCardPhase : BasePhase
     {
-        private EnumResourceTypes? _type;
+        private EnumResourceType? _type;
 
         public MonopolyCardPhase(Facade facade) : base(facade) { }
 

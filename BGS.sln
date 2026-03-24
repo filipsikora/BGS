@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catan.Application", "Games\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catan.Shared", "Games\Catan\Catan.Shared\Catan.Shared.csproj", "{0F0F279B-60D1-43C3-B8BC-26673365B8C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catan.Backend", "Catan.Backend\Catan.Backend.csproj", "{3E5F0DCE-13E5-4598-9D36-0412D872ABA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,18 @@ Global
 		{0F0F279B-60D1-43C3-B8BC-26673365B8C3}.Release|x64.Build.0 = Release|Any CPU
 		{0F0F279B-60D1-43C3-B8BC-26673365B8C3}.Release|x86.ActiveCfg = Release|Any CPU
 		{0F0F279B-60D1-43C3-B8BC-26673365B8C3}.Release|x86.Build.0 = Release|Any CPU
+		{3E5F0DCE-13E5-4598-9D36-0412D872ABA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E5F0DCE-13E5-4598-9D36-0412D872ABA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E5F0DCE-13E5-4598-9D36-0412D872ABA1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3E5F0DCE-13E5-4598-9D36-0412D872ABA1}.Debug|x64.Build.0 = Debug|Any CPU
+		{3E5F0DCE-13E5-4598-9D36-0412D872ABA1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3E5F0DCE-13E5-4598-9D36-0412D872ABA1}.Debug|x86.Build.0 = Debug|Any CPU
+		{3E5F0DCE-13E5-4598-9D36-0412D872ABA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E5F0DCE-13E5-4598-9D36-0412D872ABA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E5F0DCE-13E5-4598-9D36-0412D872ABA1}.Release|x64.ActiveCfg = Release|Any CPU
+		{3E5F0DCE-13E5-4598-9D36-0412D872ABA1}.Release|x64.Build.0 = Release|Any CPU
+		{3E5F0DCE-13E5-4598-9D36-0412D872ABA1}.Release|x86.ActiveCfg = Release|Any CPU
+		{3E5F0DCE-13E5-4598-9D36-0412D872ABA1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,6 +116,7 @@ Global
 		{8C7CC3C5-5E19-4F80-B707-4FD90FE947C8} = {324C61A4-2DCC-AAC7-3099-12B825B52AE3}
 		{3D15D051-5A65-42F3-8000-3260F992577C} = {324C61A4-2DCC-AAC7-3099-12B825B52AE3}
 		{0F0F279B-60D1-43C3-B8BC-26673365B8C3} = {324C61A4-2DCC-AAC7-3099-12B825B52AE3}
+		{3E5F0DCE-13E5-4598-9D36-0412D872ABA1} = {324C61A4-2DCC-AAC7-3099-12B825B52AE3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {745EA962-ED6E-4FB5-B8B5-8B427C2EBD8B}
