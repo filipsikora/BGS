@@ -1,6 +1,6 @@
-﻿using Catan.Shared.Models;
+﻿using Catan.Shared.Data;
 
-namespace Catan.Shared.Data
+namespace Catan.Core.Data
 {
     public static class DevelopmentCardDataRegistry
     {
@@ -12,7 +12,5 @@ namespace Catan.Shared.Data
             { EnumDevelopmentCardTypes.RoadBuilding, 2 },
             { EnumDevelopmentCardTypes.YearOfPlenty, 2 }
         };
-
-        public static readonly ResourceCostOrStock Cost = new(1,0, 1, 1, 0);
     }
 }

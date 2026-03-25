@@ -3,7 +3,7 @@ using Catan.Core.Queries.Interfaces;
 using Catan.Core.Results;
 using Catan.Core.Snapshots;
 using Catan.Shared.Data;
-using Catan.Shared.Models;
+using Catan.Core.Models;
 
 namespace Catan.Application.Controllers
 {

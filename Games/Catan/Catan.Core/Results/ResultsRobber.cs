@@ -1,7 +1,5 @@
 ﻿#nullable enable
-
 using Catan.Shared.Data;
-using System.Collections.Generic;
 
 namespace Catan.Core.Results
 {

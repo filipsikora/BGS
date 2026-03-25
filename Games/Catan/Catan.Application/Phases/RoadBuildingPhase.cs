@@ -1,7 +1,7 @@
 ﻿using Catan.Application.Controllers;
 using Catan.Application.UIMessages;
 using Catan.Core.DomainEvents;
-using Catan.Shared.Commands;
+using Catan.Application.Commands;
 
 namespace Catan.Application.Phases
 {

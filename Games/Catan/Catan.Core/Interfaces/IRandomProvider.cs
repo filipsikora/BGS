@@ -1,4 +1,4 @@
-﻿namespace Catan.Shared.Interfaces
+﻿namespace Catan.Core.Interfaces
 {
     public interface IRandomProvider
     {

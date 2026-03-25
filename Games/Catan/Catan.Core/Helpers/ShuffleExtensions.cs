@@ -1,7 +1,6 @@
-﻿using Catan.Shared.Interfaces;
-using System.Collections.Generic;
+﻿using Catan.Core.Interfaces;
 
-namespace Catan.Shared.Helpers
+namespace Catan.Core.Helpers
 {
     public static class ShuffleExtensions
     {

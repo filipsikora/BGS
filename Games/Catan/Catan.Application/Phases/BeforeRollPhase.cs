@@ -2,7 +2,7 @@
 using Catan.Application.Interfaces;
 using Catan.Application.UIMessages;
 using Catan.Core.Results;
-using Catan.Shared.Commands;
+using Catan.Application.Commands;
 using Catan.Shared.Data;
 
 namespace Catan.Application.Phases

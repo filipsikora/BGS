@@ -1,6 +1,6 @@
-﻿using Catan.Shared.Interfaces;
+﻿using Catan.Application.Interfaces;
 
-namespace Catan.Shared.Commands
+namespace Catan.Application.Commands
 {
     public class ShowDevelopmentCardsCommand : ICommand { }
 

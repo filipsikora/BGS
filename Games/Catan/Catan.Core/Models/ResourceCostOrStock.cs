@@ -1,8 +1,7 @@
 ﻿#nullable enable
 using Catan.Shared.Data;
-using System.Diagnostics;
 
-namespace Catan.Shared.Models
+namespace Catan.Core.Models
 {
     public class ResourceCostOrStock
     {
@@ -72,8 +71,7 @@ namespace Catan.Shared.Models
             {
                 if (amount < 0)
                 {
-                    Debug.Assert(amount >= 0);
-                    continue;
+                    throw new ArgumentOutOfRangeException(nameof(amount));
                 }
 
                 ResourceDictionary[type] += amount;
@@ -86,8 +84,7 @@ namespace Catan.Shared.Models
             {
                 if (amount < 0)
                 {
-                    Debug.Assert(amount >= 0);
-                    continue;
+                    throw new ArgumentOutOfRangeException(nameof(amount));
                 }
 
                 ResourceDictionary[type] -= amount;

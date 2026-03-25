@@ -6,9 +6,7 @@ using Vertex = Catan.Core.Models.Vertex;
 using Edge = Catan.Core.Models.Edge;
 using Catan.Shared.Data;
 using Catan.Core.Results;
-using Catan.Shared.Models;
-using Catan.Shared.Interfaces;
-using Catan.Shared.Helpers;
+using Catan.Core.Data;
 
 namespace Catan.Core.Engine
 {

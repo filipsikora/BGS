@@ -1,9 +1,9 @@
 ﻿using Catan.Application.Controllers;
 using Catan.Application.Interfaces;
 using Catan.Application.UIMessages;
-using Catan.Shared.Models;
+using Catan.Core.Models;
 using Catan.Core.Results;
-using Catan.Shared.Commands;
+using Catan.Application.Commands;
 
 namespace Catan.Application.Phases
 {

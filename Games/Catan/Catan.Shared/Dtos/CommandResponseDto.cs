@@ -1,6 +1,6 @@
-﻿using Catan.Backend.Data;
+﻿using Catan.Shared.Data;
 
-namespace Catan.Backend.Models
+namespace Catan.Shared.Dtos
 {
     public class CommandResponseDto
     {

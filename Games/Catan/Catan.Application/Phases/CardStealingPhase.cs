@@ -1,5 +1,5 @@
 ﻿using Catan.Application.Controllers;
-using Catan.Shared.Commands;
+using Catan.Application.Commands;
 using Catan.Application.UIMessages;
 
 namespace Catan.Application.Phases

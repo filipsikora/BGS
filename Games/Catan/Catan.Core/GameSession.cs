@@ -1,11 +1,11 @@
 ﻿using Catan.Core.Conditions;
+using Catan.Core.Data;
 using Catan.Core.Engine;
 using Catan.Core.Models;
 using Catan.Core.PhaseLogic;
 using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
-using Catan.Shared.Models;
 
 namespace Catan.Core
 {

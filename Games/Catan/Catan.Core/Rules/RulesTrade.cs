@@ -3,7 +3,6 @@ using Catan.Core.Engine;
 using Catan.Core.Models;
 using Catan.Core.Results;
 using Catan.Shared.Data;
-using Catan.Shared.Models;
 
 namespace Catan.Core.Rules
 {

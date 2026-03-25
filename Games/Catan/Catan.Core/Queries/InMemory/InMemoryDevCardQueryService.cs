@@ -1,7 +1,5 @@
 ﻿using Catan.Core.Snapshots;
 using Catan.Core.Queries.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
 using Catan.Core.Models;
 using Catan.Shared.Data;
 

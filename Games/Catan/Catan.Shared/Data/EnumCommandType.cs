@@ -1,4 +1,4 @@
-﻿namespace Catan.Backend.Data
+﻿namespace Catan.Shared.Data
 {
     public enum EnumCommandType
     {

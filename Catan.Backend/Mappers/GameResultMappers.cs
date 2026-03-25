@@ -1,5 +1,5 @@
 ﻿using Catan.Application;
-using Catan.Backend.Models;
+using Catan.Shared.Dtos;
 
 namespace Catan.Backend.Mappers
 {

@@ -1,4 +1,5 @@
 ﻿using BGS.GameAbstractions.Interfaces;
+using Catan.Shared.Data;
 using System.Collections.Concurrent;
 
 namespace BGS.Backend
@@ -6,17 +7,14 @@ namespace BGS.Backend
     public class GameManager : IGameManager
     {
         private readonly ConcurrentDictionary<Guid, IGameInstance> _games = new();
-        private readonly IGameFactory _factory;
 
-        public GameManager(IGameFactory factory)
-        {
-            _factory = factory;
-        }
+        public GameManager(EnumGamePhases game) { }
 
-        public Guid CreateGame()
+        public Guid CreateGame(IGameFactory factory)
         {
             var gameId = Guid.NewGuid();
-            var game = _factory.CreateGame();
+            var game = factory.CreateGame();
+
             _games[gameId] = game;
 
             return gameId;

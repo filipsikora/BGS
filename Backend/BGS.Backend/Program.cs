@@ -1,4 +1,5 @@
 using BGS.Backend;
+using BGS.Backend.Helpers;
 using BGS.GameAbstractions.Interfaces;
 using Catan.Backend.GameManagement;
 using System.Text.Json.Serialization;
@@ -13,6 +14,7 @@ builder.Services.AddControllers()
 
 builder.Services.AddSingleton<IGameFactory, CatanGameFactory>();
 builder.Services.AddSingleton<IGameManager, GameManager>();
+builder.Services.AddSingleton<GameFactoryMapper>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

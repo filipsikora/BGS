@@ -4,7 +4,7 @@ using Catan.Application.Controllers;
 using Catan.Core;
 using Catan.Core.Engine;
 using Catan.Core.Queries.InMemory;
-using Catan.Shared.Helpers;
+using Catan.Core.Helpers;
 
 namespace Catan.Backend.GameManagement
 {

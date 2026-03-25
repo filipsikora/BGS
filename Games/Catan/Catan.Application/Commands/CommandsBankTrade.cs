@@ -1,7 +1,7 @@
 ﻿using Catan.Shared.Data;
-using Catan.Shared.Interfaces;
+using Catan.Application.Interfaces;
 
-namespace Catan.Shared.Commands
+namespace Catan.Application.Commands
 {
     public class BankTradeCanceledCommand : ICommand { }
 

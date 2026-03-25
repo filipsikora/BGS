@@ -1,11 +1,12 @@
-﻿using Catan.Backend.Data;
-using Catan.Backend.Helpers;
+﻿using Catan.Backend.Helpers;
 using Catan.Backend.Mappers;
 using Catan.Backend.Models;
-using Catan.Shared.Commands;
+using Catan.Application.Commands;
+using Catan.Application.Interfaces;
 using Catan.Shared.Data;
 using Catan.Shared.Interfaces;
 using System.Text.Json;
+using Catan.Shared.Dtos;
 
 namespace Catan.Backend.GameManagement
 {

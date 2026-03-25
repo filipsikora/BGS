@@ -1,5 +1,4 @@
 ﻿using Catan.Core.Interfaces;
-using Catan.Shared.Models;
 
 namespace Catan.Core.Models
 {

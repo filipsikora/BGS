@@ -1,4 +1,4 @@
-﻿using Catan.Shared.Commands;
+﻿using Catan.Application.Commands;
 using Catan.Application.Controllers;
 using Catan.Shared.Data;
 using Catan.Application.UIMessages;

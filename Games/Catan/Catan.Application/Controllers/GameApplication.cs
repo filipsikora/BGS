@@ -3,7 +3,6 @@ using Catan.Application.Controllers;
 using Catan.Application.Interfaces;
 using Catan.Application.Phases;
 using Catan.Shared.Data;
-using Catan.Shared.Interfaces;
 
 namespace Catan.Application
 {

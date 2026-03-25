@@ -1,4 +1,4 @@
-﻿namespace Catan.Shared.Data
+﻿namespace Catan.Core.Data
 {
     public enum EnumBuildings
     {

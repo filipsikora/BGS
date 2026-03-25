@@ -1,7 +1,7 @@
-﻿using Catan.Backend.Data;
+﻿using Catan.Shared.Data;
 using System.Text.Json;
 
-namespace Catan.Backend.Models
+namespace Catan.Shared.Dtos
 {
     public class CommandRequestDto
     {

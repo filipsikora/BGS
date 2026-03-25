@@ -1,5 +1,5 @@
-﻿using Catan.Shared.Commands;
-using Catan.Shared.Models;
+﻿using Catan.Application.Commands;
+using Catan.Core.Models;
 using Catan.Application.Controllers;
 using Catan.Shared.Data;
 using Catan.Application.UIMessages;

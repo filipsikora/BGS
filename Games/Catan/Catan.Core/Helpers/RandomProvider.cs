@@ -1,6 +1,6 @@
-﻿using Catan.Shared.Interfaces;
+﻿using Catan.Core.Interfaces;
 
-namespace Catan.Shared.Helpers
+namespace Catan.Core.Helpers
 {
     public class RandomProvider : IRandomProvider
     {
