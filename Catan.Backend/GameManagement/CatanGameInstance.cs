@@ -1,7 +1,7 @@
 ﻿using BGS.GameAbstractions.Interfaces;
 using Catan.Application;
 using Catan.Backend.Mappers;
-using Catan.Shared.Data.Dtos;
+using Catan.Shared.Dtos;
 
 namespace Catan.Backend.GameManagement
 {

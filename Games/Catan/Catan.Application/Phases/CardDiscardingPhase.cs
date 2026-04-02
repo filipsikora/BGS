@@ -4,6 +4,7 @@ using Catan.Application.UIMessages;
 using Catan.Core.Models;
 using Catan.Core.Results;
 using Catan.Application.Commands;
+using Catan.Core.DomainEvents;
 
 namespace Catan.Application.Phases
 {
@@ -70,7 +71,7 @@ namespace Catan.Application.Phases
         {
             if (result.NextPhase != null)
             {
-                return GameResult.Ok(result.NextPhase);
+                return GameResult.Ok(result.NextPhase).AddDomainEvent(new PlayerStateChangedEvent(Facade.GetCurrentPlayerId()));
             }
 
             _currentDiscardingPlayerId = Facade.GetNextToDiscardId();

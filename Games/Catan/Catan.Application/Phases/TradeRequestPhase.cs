@@ -2,6 +2,7 @@
 using Catan.Application.Controllers;
 using Catan.Shared.Data;
 using Catan.Application.UIMessages;
+using Catan.Core.DomainEvents;
 
 namespace Catan.Application.Phases
 {
@@ -33,7 +34,7 @@ namespace Catan.Application.Phases
                 return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(result.BuyerId, result.Reason));
             }
 
-            return GameResult.Ok(result.NextPhase).AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, "Trade accepted"));
+            return GameResult.Ok(result.NextPhase).AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, "Trade accepted")).AddDomainEvent(new PlayerStateChangedEvent(result.SellerId));
         }
     }
 }

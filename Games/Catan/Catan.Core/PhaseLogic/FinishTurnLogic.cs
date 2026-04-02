@@ -18,9 +18,10 @@ namespace Catan.Core.PhaseLogic
             Session.AdvanceToNextPlayerMutation(nextIndex);
             Session.WinCheck();
 
+            var nextTurnNumber = Session.GetTurn();
             var nextPhase = initialRoundsRemaining ? EnumGamePhases.FirstRoundsBuilding : EnumGamePhases.BeforeRoll;
 
-            return ResultFinishTurn.Ok(player.ID, initialRoundsRemaining, nextPhase);
+            return ResultFinishTurn.Ok(player.ID, initialRoundsRemaining, nextTurnNumber, nextPhase);
         }
     }
 }

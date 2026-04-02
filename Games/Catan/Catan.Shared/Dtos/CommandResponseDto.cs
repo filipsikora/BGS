@@ -6,7 +6,7 @@ namespace Catan.Shared.Dtos
     {
         public bool Success { get; set; }
         public EnumGamePhasesDto? NextPhase { get; set; }
-        public List<object> UiMessages { get; set; } = new();
-        public List<object> DomainMessages { get; set; } = new();
+        public List<UiMessageDto> UiMessages { get; set; } = new();
+        public List<DomainEventDto> DomainMessages { get; set; } = new();
     }
 }

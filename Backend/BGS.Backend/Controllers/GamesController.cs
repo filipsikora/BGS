@@ -60,5 +60,17 @@ namespace BGS.Backend.Controllers
 
             return Ok(ids);
         }
+
+        [HttpGet("{gameId}/queries/board")]
+        public IActionResult GetBoardQuery(Guid gameId)
+        {
+            if (!_gameManager.TryGetGame(gameId, out var game))
+                return NotFound();
+
+            try
+            {
+                var boardQuery = game.
+            }
+        }
     }
 }

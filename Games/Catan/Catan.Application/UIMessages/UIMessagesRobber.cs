@@ -1,5 +1,4 @@
 ﻿using Catan.Application.Interfaces;
-using System.Collections.Generic;
 
 namespace Catan.Application.UIMessages
 {

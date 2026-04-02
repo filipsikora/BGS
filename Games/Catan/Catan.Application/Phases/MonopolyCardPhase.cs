@@ -2,6 +2,7 @@
 using Catan.Application.UIMessages;
 using Catan.Application.Commands;
 using Catan.Shared.Data;
+using Catan.Core.DomainEvents;
 
 namespace Catan.Application.Phases
 {
@@ -51,7 +52,7 @@ namespace Catan.Application.Phases
                 return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(result.ThiefId, result.Reason));
             }
 
-            return GameResult.Ok(result.NextPhase);
+            return GameResult.Ok(result.NextPhase).AddDomainEvent(new PlayerStateChangedEvent(result.ThiefId));
         }
     }
 }

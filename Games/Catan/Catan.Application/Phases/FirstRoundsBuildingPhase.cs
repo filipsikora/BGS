@@ -40,7 +40,7 @@ namespace Catan.Application.Phases
                     return HandleTurnEnded(c);
 
                 case StartGameCommand c:
-                    return GameResult.Ok(EnumGamePhases.FirstRoundsBuilding);
+                    return GameResult.Ok(EnumGamePhases.FirstRoundsBuilding); // problem?
 
                 default:
                     return GameResult.Fail();
@@ -97,7 +97,7 @@ namespace Catan.Application.Phases
 
             villagePlaced = true;
 
-            return GameResult.Ok().AddDomainEvent(new VillagePlacedEvent(id, Facade.GetCurrentPlayerId())).AddUIMessage(selectionMessage);
+            return GameResult.Ok().AddDomainEvent(new VillagePlacedEvent(id, result.PlayerId)).AddUIMessage(selectionMessage).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
         }
 
         private GameResult HandleBuildRoad(BuildRoadCommand signal)
@@ -112,17 +112,17 @@ namespace Catan.Application.Phases
             {
                 return GameResult.Fail().AddUIMessage((new ActionRejectedMessage(result.PlayerId, result.Reason)));
             }
-
+            
             roadPlaced = true;
 
-            return GameResult.Ok().AddDomainEvent(new RoadPlacedEvent(id, Facade.GetCurrentPlayerId())).AddUIMessage(selectionMessage);
+            return GameResult.Ok().AddDomainEvent(new RoadPlacedEvent(id, result.PlayerId)).AddUIMessage(selectionMessage).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
         }
 
         private GameResult HandleTurnEnded(EndTurnCommand signal)
         {
             var result = Facade.UseFinishTurn();
 
-            return GameResult.Ok(result.NextPhase);
+            return GameResult.Ok(result.NextPhase).AddDomainEvent(new PlayerStateChangedEvent(result.NewCurrentPlayerId));
         }
     }
 }
