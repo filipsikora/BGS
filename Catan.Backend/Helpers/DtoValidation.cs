@@ -1,5 +1,5 @@
 ﻿using Catan.Backend.Models;
-using System.Text.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Catan.Backend.Helpers
 {
@@ -24,14 +24,14 @@ namespace Catan.Backend.Helpers
             return value.Value;
         }
 
-        public static void EnsureNoExtraFields<T>(JsonElement json)
+        public static void EnsureNoExtraFields<T>(JObject json)
         {
-            if (json.ValueKind != JsonValueKind.Object)
+            if (json.Type != JTokenType.Object)
                 throw new BadRequestException($"Data must be a JSON object");
 
             var allowedFields = typeof(T).GetProperties().Select(p => p.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-            foreach (var property in json.EnumerateObject())
+            foreach (var property in json.Properties())
                 if (!allowedFields.Contains(property.Name))
                     throw new BadRequestException($"Unknown field: {property.Name}");
         }

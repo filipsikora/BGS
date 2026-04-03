@@ -38,7 +38,8 @@ namespace Catan.Application.Phases
 
             var logList = GetLogList(result);
 
-            return GameResult.Ok(result.NextPhase.Value).AddUIMessagesList(logList).AddDomainEvent(new PlayerStateChangedEvent(Facade.GetCurrentPlayerId()));
+            return GameResult.Ok(result.NextPhase.Value).AddUIMessagesList(logList).AddDomainEvent(new PlayerStateChangedEvent(Facade.GetCurrentPlayerId())).
+                AddUIMessage(new DiceRollChangedMessage(result.Roll));
         }
 
         private GameResult HandleInvalidClick()

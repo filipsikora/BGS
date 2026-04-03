@@ -1,14 +1,14 @@
-﻿using Catan.Backend.Data;
-using Catan.Backend.Helpers;
+﻿using Catan.Backend.Helpers;
+using Catan.Shared.Data;
 using Catan.Shared.Interfaces;
 
 namespace Catan.Backend.Models
 {
     public class BankTradeOfferedResourceSelectedDto : IValidatableDto
     {
-        public  EnumResourceTypeDto? Type { get; set; }
+        public  EnumResourceType? Type { get; set; }
 
-        public EnumResourceTypeDto GetValidatedData()
+        public EnumResourceType GetValidatedData()
         {
             return DtoValidation.RequireValueNotNull(Type, nameof(Type));
         }
@@ -18,9 +18,9 @@ namespace Catan.Backend.Models
 
     public class BankTradeDesiredResourceSelectedDto : IValidatableDto
     {
-        public EnumResourceTypeDto? Type { get; set; }
+        public EnumResourceType? Type { get; set; }
 
-        public EnumResourceTypeDto? GetValidatedData()
+        public EnumResourceType? GetValidatedData()
         {
             return Type;
         }
@@ -78,10 +78,10 @@ namespace Catan.Backend.Models
 
     public class ResourceCardSelectedDto : IValidatableDto
     {
-        public EnumResourceTypeDto? Type { get; set; }
+        public EnumResourceType? Type { get; set; }
         public bool? IsSelected { get; set; }
 
-        public (EnumResourceTypeDto, bool) GetValidatedData()
+        public (EnumResourceType, bool) GetValidatedData()
         {
             var typeValidated = DtoValidation.RequireValueNotNull(Type, nameof(Type));
             var isSelectedValidated = DtoValidation.RequireValueNotNull(IsSelected, nameof(IsSelected));
@@ -106,9 +106,9 @@ namespace Catan.Backend.Models
 
     public class StolenCardSelectedDto : IValidatableDto
     {
-        public EnumResourceTypeDto? Type { get; set; }
+        public EnumResourceType? Type { get; set; }
 
-        public EnumResourceTypeDto GetValidatedData()
+        public EnumResourceType GetValidatedData()
         {
             return DtoValidation.RequireValueNotNull(Type, nameof(Type));
         }

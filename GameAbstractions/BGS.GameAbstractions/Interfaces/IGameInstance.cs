@@ -3,5 +3,6 @@
     public interface IGameInstance
     {
         object Execute(object request);
+        object Query(object request);
     }
 }

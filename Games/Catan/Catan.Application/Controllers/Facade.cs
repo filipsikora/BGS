@@ -93,15 +93,15 @@ namespace Catan.Application.Controllers
         public PortSnapshot GetPortData(int edgeId) => _boardQuery.GetPortData(edgeId);
         public BoardSnapshot GetBoardData() => _boardQuery.GetBoardData();
 
+
+        public PlayerDataSnapshot GetPlayersData(int playerId) => _playersQuery.GetPlayersData(playerId);
+
+        public ResourcesAvailabilitySnapshot GetResourcesAvailability() => _resourcesQuery.GetResourcesAvailability();
+        public PlayerResourcesSnapshot GetPlayersCards(int playerId) => _playersQuery.GetPlayersCards(playerId);
+        public PlayerResourcesSnapshot GetVictimsCards() => _playersQuery.GetVictimsCards();
+        public IReadOnlyList<PlayerNameSnapshot> GetSomePlayersNames(List<int> potentialVictimsIds) => _playersQuery.GetSomePlayersNames(potentialVictimsIds);
         public IReadOnlyList<DevelopmentCardSnapshot> GetCurrentPlayerDevCards() => _devCardQuery.GetCurrentPlayerDevCards();
 
-        public PlayerResourcesSnapshot GetPlayersCards(int playerId) => _playersQuery.GetPlayersCards(playerId);
-        public PlayerDataSnapshot GetPlayersData(int playerId) => _playersQuery.GetPlayersData(playerId);
-        public CurrentPlayerIdSnapshot GetCurrentPlayerId() => _playersQuery.GetCurrentPlayerId();
-        public ResourcesAvailabilitySnapshot GetResourcesAvailability() => _resourcesQuery.GetResourcesAvailability();
-        public TurnDataSnapshot GetTurnData() => _turnsQuery.GetTurnData();
-        public PlayerNameSnapshot GetVictimsName() => _playersQuery.GetVictimsName();
-        public IReadOnlyList<PlayerNameSnapshot> GetSomePlayersNames(List<int> potentialVictimsIds) => _playersQuery.GetSomePlayersNames(potentialVictimsIds);
         public IReadOnlyList<PlayerNameSnapshot> GetNotCurrentPlayersNames() => _playersQuery.GetNotCurrentPlayersNames();
         public TradeOfferedSnapshot GetTradeOfferData() => _tradeQuery.GetTradeOfferData();
     }

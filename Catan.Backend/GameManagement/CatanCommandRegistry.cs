@@ -1,22 +1,21 @@
 ﻿using Catan.Backend.Helpers;
-using Catan.Backend.Mappers;
 using Catan.Backend.Models;
 using Catan.Application.Commands;
 using Catan.Application.Interfaces;
 using Catan.Shared.Data;
 using Catan.Shared.Interfaces;
-using System.Text.Json;
 using Catan.Shared.Dtos;
+using Newtonsoft.Json.Linq;
 
 namespace Catan.Backend.GameManagement
 {
     public class CatanCommandRegistry
     {
-        private readonly Dictionary<EnumCommandType, Func<JsonElement, ICommand>> _commandDictionary;
+        private readonly Dictionary<EnumCommandType, Func<JObject, ICommand>> _commandDictionary;
 
         public CatanCommandRegistry()
         {
-            _commandDictionary = new Dictionary<EnumCommandType, Func<JsonElement, ICommand>>();
+            _commandDictionary = new Dictionary<EnumCommandType, Func<JObject, ICommand>>();
 
             Register();
         }
@@ -35,7 +34,7 @@ namespace Catan.Backend.GameManagement
             _commandDictionary[EnumCommandType.BankTradeOfferedResourceSelectedCommand] = json =>
             {
                 var dto = Deserialize<BankTradeOfferedResourceSelectedDto>(json);
-                var type = EnumMappers.MapResourceTypeFromDto(dto.GetValidatedData());
+                var type = dto.GetValidatedData();
 
                 return new BankTradeOfferedResourceSelectedCommand(type);
             };
@@ -43,9 +42,8 @@ namespace Catan.Backend.GameManagement
             _commandDictionary[EnumCommandType.BankTradeDesiredResourceSelectedCommand] = json =>
             {
                 var dto = Deserialize<BankTradeDesiredResourceSelectedDto>(json);
-                EnumResourceType? type = dto.Type.HasValue ? EnumMappers.MapResourceTypeFromDto(dto.Type.Value) : null;
 
-                return new BankTradeDesiredResourceSelectedCommand(type);
+                return new BankTradeDesiredResourceSelectedCommand(dto.Type);
             };
 
             _commandDictionary[EnumCommandType.BankTradeCommand] = json =>
@@ -153,9 +151,8 @@ namespace Catan.Backend.GameManagement
             {
                 var dto = Deserialize<ResourceCardSelectedDto>(json);
                 var (type, isSelected) = dto.GetValidatedData();
-                var typeDto = EnumMappers.MapResourceTypeFromDto(type);
 
-                return new ResourceCardSelectedCommand(isSelected, typeDto);
+                return new ResourceCardSelectedCommand(isSelected, type);
             };
 
             // RobberCommands
@@ -177,7 +174,7 @@ namespace Catan.Backend.GameManagement
             _commandDictionary[EnumCommandType.StolenCardSelectedCommand] = json =>
             {
                 var dto = Deserialize<StolenCardSelectedDto>(json);
-                var type = EnumMappers.MapResourceTypeFromDto(dto.GetValidatedData());
+                var type = dto.GetValidatedData();
 
                 return new StolenCardSelectedCommand(type);
             };
@@ -267,11 +264,11 @@ namespace Catan.Backend.GameManagement
             return factory(request.Data);
         }
 
-        private T Deserialize<T>(JsonElement json) where T : IValidatableDto
+        private T Deserialize<T>(JObject json) where T : IValidatableDto
         {
             DtoValidation.EnsureNoExtraFields<T>(json);
 
-            var dto = JsonSerializer.Deserialize<T>(json);
+            var dto = json.ToObject<T>();
 
             if (dto == null)
                 throw new BadRequestException($"Failed to deserialize {typeof(T).Name}");

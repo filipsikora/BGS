@@ -10,4 +10,13 @@ namespace Catan.Application.UIMessages
             NewTurnNumber = newTurnNumber;
         }
     }
+
+    public sealed class DiceRollChangedMessage : IUIMessages
+    {
+        public int RolledNumber;
+        public DiceRollChangedMessage(int rolledNumber)
+        {
+            RolledNumber = rolledNumber;
+        }
+    }
 }

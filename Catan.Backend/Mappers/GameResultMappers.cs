@@ -33,7 +33,7 @@ namespace Catan.Backend.Mappers
             return new CommandResponseDto
             {
                 Success = result.Success,
-                NextPhase = EnumMappers.MapGamePhaseToDto(result.NextPhase),
+                NextPhase = result.NextPhase,
 
                 UiMessages = result.GetUIMessagesList().Select(MapUiMessageToDto).ToList(),
                 DomainMessages = result.GetDomainEventsList().Select(MapDomainMessageToDto).ToList()
@@ -56,6 +56,7 @@ namespace Catan.Backend.Mappers
                 PotentialVictimsFoundMessage => EnumUiMessages.PotentialVictimsFoundMessage,
                 BankTradeRatioChangedMessage => EnumUiMessages.BankTradeRatioChangedMessage,
                 TurnNumberChangedMessage => EnumUiMessages.TurnNumberChangedMessage,
+                DiceRollChangedMessage => EnumUiMessages.DiceRollChangedMessage,
                 _ => throw new Exception($"Unknown UI message: {message}")
             };
         }

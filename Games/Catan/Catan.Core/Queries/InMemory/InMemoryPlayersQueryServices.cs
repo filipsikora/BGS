@@ -90,12 +90,12 @@ namespace Catan.Core.Queries.InMemory
             return playersData;
         }
 
-        public PlayerNameSnapshot GetVictimsName()
+        public PlayerResourcesSnapshot GetVictimsCards()
         {
             var victimId = _session.GetVictimId();
-            var victim = _session.GetPlayerById(victimId);
+            var victimCards = GetPlayersCards(victimId);
 
-            return new PlayerNameSnapshot(victim.ID, victim.Name);
+            return victimCards;
         }
     }
 }

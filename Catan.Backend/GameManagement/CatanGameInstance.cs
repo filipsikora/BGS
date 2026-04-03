@@ -33,5 +33,10 @@ namespace Catan.Backend.GameManagement
                 return GameResultMappers.MapGameResultToDto(result);
             }
         }
+
+        public object Query(object request)
+        {
+
+        }
     }
 }
