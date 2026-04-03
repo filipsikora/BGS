@@ -62,12 +62,60 @@ namespace BGS.Backend.Controllers
         }
 
         [HttpGet("{gameId}/queries/board")]
-        public IActionResult QueryBoard(Guid gameId, object request)
+        public IActionResult QueryBoard(Guid gameId)
         {
             if (!_gameManager.TryGetGame(gameId, out var game))
                 return NotFound();
 
-            var boardData = game.Query();
+            try
+            {
+                var boardData = game.Query("board");
+
+                return Ok(boardData);
+            }
+            
+            catch
+            {
+                return StatusCode(500, new { error = "Internal server error" });
+            }
+        }
+
+        [HttpGet("{gameId}/queries/player-data/{playerId}")]
+        public IActionResult QueryPlayerData(Guid gameId, int playerId)
+        {
+            if (!_gameManager.TryGetGame(gameId, out var game))
+                return NotFound();
+
+            try
+            {
+                var playerData = game.Query("player-Data", playerId);
+
+                return Ok(playerData);
+            }
+
+            catch
+            {
+                return StatusCode(500, new { error = "Internal server error" });
+            }
+        }
+
+        [HttpGet("{gameId}/queries/player-cards/{playerId")]
+        public IActionResult QueryPlayerCards(Guid gameId, int playerId)
+        {
+            if (!_gameManager.TryGetGame(gameId, out var game))
+                return NotFound();
+
+            try
+            {
+                var playerCards = game.Query("player-cards", playerId);
+
+                return Ok(playerCards);
+            }
+
+            catch
+            {
+                return StatusCode(500, new { error = "Internal server error" });
+            }
         }
     }
 }

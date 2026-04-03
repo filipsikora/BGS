@@ -34,9 +34,48 @@ namespace Catan.Backend.GameManagement
             }
         }
 
-        public object Query(object request)
+        public object Query(string queryName, object? parameters = null)
         {
+            lock (_lock)
+            {
+                return queryName switch
+                {
+                    "board" => HandleBoardQuery(),
+                    "player-data" => HandlePlayerDataQuery(parameters),
+                    "player-cards" => HandlerPlayerCardsQuery(parameters),
+                    _ => throw new Exception($"Unknown query: {queryName}")
+                };
+            }
+        }
 
+        private BoardDto HandleBoardQuery()
+        {
+            var snapshot = _gameApplication.Facade.GetBoardData();
+            var dto = BoardMappers.MapBoardToDto(snapshot);
+
+            return dto;
+        }
+
+        private PlayerDataDto HandlePlayerDataQuery(object? param)
+        {
+            if (param is not int playerId)
+                throw new Exception("PlayerId is required");
+
+            var snapshot = _gameApplication.Facade.GetPlayersData(playerId);
+            var dto = PlayerMappers.MapPlayerDataToDto(snapshot);
+
+            return dto;
+        }
+
+        private PlayerCardsDto HandlerPlayerCardsQuery(object? param)
+        {
+            if (param is not int playerId)
+                throw new Exception("PlayerId is required");
+
+            var snapshot = _gameApplication.Facade.GetPlayersCards(playerId);
+            var dto = PlayerMappers.MapPlayerCardsToDto(snapshot);
+
+            return dto;
         }
     }
 }

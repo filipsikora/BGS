@@ -87,15 +87,8 @@ namespace Catan.Application.Controllers
 
         // queries //
 
-        public EdgeSnapshot GetEdgeData(int edgeId) => _boardQuery.GetEdgeData(edgeId);
-        public VertexSnapshot GetVertexSnapshot(int vertexId) => _boardQuery.GetVertexData(vertexId);
-        public HexSnapshot GetHexData(int hexId) => _boardQuery.GetHexData(hexId);
-        public PortSnapshot GetPortData(int edgeId) => _boardQuery.GetPortData(edgeId);
         public BoardSnapshot GetBoardData() => _boardQuery.GetBoardData();
-
-
         public PlayerDataSnapshot GetPlayersData(int playerId) => _playersQuery.GetPlayersData(playerId);
-
         public ResourcesAvailabilitySnapshot GetResourcesAvailability() => _resourcesQuery.GetResourcesAvailability();
         public PlayerResourcesSnapshot GetPlayersCards(int playerId) => _playersQuery.GetPlayersCards(playerId);
         public PlayerResourcesSnapshot GetVictimsCards() => _playersQuery.GetVictimsCards();

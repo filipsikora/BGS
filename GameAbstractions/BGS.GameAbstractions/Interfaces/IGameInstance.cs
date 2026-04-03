@@ -3,6 +3,6 @@
     public interface IGameInstance
     {
         object Execute(object request);
-        object Query(object request);
+        object Query(string queryName, object? parameters = null);
     }
 }
