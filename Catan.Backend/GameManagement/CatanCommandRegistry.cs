@@ -34,9 +34,8 @@ namespace Catan.Backend.GameManagement
             _commandDictionary[EnumCommandType.BankTradeOfferedResourceSelectedCommand] = json =>
             {
                 var dto = Deserialize<BankTradeOfferedResourceSelectedDto>(json);
-                var type = dto.GetValidatedData();
 
-                return new BankTradeOfferedResourceSelectedCommand(type);
+                return new BankTradeOfferedResourceSelectedCommand(dto.Type.Value);
             };
 
             _commandDictionary[EnumCommandType.BankTradeDesiredResourceSelectedCommand] = json =>
@@ -59,21 +58,21 @@ namespace Catan.Backend.GameManagement
             {
                 var dto = Deserialize<VertexClickedDto>(json);
 
-                return new VertexClickedCommand(dto.GetValidatedData());
+                return new VertexClickedCommand(dto.VertexId.Value);
             };
 
             _commandDictionary[EnumCommandType.EdgeClickedCommand] = json =>
             {
                 var dto = Deserialize<EdgeClickedDto>(json);
 
-                return new EdgeClickedCommand(dto.GetValidatedData());
+                return new EdgeClickedCommand(dto.EdgeId.Value);
             };
 
             _commandDictionary[EnumCommandType.HexClickedCommand] = json =>
             {
                 var dto = Deserialize<HexClickedDto>(json);
 
-                return new HexClickedCommand(dto.GetValidatedData());
+                return new HexClickedCommand(dto.HexId.Value);
             };
 
             // BuildingsCommands
@@ -133,7 +132,7 @@ namespace Catan.Backend.GameManagement
             {
                 var dto = Deserialize<DevelopmentCardClickedPlayedDto>(json);
 
-                return new DevelopmentCardClickedPlayedCommand(dto.GetValidatedData());
+                return new DevelopmentCardClickedPlayedCommand(dto.DevelopmentCardId.Value);
             };
 
             // PhasesCommands
@@ -150,9 +149,8 @@ namespace Catan.Backend.GameManagement
             _commandDictionary[EnumCommandType.ResourceCardSelectedCommand] = json =>
             {
                 var dto = Deserialize<ResourceCardSelectedDto>(json);
-                var (type, isSelected) = dto.GetValidatedData();
 
-                return new ResourceCardSelectedCommand(isSelected, type);
+                return new ResourceCardSelectedCommand(dto.IsSelected.Value, dto.Type.Value);
             };
 
             // RobberCommands
@@ -161,7 +159,7 @@ namespace Catan.Backend.GameManagement
             {
                 var dto = Deserialize<VictimChosenDto>(json);
 
-                return new VictimChosenCommand(dto.GetValidatedData());
+                return new VictimChosenCommand(dto.VictimId.Value);
             };
 
             _commandDictionary[EnumCommandType.DiscardingAcceptedCommand] = json =>
@@ -174,9 +172,8 @@ namespace Catan.Backend.GameManagement
             _commandDictionary[EnumCommandType.StolenCardSelectedCommand] = json =>
             {
                 var dto = Deserialize<StolenCardSelectedDto>(json);
-                var type = dto.GetValidatedData();
 
-                return new StolenCardSelectedCommand(type);
+                return new StolenCardSelectedCommand(dto.Type.Value);
             };
 
             _commandDictionary[EnumCommandType.TryGetDiscardingVictimCommand] = json =>
@@ -250,18 +247,18 @@ namespace Catan.Backend.GameManagement
             {
                 var dto = Deserialize<TradePartnerChosenDto>(json);
 
-                return new TradePartnerChosenCommand(dto.GetValidatedData());
+                return new TradePartnerChosenCommand(dto.PlayerId.Value);
             };
         }
 
         public ICommand Create(CommandRequestDto request)
         {
-            if (!_commandDictionary.TryGetValue(request.Type, out var factory))
+            if (!_commandDictionary.TryGetValue(request.Type, out var command))
             {
                 throw new BadRequestException($"Command not registered: {request.Type}");
             }
 
-            return factory(request.Data);
+            return command(request.Data);
         }
 
         private T Deserialize<T>(JObject json) where T : IValidatableDto

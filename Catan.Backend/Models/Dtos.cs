@@ -8,72 +8,42 @@ namespace Catan.Backend.Models
     {
         public  EnumResourceType? Type { get; set; }
 
-        public EnumResourceType GetValidatedData()
-        {
-            return DtoValidation.RequireValueNotNull(Type, nameof(Type));
-        }
-
-        public void Validate() => GetValidatedData();
+        public void Validate() => DtoValidation.RequireValueNotNull(Type, nameof(Type));
     }
 
     public class BankTradeDesiredResourceSelectedDto : IValidatableDto
     {
         public EnumResourceType? Type { get; set; }
 
-        public EnumResourceType? GetValidatedData()
-        {
-            return Type;
-        }
-        public void Validate() => GetValidatedData();
+        public void Validate() {} // this command is always valid (accepts nullable)
     }
-
 
     public class VertexClickedDto : IValidatableDto
     {
         public int? VertexId { get; set; }
 
-        public int GetValidatedData()
-        {
-            return DtoValidation.RequirePositiveInt(VertexId, nameof(VertexId));
-        }
-
-        public void Validate() => GetValidatedData();
+        public void Validate() => DtoValidation.RequirePositiveInt(VertexId, nameof(VertexId));
     }
 
     public class EdgeClickedDto : IValidatableDto
     {
         public int? EdgeId { get; set; }
 
-        public int GetValidatedData()
-        {
-            return DtoValidation.RequirePositiveInt(EdgeId, nameof(EdgeId));
-        }
-
-        public void Validate() => GetValidatedData();
+        public void Validate() => DtoValidation.RequirePositiveInt(EdgeId, nameof(EdgeId));
     }
 
     public class HexClickedDto : IValidatableDto
     {
         public int? HexId { get; set; }
 
-        public int GetValidatedData()
-        {
-            return DtoValidation.RequirePositiveInt(HexId, nameof(HexId));
-        }
-
-        public void Validate() => GetValidatedData();
+        public void Validate() => DtoValidation.RequirePositiveInt(HexId, nameof(HexId));
     }
 
     public class DevelopmentCardClickedPlayedDto : IValidatableDto
     {
         public int? DevelopmentCardId { get; set; }
 
-        public int GetValidatedData()
-        {
-            return DtoValidation.RequirePositiveInt(DevelopmentCardId, nameof(DevelopmentCardId));
-        }
-
-        public void Validate() => GetValidatedData();
+        public void Validate() => DtoValidation.RequirePositiveInt(DevelopmentCardId, nameof(DevelopmentCardId));
     }
 
     public class ResourceCardSelectedDto : IValidatableDto
@@ -81,51 +51,32 @@ namespace Catan.Backend.Models
         public EnumResourceType? Type { get; set; }
         public bool? IsSelected { get; set; }
 
-        public (EnumResourceType, bool) GetValidatedData()
+        public void Validate()
         {
-            var typeValidated = DtoValidation.RequireValueNotNull(Type, nameof(Type));
-            var isSelectedValidated = DtoValidation.RequireValueNotNull(IsSelected, nameof(IsSelected));
-
-            return (typeValidated, isSelectedValidated);
+            DtoValidation.RequireValueNotNull(Type, nameof(Type));
+            DtoValidation.RequireValueNotNull(IsSelected, nameof(IsSelected));
         }
-
-        public void Validate() => GetValidatedData();
     }
 
     public class VictimChosenDto : IValidatableDto
     {
         public int? VictimId { get; set; }
 
-        public int GetValidatedData()
-        {
-            return DtoValidation.RequirePositiveInt(VictimId, nameof(VictimId));
-        }
-
-        public void Validate() => GetValidatedData();
+        public void Validate() => DtoValidation.RequirePositiveInt(VictimId, nameof(VictimId));
     }
 
     public class StolenCardSelectedDto : IValidatableDto
     {
         public EnumResourceType? Type { get; set; }
 
-        public EnumResourceType GetValidatedData()
-        {
-            return DtoValidation.RequireValueNotNull(Type, nameof(Type));
-        }
-
-        public void Validate() => GetValidatedData();
+        public void Validate() => DtoValidation.RequireValueNotNull(Type, nameof(Type));
     }
 
     public class TradePartnerChosenDto : IValidatableDto
     {
         public int? PlayerId { get; set; }
 
-        public int GetValidatedData()
-        {
-            return DtoValidation.RequirePositiveInt(PlayerId, nameof(PlayerId));
-        }
-
-        public void Validate() => GetValidatedData();
+        public void Validate() => DtoValidation.RequirePositiveInt(PlayerId, nameof(PlayerId));
     }
 
     public class EmptyDto : IValidatableDto

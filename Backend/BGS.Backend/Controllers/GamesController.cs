@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BGS.Backend.Helpers;
 using BGS.GameAbstractions.Interfaces;
 using Catan.Backend.Models;
 using Catan.Shared.Dtos;
-using BGS.Backend.Helpers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 
 namespace BGS.Backend.Controllers
 {
@@ -61,60 +62,20 @@ namespace BGS.Backend.Controllers
             return Ok(ids);
         }
 
-        [HttpGet("{gameId}/queries/board")]
-        public IActionResult QueryBoard(Guid gameId)
+        [HttpGet("{gameId}/queries/{queryName}")]
+        public IActionResult Query(Guid gameId, string queryName, [FromQuery] Dictionary<string, StringValues> queryParams)
         {
             if (!_gameManager.TryGetGame(gameId, out var game))
                 return NotFound();
 
             try
             {
-                var boardData = game.Query("board");
-
-                return Ok(boardData);
-            }
-            
-            catch
-            {
-                return StatusCode(500, new { error = "Internal server error" });
-            }
-        }
-
-        [HttpGet("{gameId}/queries/player-data/{playerId}")]
-        public IActionResult QueryPlayerData(Guid gameId, int playerId)
-        {
-            if (!_gameManager.TryGetGame(gameId, out var game))
-                return NotFound();
-
-            try
-            {
-                var playerData = game.Query("player-Data", playerId);
-
-                return Ok(playerData);
+                return Ok(game.Query(queryName, queryParams));
             }
 
-            catch
+            catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Internal server error" });
-            }
-        }
-
-        [HttpGet("{gameId}/queries/player-cards/{playerId")]
-        public IActionResult QueryPlayerCards(Guid gameId, int playerId)
-        {
-            if (!_gameManager.TryGetGame(gameId, out var game))
-                return NotFound();
-
-            try
-            {
-                var playerCards = game.Query("player-cards", playerId);
-
-                return Ok(playerCards);
-            }
-
-            catch
-            {
-                return StatusCode(500, new { error = "Internal server error" });
+                return BadRequest(new { error = ex.Message });
             }
         }
     }

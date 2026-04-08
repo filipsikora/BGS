@@ -5,23 +5,19 @@ namespace Catan.Backend.Helpers
 {
     public static class DtoValidation
     {
-        public static T RequireValueNotNull<T>(T? value, string fieldName) where T : struct
+        public static void RequireValueNotNull<T>(T? value, string fieldName) where T : struct
         {
             if (value == null)
                 throw new BadRequestException($"{fieldName} is required");
-
-            return value.Value;
         }
 
-        public static int RequirePositiveInt(int? value, string fieldName)
+        public static void RequirePositiveInt(int? value, string fieldName)
         {
             if (value == null)
                 throw new BadRequestException($"{fieldName} is required");
 
             if (value <= 0)
                 throw new BadRequestException($"{fieldName} has to be over 0");
-
-            return value.Value;
         }
 
         public static void EnsureNoExtraFields<T>(JObject json)
