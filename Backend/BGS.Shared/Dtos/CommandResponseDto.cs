@@ -1,11 +1,14 @@
-﻿using Catan.Shared.Data;
+﻿#nullable enable
 
-namespace Catan.Shared.Dtos
+using System;
+using System.Collections.Generic;
+
+namespace BGS.Shared.Dtos
 {
     public class CommandResponseDto
     {
         public bool Success { get; set; }
-        public EnumGamePhases? NextPhase { get; set; }
+        public String? NextPhase { get; set; }
         public List<UiMessageDto> UiMessages { get; set; } = new();
         public List<DomainEventDto> DomainMessages { get; set; } = new();
     }

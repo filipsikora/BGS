@@ -3,11 +3,10 @@ using Catan.Application.Interfaces;
 using Catan.Application.UIMessages;
 using Catan.Core.DomainEvents;
 using Catan.Core.Interfaces;
-using Catan.Shared.Data;
-using Catan.Shared.Dtos;
 using Catan.Shared.Dtos.DomainEvents;
 using Catan.Shared.Dtos.UiMessages;
 using Catan.Shared.Interfaces;
+using BGS.Shared.Dtos;
 
 namespace Catan.Backend.Mappers
 {
@@ -17,7 +16,7 @@ namespace Catan.Backend.Mappers
         {
             return new UiMessageDto
             {
-                Type = MapUiMessageToEnum(message),
+                Type = message.GetType().Name,
                 Data = MapUiMessageToDto(message)
             };
         }
@@ -26,7 +25,7 @@ namespace Catan.Backend.Mappers
         {
             return new DomainEventDto
             {
-                Type = MapDomainEventsToEnum(message),
+                Type = message.GetType().Name,
                 Data = MapDomainEventToDto(message)
             };
         }
@@ -36,44 +35,10 @@ namespace Catan.Backend.Mappers
             return new CommandResponseDto
             {
                 Success = result.Success,
-                NextPhase = result.NextPhase,
+                NextPhase = result.NextPhase != null ? result.NextPhase.ToString() : null,
 
                 UiMessages = result.GetUIMessagesList().Select(MapUiMessageToWrapperDto).ToList(),
                 DomainMessages = result.GetDomainEventsList().Select(MapDomainMessageToWrapperDto).ToList()
-            };
-        }
-
-        private static EnumUiMessages MapUiMessageToEnum(IUIMessages message)
-        {
-            return message switch
-            {
-                VertexHighlightedMessage => EnumUiMessages.VertexHighlightedMessage,
-                EdgeHighlightedMessage => EnumUiMessages.EdgeHighlightedMessage,
-                BuildOptionsSentMessage => EnumUiMessages.BuildOptionsSentMessage,
-                LogMessageMessage => EnumUiMessages.LogMessageMessage,
-                ActionRejectedMessage => EnumUiMessages.ActionRejectedMessage,
-                ResourceSelectedMessage => EnumUiMessages.ResourceSelectedMessage,
-                SelectionChangedMessage => EnumUiMessages.SelectionChangedMessage,
-                DesiredCardsChangedMessage => EnumUiMessages.DesiredCardsChangedMessage,
-                PlayerSelectedToDiscardMessage => EnumUiMessages.PlayerSelectedToDiscardMessage,
-                PotentialVictimsFoundMessage => EnumUiMessages.PotentialVictimsFoundMessage,
-                BankTradeRatioChangedMessage => EnumUiMessages.BankTradeRatioChangedMessage,
-                TurnNumberChangedMessage => EnumUiMessages.TurnNumberChangedMessage,
-                DiceRollChangedMessage => EnumUiMessages.DiceRollChangedMessage,
-                _ => throw new Exception($"Unknown UI message: {message}")
-            };
-        }
-
-        private static EnumDomainEvents MapDomainEventsToEnum(IDomainEvent message)
-        {
-            return message switch
-            {
-                VillagePlacedEvent => EnumDomainEvents.VillagePlacedEvent,
-                RoadPlacedEvent => EnumDomainEvents.RoadPlacedEvent,
-                TownPlacedEvent => EnumDomainEvents.TownPlacedEvent,
-                DevelopmentCardBoughtEvent => EnumDomainEvents.DevelopmentCardBoughtEvent,
-                RobberPlacedEvent => EnumDomainEvents.RobberPlacedEvent,
-                PlayerStateChangedEvent => EnumDomainEvents.PlayerStateChangedEvent
             };
         }
 
@@ -84,14 +49,14 @@ namespace Catan.Backend.Mappers
                 VertexHighlightedMessage m => new VertexHighlightedDto(m.VertexId),
                 EdgeHighlightedMessage m => new EdgeHighlightedDto(m.EdgeId),
                 BuildOptionsSentMessage m => new BuildOptionsSentDto(m.CanBuildVillage, m.CanBuildRoad, m.CanUpgradeVillage),
-                LogMessageMessage m => new LogMessageDto(m.Type, m.Message, m.Time),
-                ActionRejectedMessage m => new ActionRejectedDto(m.PlayerId, m.Reason),
-                ResourceSelectedMessage m => new ResourceSelectedDto(m.Selected, m.Type),
+                LogMessageMessage m => new LogMessageDto(m.Type.ToString(), m.Message, m.Time),
+                ActionRejectedMessage m => new ActionRejectedDto(m.PlayerId, m.Reason.ToString()),
+                ResourceSelectedMessage m => new ResourceSelectedDto(m.Selected, m.Type.ToString()),
                 SelectionChangedMessage m => new SelectionChangedDto(m.ActionAvailable),
                 DesiredCardsChangedMessage m => new DesiredCardsChangedDto(m.HasDesired),
                 PlayerSelectedToDiscardMessage m => new PlayerSelectedToDiscardDto(m.PlayerId),
                 PotentialVictimsFoundMessage m => new PotentialVictimsFoundDto(m.VictimsIds),
-                BankTradeRatioChangedMessage m => new BankTradeRatioChangedDto(m.Ratio, m.PossibleForPlayer, m.Resource),
+                BankTradeRatioChangedMessage m => new BankTradeRatioChangedDto(m.Ratio, m.PossibleForPlayer, m.Resource.ToString()),
                 TurnNumberChangedMessage m => new TurnNumberChangedDto(m.NewTurnNumber),
                 DiceRollChangedMessage m => new DiceRollChangedDto(m.RolledNumber),
                 _ => throw new Exception($"Unknown UI message: {message}")

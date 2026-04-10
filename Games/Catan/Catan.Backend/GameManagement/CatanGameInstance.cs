@@ -3,6 +3,7 @@ using Catan.Application;
 using Catan.Backend.Mappers;
 using Catan.Shared.Data;
 using Catan.Shared.Dtos;
+using BGS.Shared.Dtos;
 using Microsoft.Extensions.Primitives;
 
 namespace Catan.Backend.GameManagement

@@ -23,7 +23,9 @@ namespace Catan.Backend.Mappers
         {
             return new PlayerCardsDto
             {
-                PlayerResources = snapshot.PlayerResources
+                PlayerResources = snapshot.PlayerResources.ToDictionary(
+                    kvp => kvp.Key.ToString(),
+                    kvp => kvp.Value)
             };
         }
 
@@ -31,7 +33,9 @@ namespace Catan.Backend.Mappers
         {
             return new ResourcesAvailabilityDto
             {
-                ResourcesAvailability = snapshot.ResourcesAvailability
+                ResourcesAvailability = snapshot.ResourcesAvailability.ToDictionary(
+                    kvp => kvp.Key.ToString(),
+                    kvp => kvp.Value)
             };
         }
 
@@ -42,7 +46,7 @@ namespace Catan.Backend.Mappers
                 Id = devCard.Id,
                 IsNew = devCard.IsNew,
                 IsPlayable = devCard.IsPlayable,
-                Type = devCard.Type
+                Type = devCard.Type.ToString()
             }).ToList();
         }
 
@@ -72,8 +76,12 @@ namespace Catan.Backend.Mappers
                 BuyerId = snapshot.BuyerId,
                 SellerName = snapshot.SellerName,
                 BuyerName = snapshot.BuyerName,
-                Offered = snapshot.Offered,
-                Desired = snapshot.Desired,
+                Offered = snapshot.Offered.ToDictionary(
+                    kvp => kvp.Key.ToString(),
+                    kvp => kvp.Value),
+                Desired = snapshot.Desired.ToDictionary(
+                    kvp => kvp.Key.ToString(),
+                    kvp => kvp.Value),
                 CanTrade = snapshot.CanTrade
             };
         }

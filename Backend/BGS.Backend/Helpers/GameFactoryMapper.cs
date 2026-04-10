@@ -1,7 +1,7 @@
 ﻿using BGS.Backend.Interfaces;
 using BGS.GameAbstractions.Interfaces;
 using Catan.Backend.GameManagement;
-using Catan.Shared.Data;
+using BGS.Shared.Data;
 
 namespace BGS.Backend.Helpers
 {

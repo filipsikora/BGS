@@ -1,0 +1,27 @@
+1.
+ISSUE: Validation for command dtos is wrong - it returns values for no reason, then doesn't use them, which will cause bugs
+
+SOLUTION: remove GetValidatedData(), make Validate return void, make queries use dto fields, not validation result fields
+
+STATE: done
+
+2. 
+ISSUE: controller has too many strings
+
+SOLUTION: replace them with string objects received from path, then have them used and passed in backend
+
+STATE: mostly done, i will want to replace more random strings with const   -------------------
+
+3.
+ISSUE: validation is scattered all over the place, i think it is separated nicely (core, app, backend), but will need to check. also i'm not sure if the errors are returned well
+
+SOLUTION: make a layer that reads errors and translates them, check every error once the game runs
+
+STATE: later issue, once all is done
+
+4. 
+ISSUE: new dictionary transport solution breaks the order in which the player has his cards. it's not a big issue for now I guess, but ultimately needs to be fixed
+
+SOLUTION: no idea
+
+STATE: well it is a big deal i think, but not pressing

@@ -15,6 +15,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Catan.Backend\Catan.Backend.csproj" />
     <ProjectReference Include="..\..\GameAbstractions\BGS.GameAbstractions\BGS.GameAbstractions.csproj" />
+    <ProjectReference Include="..\..\Games\Catan\Catan.Backend\Catan.Backend.csproj" />
+    <ProjectReference Include="..\BGS.GameAbstractions\BGS.GameAbstractions.csproj" />
+    <ProjectReference Include="..\BGS.Shared\BGS.Shared.csproj" />
   </ItemGroup>
 
 </Project>

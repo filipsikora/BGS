@@ -1,4 +1,5 @@
 ﻿using Catan.Shared.Interfaces;
+using System.Collections.Generic;
 
 namespace Catan.Shared.Dtos.UiMessages
 {

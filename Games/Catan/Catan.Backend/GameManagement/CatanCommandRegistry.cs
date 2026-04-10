@@ -4,7 +4,7 @@ using Catan.Application.Commands;
 using Catan.Application.Interfaces;
 using Catan.Shared.Data;
 using Catan.Shared.Interfaces;
-using Catan.Shared.Dtos;
+using BGS.Shared.Dtos;
 using Newtonsoft.Json.Linq;
 
 namespace Catan.Backend.GameManagement
@@ -253,7 +253,10 @@ namespace Catan.Backend.GameManagement
 
         public ICommand Create(CommandRequestDto request)
         {
-            if (!_commandDictionary.TryGetValue(request.Type, out var command))
+            if (!Enum.TryParse<EnumCommandType>(request.Type, out var type))
+                throw new Exception($"Failed to parse CommandType: {request.Type}");
+
+            if (!_commandDictionary.TryGetValue(type, out var command))
             {
                 throw new BadRequestException($"Command not registered: {request.Type}");
             }

@@ -1,5 +1,5 @@
 ﻿using BGS.GameAbstractions.Interfaces;
-using Catan.Shared.Data;
+using BGS.Shared.Data;
 
 namespace BGS.Backend.Interfaces
 {

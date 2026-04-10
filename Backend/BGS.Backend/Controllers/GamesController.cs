@@ -1,9 +1,10 @@
 ﻿using BGS.Backend.Helpers;
 using BGS.GameAbstractions.Interfaces;
 using Catan.Backend.Models;
-using Catan.Shared.Dtos;
+using BGS.Shared.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using BGS.Shared.Data;
 
 namespace BGS.Backend.Controllers
 {
@@ -23,7 +24,11 @@ namespace BGS.Backend.Controllers
         [HttpPost("create")]
         public IActionResult CreateGame([FromBody] CreateGameRequestDto request)
         {
-            var factory = _factoryMapper.GetFactory(request.GameType);
+            if (!Enum.TryParse<EnumGames>(request.GameType, out var gameType))
+                return StatusCode(500, new { error = $"Failed to parse GameType: {gameType}" });
+
+
+            var factory = _factoryMapper.GetFactory(gameType);
             var gameId = _gameManager.CreateGame(factory);
 
             return Ok(new CreateGameResponseDto { GameId = gameId });
