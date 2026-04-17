@@ -1,5 +1,4 @@
 ﻿#nullable enable
-using System.Collections.Generic;
 using Catan.Core.Interfaces;
 
 namespace Catan.Core.Models

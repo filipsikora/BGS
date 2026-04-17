@@ -1,8 +1,9 @@
 ﻿using Catan.Application.Controllers;
 using Catan.Application.UIMessages;
-using Catan.Shared.Models;
-using Catan.Shared.Commands;
+using Catan.Core.Models;
+using Catan.Application.Commands;
 using Catan.Shared.Data;
+using Catan.Core.DomainEvents;
 
 namespace Catan.Application.Phases
 {
@@ -69,7 +70,7 @@ namespace Catan.Application.Phases
                 return GameResult.Fail().AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, $"Player{playerId} received {key} {amount} from Year Of Plenty card"));
             }
 
-            return GameResult.Ok(result.NextPhase);
+            return GameResult.Ok(result.NextPhase).AddDomainEvent(new PlayerStateChangedEvent(playerId));
         }
     }
 }

@@ -2,7 +2,6 @@
 using Catan.Core.Engine;
 using Catan.Core.Models;
 using Catan.Core.Results;
-using System.Collections.Generic;
 
 namespace Catan.Core.Rules
 {

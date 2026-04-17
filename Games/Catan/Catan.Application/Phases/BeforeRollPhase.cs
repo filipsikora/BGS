@@ -2,8 +2,9 @@
 using Catan.Application.Interfaces;
 using Catan.Application.UIMessages;
 using Catan.Core.Results;
-using Catan.Shared.Commands;
+using Catan.Application.Commands;
 using Catan.Shared.Data;
+using Catan.Core.DomainEvents;
 
 namespace Catan.Application.Phases
 {
@@ -37,7 +38,8 @@ namespace Catan.Application.Phases
 
             var logList = GetLogList(result);
 
-            return GameResult.Ok(result.NextPhase.Value).AddUIMessagesList(logList);
+            return GameResult.Ok(result.NextPhase.Value).AddUIMessagesList(logList).AddDomainEvent(new PlayerStateChangedEvent(Facade.GetCurrentPlayerId())).
+                AddUIMessage(new DiceRollChangedMessage(result.Roll));
         }
 
         private GameResult HandleInvalidClick()

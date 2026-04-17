@@ -28,11 +28,14 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\borgw\\source\\repos\\BGS\\Catan.Backend\\Catan.Backend.csproj": {
-                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Catan.Backend\\Catan.Backend.csproj"
+              "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj": {
+                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj"
               },
-              "C:\\Users\\borgw\\source\\repos\\BGS\\GameAbstractions\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj": {
-                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\GameAbstractions\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj"
+              "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.Shared\\BGS.Shared.csproj": {
+                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.Shared\\BGS.Shared.csproj"
+              },
+              "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Backend\\Catan.Backend.csproj": {
+                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Backend\\Catan.Backend.csproj"
               }
             }
           }
@@ -53,6 +56,10 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.12, )"
@@ -85,85 +92,14 @@
         }
       }
     },
-    "C:\\Users\\borgw\\source\\repos\\BGS\\Catan.Backend\\Catan.Backend.csproj": {
+    "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\borgw\\source\\repos\\BGS\\Catan.Backend\\Catan.Backend.csproj",
-        "projectName": "Catan.Backend",
-        "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Catan.Backend\\Catan.Backend.csproj",
-        "packagesPath": "C:\\Users\\borgw\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Catan.Backend\\obj\\",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "C:\\Users\\borgw\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "net9.0"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net9.0": {
-            "targetAlias": "net9.0",
-            "projectReferences": {
-              "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Application\\Catan.Application.csproj": {
-                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Application\\Catan.Application.csproj"
-              },
-              "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Core\\Catan.Core.csproj": {
-                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Core\\Catan.Core.csproj"
-              },
-              "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Shared\\Catan.Shared.csproj": {
-                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Shared\\Catan.Shared.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
-      },
-      "frameworks": {
-        "net9.0": {
-          "targetAlias": "net9.0",
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "C:\\Users\\borgw\\source\\repos\\BGS\\GameAbstractions\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\borgw\\source\\repos\\BGS\\GameAbstractions\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj",
+        "projectUniqueName": "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj",
         "projectName": "BGS.GameAbstractions",
-        "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\GameAbstractions\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj",
+        "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj",
         "packagesPath": "C:\\Users\\borgw\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\borgw\\source\\repos\\BGS\\GameAbstractions\\BGS.GameAbstractions\\obj\\",
+        "outputPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.GameAbstractions\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\borgw\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -217,6 +153,73 @@
         }
       }
     },
+    "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.Shared\\BGS.Shared.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.Shared\\BGS.Shared.csproj",
+        "projectName": "BGS.Shared",
+        "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.Shared\\BGS.Shared.csproj",
+        "packagesPath": "C:\\Users\\borgw\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.Shared\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\borgw\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Application\\Catan.Application.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -241,11 +244,82 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\borgw\\source\\repos\\BGS\\GameAbstractions\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj": {
-                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\GameAbstractions\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj"
-              },
               "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Core\\Catan.Core.csproj": {
                 "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Core\\Catan.Core.csproj"
+              },
+              "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Shared\\Catan.Shared.csproj": {
+                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Shared\\Catan.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Backend\\Catan.Backend.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Backend\\Catan.Backend.csproj",
+        "projectName": "Catan.Backend",
+        "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Backend\\Catan.Backend.csproj",
+        "packagesPath": "C:\\Users\\borgw\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Backend\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\borgw\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj": {
+                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj"
+              },
+              "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.Shared\\BGS.Shared.csproj": {
+                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.Shared\\BGS.Shared.csproj"
+              },
+              "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Application\\Catan.Application.csproj": {
+                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Application\\Catan.Application.csproj"
               },
               "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Shared\\Catan.Shared.csproj": {
                 "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Shared\\Catan.Shared.csproj"
@@ -400,6 +474,12 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

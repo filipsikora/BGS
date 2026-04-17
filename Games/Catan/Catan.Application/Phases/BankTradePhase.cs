@@ -1,7 +1,8 @@
 ﻿using Catan.Application.Controllers;
 using Catan.Application.UIMessages;
-using Catan.Shared.Commands;
+using Catan.Application.Commands;
 using Catan.Shared.Data;
+using Catan.Core.DomainEvents;
 
 namespace Catan.Application.Phases
 {
@@ -54,7 +55,8 @@ namespace Catan.Application.Phases
                 return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(result.PlayerId, result.Reason));
             }
 
-            return GameResult.Ok(result.NextPhase).AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, $"player{result.PlayerId} trade {result.Ratio} {result.Offered} for 1 {result.Desired}"));
+            return GameResult.Ok(result.NextPhase).AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, $"player{result.PlayerId} trade {result.Ratio} {result.Offered} for 1 {result.Desired}")).
+                AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
         }
     }
 }

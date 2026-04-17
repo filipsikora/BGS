@@ -1,6 +1,5 @@
 ﻿#nullable enable
 using Catan.Shared.Data;
-using Catan.Shared.Models;
 
 namespace Catan.Core.Models
 {

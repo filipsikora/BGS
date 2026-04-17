@@ -1,5 +1,4 @@
 ﻿using Catan.Core.Snapshots;
-using System.Collections.Generic;
 
 namespace Catan.Core.Queries.Interfaces
 {
@@ -17,6 +16,6 @@ namespace Catan.Core.Queries.Interfaces
 
         List<PlayerNameSnapshot> GetNotCurrentPlayersNames();
 
-        PlayerNameSnapshot GetVictimsName();
+        PlayerResourcesSnapshot GetVictimsCards();
     }
 }

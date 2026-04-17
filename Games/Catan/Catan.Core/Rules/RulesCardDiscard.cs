@@ -1,7 +1,6 @@
 ﻿using Catan.Core.Conditions;
 using Catan.Core.Models;
 using Catan.Core.Results;
-using Catan.Shared.Models;
 
 namespace Catan.Core.Rules
 {

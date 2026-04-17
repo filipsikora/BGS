@@ -1,4 +1,4 @@
-﻿using Catan.Shared.Models;
+﻿using Catan.Core.Models;
 
 namespace Catan.Core.Engine
 {

@@ -3,7 +3,7 @@ using Catan.Core.Queries.Interfaces;
 using Catan.Core.Results;
 using Catan.Core.Snapshots;
 using Catan.Shared.Data;
-using Catan.Shared.Models;
+using Catan.Core.Models;
 
 namespace Catan.Application.Controllers
 {
@@ -89,12 +89,12 @@ namespace Catan.Application.Controllers
 
         public BoardSnapshot GetBoardData() => _boardQuery.GetBoardData();
         public PlayerDataSnapshot GetPlayersData(int playerId) => _playersQuery.GetPlayersData(playerId);
-        public PlayerResourcesSnapshot GetPlayersCards(int playerId) => _playersQuery.GetPlayersCards(playerId);
         public ResourcesAvailabilitySnapshot GetResourcesAvailability() => _resourcesQuery.GetResourcesAvailability();
-        public TurnDataSnapshot GetTurnData() => _turnsQuery.GetTurnData();
-        public PlayerNameSnapshot GetVictimsName() => _playersQuery.GetVictimsName();
-        public IReadOnlyList<DevelopmentCardSnapshot> GetCurrentPlayerDevCards() => _devCardQuery.GetCurrentPlayerDevCards();
+        public PlayerResourcesSnapshot GetPlayersCards(int playerId) => _playersQuery.GetPlayersCards(playerId);
+        public PlayerResourcesSnapshot GetVictimsCards() => _playersQuery.GetVictimsCards();
         public IReadOnlyList<PlayerNameSnapshot> GetSomePlayersNames(List<int> potentialVictimsIds) => _playersQuery.GetSomePlayersNames(potentialVictimsIds);
+        public IReadOnlyList<DevelopmentCardSnapshot> GetCurrentPlayerDevCards() => _devCardQuery.GetCurrentPlayerDevCards();
+
         public IReadOnlyList<PlayerNameSnapshot> GetNotCurrentPlayersNames() => _playersQuery.GetNotCurrentPlayersNames();
         public TradeOfferedSnapshot GetTradeOfferData() => _tradeQuery.GetTradeOfferData();
     }

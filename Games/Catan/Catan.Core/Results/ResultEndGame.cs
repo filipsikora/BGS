@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Catan.Core.Results
+﻿namespace Catan.Core.Results
 {
     public class ResultEndGame
     {

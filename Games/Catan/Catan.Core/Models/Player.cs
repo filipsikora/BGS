@@ -1,7 +1,6 @@
 ﻿#nullable enable
+using Catan.Core.Data;
 using Catan.Core.Helpers;
-using Catan.Shared.Data;
-using Catan.Shared.Models;
 
 namespace Catan.Core.Models
 {

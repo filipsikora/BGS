@@ -1,5 +1,5 @@
 ﻿#nullable enable
-using System;
+using Catan.Core.Data;
 using Catan.Shared.Data;
 using Catan.Core.Results;
 using Catan.Core.Models;

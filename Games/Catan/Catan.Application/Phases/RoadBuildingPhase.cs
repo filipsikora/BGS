@@ -1,7 +1,7 @@
 ﻿using Catan.Application.Controllers;
 using Catan.Application.UIMessages;
 using Catan.Core.DomainEvents;
-using Catan.Shared.Commands;
+using Catan.Application.Commands;
 
 namespace Catan.Application.Phases
 {
@@ -49,7 +49,7 @@ namespace Catan.Application.Phases
                 return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(playerId, result.Reason));
             }
 
-            return GameResult.Ok(result.NextPhase).AddDomainEvent(new RoadPlacedEvent(id, Facade.GetCurrentPlayerId()));
+            return GameResult.Ok(result.NextPhase).AddDomainEvent(new RoadPlacedEvent(id, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
         }
     }
 }
