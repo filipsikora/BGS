@@ -46,7 +46,7 @@ namespace Catan.Backend.Mappers
             return new PortDto
             {
                 EdgeId = snapshot.EdgeId,
-                Type = snapshot.Type.ToString()
+                Type = snapshot.Type == null ? null : snapshot.Type.ToString()
             };
         }
 

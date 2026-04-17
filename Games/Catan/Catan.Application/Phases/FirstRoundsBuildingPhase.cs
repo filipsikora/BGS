@@ -122,7 +122,7 @@ namespace Catan.Application.Phases
         {
             var result = Facade.UseFinishTurn();
 
-            return GameResult.Ok(result.NextPhase).AddDomainEvent(new PlayerStateChangedEvent(result.NewCurrentPlayerId));
+            return GameResult.Ok(result.NextPhase).AddDomainEvent(new PlayerStateChangedEvent(result.NewCurrentPlayerId)).AddUIMessage(new TurnNumberChangedMessage(result.NewTurnNumber));
         }
     }
 }

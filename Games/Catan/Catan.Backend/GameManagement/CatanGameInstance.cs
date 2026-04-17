@@ -4,7 +4,7 @@ using Catan.Backend.Mappers;
 using Catan.Shared.Data;
 using Catan.Shared.Dtos;
 using BGS.Shared.Dtos;
-using Microsoft.Extensions.Primitives;
+using Microsoft.AspNetCore.Http;
 
 namespace Catan.Backend.GameManagement
 {
@@ -41,7 +41,7 @@ namespace Catan.Backend.GameManagement
         {
             lock (_lock)
             {
-                var dict = data as Dictionary<string, StringValues>;
+                var dict = data as IQueryCollection;
                 var query = QueryMappers.MapStringToEnum(queryName);
 
                 return query switch
@@ -138,33 +138,22 @@ namespace Catan.Backend.GameManagement
             return dto;
         }
 
-        private int ParseInt(Dictionary<string, StringValues>? dict, string key)
+        private int ParseInt(IQueryCollection dict, string key)
         {
-            if (dict == null || !dict.TryGetValue(key, out var value))
+            if (!dict.TryGetValue(key, out var value))
                 throw new Exception($"Missing parameter: {key}");
 
-            if (!int.TryParse(value, out var result))
+            if (!int.TryParse(value.ToString(), out var result))
                 throw new Exception($"Invalid int for {key}");
 
             return result;
         }
 
-        private List<int> ParseListInt(Dictionary<string, StringValues>? dict, string key)
+        private List<int> ParseListInt(IQueryCollection dict, string key)
         {
-            if (dict == null || !dict.TryGetValue(key, out var values))
-                throw new Exception($"Missing parameter: {key}");
-
-            var result = new List<int>();
-
-            foreach (var v in values)
-            {
-                if (!int.TryParse(v, out var parsed))
-                    throw new Exception($"Invalid int in {key}");
-
-                result.Add(parsed);
-            }
-
-            return result;
+            return dict[key]
+                .Select(v => int.Parse(v))
+                .ToList();
         }
     }
 }   

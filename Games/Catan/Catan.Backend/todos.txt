@@ -20,8 +20,32 @@ SOLUTION: make a layer that reads errors and translates them, check every error 
 STATE: later issue, once all is done
 
 4. 
-ISSUE: new dictionary transport solution breaks the order in which the player has his cards. it's not a big issue for now I guess, but ultimately needs to be fixed
+ISSUE: new dictionary transport solution breaks the order in which the player has his cards
 
-SOLUTION: no idea
+SOLUTION: implement a list of player cards. i thought about refactoring whole resources system to consist of list/dictionary of resource objects, so it could be done then. i am not sure if i'd like to have just list, or to have
+both list and dictionary, one used for display, one used for costs
 
-STATE: well it is a big deal i think, but not pressing
+STATE: this stems from a design choice i made when i had no idea what was i doing and didn't think i'd actually reach unity phase. the next planned game won't have this issue, since resources work differently, so i am not sure
+i want to be bothered with refactoring this whole system (resource models will be needed for the future games, but not really resource list), so i might ignore it
+
+5. 
+ISSUE: nextPhase is decided in core
+
+SOLUTION: i can move it to application layer
+
+STATE: meh i mean i can do it but i dont think its urgent, i will keep that in mind for future games though
+
+6.
+ISSUE: controllers in Unity do too much
+
+SOLUTION: once i move from hotseat i will need to separate global events from local (player-scoped), only global ones will be dealt by controllers subbing eventbus (robber moved, building placed, game-wide logs), the rest will
+need to come from the player client. i will need to figure out how to take care of it including playerId
+
+STATE: important, but not until i move to simultanous game (once the initial db is up and the game is playable)
+
+7.
+ISSUE: some parts of logic are not validated in core (ending turn possible in firstrounds before placing buildings). this will be fixed with the client, but needs to be addressed in core as well
+
+SOLUTION: stop fixing client now, check what is not validated in core, add validation and fix ui
+
+STATE: fiest priority

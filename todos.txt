@@ -4,14 +4,16 @@ ISSUE: enumgames is in catan.shared, same as command request/response dto, creat
 SOLUTION: move all platform-wide stuff (enumgamename, commandrequest/repsonsedto, creategamerequest/responsedto) to backend.shared, pack it as a .dll and make client access it same as catan.shared. for that to work i need the 
 client to send a raw string, then backend passes it and catan.backend maps it to enum
 
-STATE: first priority to be implemented
+STATE: Mapping and moving done, .dll will need to wait until i am done with testing and it will be final
+
 
 2. 
 ISSUE: gamecontroller is accessing catan.shared to create a game, and to run commands
 
 SOLUTION: once catan.backend exists make both client and bgs.backend use this layer and remove references to catan.shared
 
-STATE: once backend.shared exists it should be pretty easy
+STATE: done
+
 
 3. program uses catan.backend to return and addService factory. there is a mapper that returns the correct factory, but because of this it will need to access all games at some point. i am not sure how to address it for now.
 
@@ -19,9 +21,24 @@ SOLUTION: add a host that actually initializes games? then move out program out 
 
 STATE: a bigger refactor i will get back to once i test the game run in unity client using backend and bugs are fixed
 
+
 4. 
 ISSUE: catan.backend has access to catan.core because it wraps domainevents
 
 SOLUTION: move models to application layer since they are used only by it anyway
 
 STATE: small improvement to do once big refactor is done, before step 3
+
+5.
+ISSUE: queries are weak
+
+SOLUTION: implement a query interface and query objects
+
+STATE: once the game is running and before step 3
+
+6.
+ISSUE: domainevents and uimessages are mixed
+
+SOLUTION: keep only game events and make the client do all the rest
+
+STATE: it's polishing and learning good practice, so once all is working and before moving on to the next game
