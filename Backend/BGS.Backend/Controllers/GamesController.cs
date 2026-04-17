@@ -3,6 +3,7 @@ using BGS.GameAbstractions.Interfaces;
 using Catan.Backend.Models;
 using BGS.Shared.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using BGS.Shared.Data;
 
@@ -43,7 +44,7 @@ namespace BGS.Backend.Controllers
             if (request == null)
                 return BadRequest("Request body is missing");
 
-            try
+            try 
             {
                 var result = game.Execute(request);
                 return Ok(result);
@@ -68,10 +69,12 @@ namespace BGS.Backend.Controllers
         }
 
         [HttpGet("{gameId}/queries/{queryName}")]
-        public IActionResult Query(Guid gameId, string queryName, [FromQuery] Dictionary<string, StringValues> queryParams)
+        public IActionResult Query(Guid gameId, string queryName)
         {
             if (!_gameManager.TryGetGame(gameId, out var game))
                 return NotFound();
+
+            var queryParams = HttpContext.Request.Query;
 
             try
             {
