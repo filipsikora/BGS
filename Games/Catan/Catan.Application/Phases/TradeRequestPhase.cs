@@ -34,7 +34,7 @@ namespace Catan.Application.Phases
                 return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(result.BuyerId, result.Reason));
             }
 
-            return GameResult.Ok(result.NextPhase).AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, "Trade accepted")).AddDomainEvent(new PlayerStateChangedEvent(result.SellerId));
+            return GameResult.Ok(result.NextPhase).AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, "Trade accepted")).AddDomainEventsList(result.DomainEvents);
         }
     }
 }

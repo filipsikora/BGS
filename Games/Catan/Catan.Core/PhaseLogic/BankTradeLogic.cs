@@ -1,4 +1,5 @@
-﻿using Catan.Core.Results;
+﻿using Catan.Core.DomainEvents;
+using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
@@ -13,16 +14,19 @@ namespace Catan.Core.PhaseLogic
             var player = Session.GetCurrentPlayer();
             var ratio = Session.GetCurrentPlayerTradeRatio(offered);
             
-            var result = RulesTrade.CanTradeWithBank(player, Session.GetBank(), offered, desired, ratio);
+            var validation = RulesTrade.CanTradeWithBank(player, Session.GetBank(), offered, desired, ratio);
             
-            if (!result.Success)
+            if (!validation.Success)
             {
-                return ResultBankTrade.Fail(player.ID, result.Reason);
+                return ResultBankTrade.Fail(player.ID, validation.Reason);
             }
 
             Session.BankTradeMutation(offered, desired, ratio);
 
-            return ResultBankTrade.Ok(player.ID, offered, desired, ratio, EnumGamePhases.NormalRound);
+            var result = ResultBankTrade.Ok(player.ID, offered, desired, ratio, EnumGamePhases.NormalRound);
+            result.AddDomainEvent(new PlayerStateChangedEvent(player.ID));
+
+            return result;
         }
     }
 }

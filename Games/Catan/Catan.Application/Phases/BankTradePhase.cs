@@ -2,7 +2,6 @@
 using Catan.Application.UIMessages;
 using Catan.Application.Commands;
 using Catan.Shared.Data;
-using Catan.Core.DomainEvents;
 
 namespace Catan.Application.Phases
 {
@@ -56,7 +55,7 @@ namespace Catan.Application.Phases
             }
 
             return GameResult.Ok(result.NextPhase).AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, $"player{result.PlayerId} trade {result.Ratio} {result.Offered} for 1 {result.Desired}")).
-                AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
+                AddDomainEventsList(result.DomainEvents);
         }
     }
 }

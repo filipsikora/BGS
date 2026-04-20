@@ -123,12 +123,16 @@ namespace Catan.Core
         public bool CheckIfExactCardsAmountSelected(ResourceCostOrStock resources, int amount) => ConditionsResources.HasExactResourcesNumber(resources, amount).Success;
 
         public bool CheckIfInitialRoundsRemaining() => _game.FirstRoundsIndices.Count > 0;
+        public bool CheckIfIsInitialRound() => _game.Turn <= _game.PlayerList.Count * 2;
 
         public int GetBlockedHexId() => _game.GetBlockedHexId();
 
         public int GetTurn() => _game.Turn;
 
         public int GetLastRoll() => _game.LastRoll;
+
+        public bool GetVillagePlacedThisTurn() => _game.VillagePlacedThisTurn;
+        public bool GetRoadPlacedThisTurn() => _game.RoadPlacedThisTurn;
 
         public int GetCurrentPlayerTradeRatio(EnumResourceType resource)
         {
@@ -313,6 +317,9 @@ namespace Catan.Core
         internal void CreateTradeDraftContext(ResourceCostOrStock offered) => _game.CreateTradeDraftContext(offered);
         internal void CreateRoadBuildingContext(int roadsLeftToBuild) => _game.CreateRoadBuildingContext(roadsLeftToBuild);
         internal void RoadBuildingContextMutation() => _game.RoadBuildingContextMutation();
+
+        internal void SetVillageBuiltThisTurn(bool built) => _game.VillagePlacedThisTurn = built;
+        internal void SetRoadBuiltThisTurn(bool built) => _game.RoadPlacedThisTurn = built;
 
         // wrappers //
 

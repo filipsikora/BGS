@@ -1,4 +1,5 @@
-﻿using Catan.Core.Results;
+﻿using Catan.Core.DomainEvents;
+using Catan.Core.Results;
 using Catan.Core.Rules;
 
 namespace Catan.Core.PhaseLogic
@@ -15,16 +16,19 @@ namespace Catan.Core.PhaseLogic
             var devCardType = devCard.Type;
             var devCardsLeftList = Session.GetDevCardsLeft();
 
-            var result = RulesDevCards.CanBuyDevCard(player, devCard, devCardsLeftList);
+            var validation = RulesDevCards.CanBuyDevCard(player, devCard, devCardsLeftList);
 
-            if (!result.Success)
+            if (!validation.Success)
             {
-                return ResultBuyDevCard.Fail(result.Reason, player.ID);
+                return ResultBuyDevCard.Fail(validation.Reason, player.ID);
             }
 
             Session.BuyDevCardMutation(devCard);
 
-            return ResultBuyDevCard.Ok(player.ID, devCardId, devCardType, null);
+            var result = ResultBuyDevCard.Ok(player.ID, devCardId, devCardType, null);
+            result.AddDomainEvent(new DevelopmentCardBoughtEvent(result.DevCardId.Value)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
+
+            return result;
         }
     }
 }

@@ -1,12 +1,10 @@
-﻿using Catan.Application;
+﻿using BGS.Shared.Dtos;
+using Catan.Application;
 using Catan.Application.Interfaces;
 using Catan.Application.UIMessages;
-using Catan.Core.DomainEvents;
-using Catan.Core.Interfaces;
-using Catan.Shared.Dtos.DomainEvents;
 using Catan.Shared.Dtos.UiMessages;
+using Catan.Shared.Dtos.UIMessages;
 using Catan.Shared.Interfaces;
-using BGS.Shared.Dtos;
 
 namespace Catan.Backend.Mappers
 {
@@ -21,15 +19,6 @@ namespace Catan.Backend.Mappers
             };
         }
 
-        public static DomainEventDto MapDomainMessageToWrapperDto(IDomainEvent message)
-        {
-            return new DomainEventDto
-            {
-                Type = message.GetType().Name,
-                Data = MapDomainEventToDto(message)
-            };
-        }
-
         public static CommandResponseDto MapGameResultToDto(GameResult result)
         {
             return new CommandResponseDto
@@ -38,7 +27,6 @@ namespace Catan.Backend.Mappers
                 NextPhase = result.NextPhase != null ? result.NextPhase.ToString() : null,
 
                 UiMessages = result.GetUIMessagesList().Select(MapUiMessageToWrapperDto).ToList(),
-                DomainMessages = result.GetDomainEventsList().Select(MapDomainMessageToWrapperDto).ToList()
             };
         }
 
@@ -59,21 +47,13 @@ namespace Catan.Backend.Mappers
                 BankTradeRatioChangedMessage m => new BankTradeRatioChangedDto(m.Ratio, m.PossibleForPlayer, m.Resource.ToString()),
                 TurnNumberChangedMessage m => new TurnNumberChangedDto(m.NewTurnNumber),
                 DiceRollChangedMessage m => new DiceRollChangedDto(m.RolledNumber),
+                VillagePlacedMessage e => new VillagePlacedMessageDto(e.VertexId, e.OwnerId),
+                RoadPlacedMessage e => new RoadPlacedMessageDto(e.EdgeId, e.OwnerId),
+                TownPlacedMessage e => new TownPlacedMessageDto(e.VertexId, e.OwnerId),
+                DevelopmentCardBoughtMessage e => new DevelopmentCardBoughtMessageDto(e.CardId),
+                RobberPlacedMessage e => new RobberPlacedMessageDto(e.HexId),
+                PlayerStateChangedMessage e => new PlayerStateChangedDto(e.PlayerId),
                 _ => throw new Exception($"Unknown UI message: {message}")
-            };
-        }
-
-        private static IDomainEventDto MapDomainEventToDto(IDomainEvent message)
-        {
-            return message switch
-            {
-                VillagePlacedEvent m => new VillagePlacedDto(m.VertexId, m.OwnerId),
-                RoadPlacedEvent m => new RoadPlacedDto(m.EdgeId, m.OwnerId),
-                TownPlacedEvent m => new TownPlacedDto(m.VertexId, m.OwnerId),
-                DevelopmentCardBoughtEvent m => new DevelopmentCardBoughtDto(m.CardId),
-                RobberPlacedEvent m => new RobberPlacedDto(m.HexId),
-                PlayerStateChangedEvent m => new PlayerStateChangedDto(m.PlayerId),
-                _ => throw new Exception($"Unknown domain event: {message}")
             };
         }
     }

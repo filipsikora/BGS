@@ -1,4 +1,5 @@
-﻿using Catan.Core.Results;
+﻿using Catan.Core.DomainEvents;
+using Catan.Core.Results;
 using Catan.Core.Rules;
 
 namespace Catan.Core.PhaseLogic
@@ -11,16 +12,19 @@ namespace Catan.Core.PhaseLogic
         {
             var vertex = Session.GetVertexById(vertexId);
             var player = Session.GetCurrentPlayer();
-            var result = RulesBuilding.CanUpgradeVillage(player, vertex, Session);
+            var validation = RulesBuilding.CanUpgradeVillage(player, vertex, Session);
 
-            if (!result.Success)
+            if (!validation.Success)
             {
-                return ResultUpgradeVillage.Fail(result.Reason, player.ID, vertexId);
+                return ResultUpgradeVillage.Fail(validation.Reason, player.ID, vertexId);
             }
 
             Session.TownPaidAndBuiltMutation(vertex);
 
-            return ResultUpgradeVillage.Ok(player.ID, vertexId, null);
+            var result = ResultUpgradeVillage.Ok(player.ID, vertexId, null);
+            result.AddDomainEvent(new TownPlacedEvent(vertexId, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
+
+            return result;
         }
     }
 }

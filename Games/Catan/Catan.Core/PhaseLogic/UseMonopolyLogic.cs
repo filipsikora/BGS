@@ -1,4 +1,5 @@
 ﻿using Catan.Core.Conditions;
+using Catan.Core.DomainEvents;
 using Catan.Core.Results;
 using Catan.Shared.Data;
 
@@ -12,16 +13,19 @@ namespace Catan.Core.PhaseLogic
         {
             var player = Session.GetCurrentPlayer();
 
-            var result = ConditionsResources.ResourceExists(resource);
+            var validation = ConditionsResources.ResourceExists(resource);
 
-            if (!result.Success)
+            if (!validation.Success)
             {
-                return ResultMonopolyCard.Fail(result.Reason, player.ID, resource);
+                return ResultMonopolyCard.Fail(validation.Reason, player.ID, resource);
             }
 
             var victimsIdsAndAmounts = Session.UseMonopolyMutation(resource);
 
-            return ResultMonopolyCard.Ok(player.ID, victimsIdsAndAmounts, resource, EnumGamePhases.NormalRound);
+            var result = ResultMonopolyCard.Ok(player.ID, victimsIdsAndAmounts, resource, EnumGamePhases.NormalRound);
+            result.AddDomainEvent(new PlayerStateChangedEvent(result.ThiefId));
+
+            return result;
         }
     }
 }

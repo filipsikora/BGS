@@ -1,4 +1,5 @@
-﻿using Catan.Core.Results;
+﻿using Catan.Core.DomainEvents;
+using Catan.Core.Results;
 using Catan.Core.Rules;
 
 namespace Catan.Core.PhaseLogic
@@ -10,11 +11,11 @@ namespace Catan.Core.PhaseLogic
         public ResultBlockHex Handle(int hexId)
         {
             var hex = Session.GetHexById(hexId);
-            var result = RulesRobber.CanBlock(hex);
+            var validation = RulesRobber.CanBlock(hex);
 
-            if (!result.Success)
+            if (!validation.Success)
             {
-                return ResultBlockHex.Fail(result.Reason);
+                return ResultBlockHex.Fail(validation.Reason);
             }
 
             Session.BlockHexMutation(hex);
@@ -22,7 +23,10 @@ namespace Catan.Core.PhaseLogic
             var potentialVictimsIds = Session.GetPossibleVictimsIds();
             var canSteal = potentialVictimsIds.Count > 0;
 
-            return ResultBlockHex.Ok(hex.Id, canSteal, potentialVictimsIds, null);
+            var result = ResultBlockHex.Ok(hex.Id, canSteal, potentialVictimsIds, null);
+            result.AddDomainEvent(new RobberPlacedEvent(hexId));
+
+            return result;
         }
     }
 }

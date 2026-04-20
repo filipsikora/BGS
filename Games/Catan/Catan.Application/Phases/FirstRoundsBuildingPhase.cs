@@ -2,7 +2,6 @@
 using Catan.Application.Controllers;
 using Catan.Application.Interfaces;
 using Catan.Application.UIMessages;
-using Catan.Core.DomainEvents;
 using Catan.Application.Commands;
 using Catan.Shared.Data;
 
@@ -97,7 +96,7 @@ namespace Catan.Application.Phases
 
             villagePlaced = true;
 
-            return GameResult.Ok().AddDomainEvent(new VillagePlacedEvent(id, result.PlayerId)).AddUIMessage(selectionMessage).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
+            return GameResult.Ok().AddUIMessage(selectionMessage).AddDomainEventsList(result.DomainEvents);
         }
 
         private GameResult HandleBuildRoad(BuildRoadCommand signal)
@@ -115,14 +114,19 @@ namespace Catan.Application.Phases
             
             roadPlaced = true;
 
-            return GameResult.Ok().AddDomainEvent(new RoadPlacedEvent(id, result.PlayerId)).AddUIMessage(selectionMessage).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
+            return GameResult.Ok().AddUIMessage(selectionMessage).AddDomainEventsList(result.DomainEvents);
         }
 
         private GameResult HandleTurnEnded(EndTurnCommand signal)
         {
             var result = Facade.UseFinishTurn();
 
-            return GameResult.Ok(result.NextPhase).AddDomainEvent(new PlayerStateChangedEvent(result.NewCurrentPlayerId)).AddUIMessage(new TurnNumberChangedMessage(result.NewTurnNumber));
+            if (!result.Success)
+            {
+                return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(result.NewCurrentPlayerId, result.Reason));
+            }
+
+            return GameResult.Ok(result.NextPhase).AddDomainEventsList(result.DomainEvents);
         }
     }
 }

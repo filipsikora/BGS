@@ -1,4 +1,5 @@
-﻿using Catan.Core.Results;
+﻿using Catan.Core.DomainEvents;
+using Catan.Core.Results;
 using Catan.Core.Rules;
 
 namespace Catan.Core.PhaseLogic
@@ -12,16 +13,19 @@ namespace Catan.Core.PhaseLogic
             var player = Session.GetCurrentPlayer();
             var edge = Session.GetEdgeById(edgeId);
 
-            var result = RulesBuilding.CanBuildRoad(player, edge, Session);
+            var validation = RulesBuilding.CanBuildRoad(player, edge, Session);
 
-            if (!result.Success)
+            if (!validation.Success)
             {
-                return ResultBuildRoad.Fail(result.Reason, player.ID, edgeId);
+                return ResultBuildRoad.Fail(validation.Reason, player.ID, edgeId);
             }
 
             Session.RoadPaidAndBuiltMutation(edge);
 
-            return ResultBuildRoad.Ok(player.ID, edgeId, null);
+            var result = ResultBuildRoad.Ok(player.ID, edgeId, null);
+            result.AddDomainEvent(new RoadPlacedEvent(edgeId, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
+
+            return result;
         }
     }
 }

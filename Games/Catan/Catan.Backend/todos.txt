@@ -46,6 +46,21 @@ STATE: important, but not until i move to simultanous game (once the initial db 
 7.
 ISSUE: some parts of logic are not validated in core (ending turn possible in firstrounds before placing buildings). this will be fixed with the client, but needs to be addressed in core as well
 
-SOLUTION: stop fixing client now, check what is not validated in core, add validation and fix ui
+SOLUTION: fix the game, do it all at once when it is finished with clientless tests
 
-STATE: fiest priority
+STATE: fiest priority after fixing the game
+
+8.
+ISSUE: use cases buildvillage and buildinitialvillage aren't good? i am not sure, will need to check it out, but perhaps i need to combine them into one and add a check inside to split them so that the client can't send a wrong
+command
+
+SOLUTION: either let them be or merge them and split on the backend side
+
+STATE: to do once the game is running
+
+9. 
+ISSUE: domainevents and uimessages are separated in the wrong way and it blocks fixing code
+
+SOLUTION: core returns domainevents, application maps it to uimessages and sends it to the client
+
+STATE: asap

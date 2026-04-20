@@ -1,7 +1,6 @@
 ﻿using Catan.Application.Controllers;
 using Catan.Application.Interfaces;
 using Catan.Application.UIMessages;
-using Catan.Core.DomainEvents;
 using Catan.Application.Commands;
 using Catan.Shared.Data;
 
@@ -49,7 +48,7 @@ namespace Catan.Application.Phases
 
             _clickableHexes = false;
 
-            return gameResult.AddDomainEvent(new RobberPlacedEvent(hexId));
+            return gameResult.AddDomainEventsList(result.DomainEvents);
         }
 
         private GameResult HandleVictimsAfterBlocking(bool canSteal, List<int> potentialVictimsIds)

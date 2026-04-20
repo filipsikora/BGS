@@ -2,6 +2,6 @@
 {
     public interface IGameFactory
     {
-        IGameInstance CreateGame();
+        (IGameInstance, int) CreateGame();
     }
 }

@@ -39,6 +39,8 @@ namespace Catan.Core.Engine
         public int CurrentPlayerIndex = 0;
 
         public Vertex? LastPlacedVillagePosition = null;
+        public bool VillagePlacedThisTurn;
+        public bool RoadPlacedThisTurn;
 
         public int MostKnightsUsed = 0;
 
@@ -79,14 +81,16 @@ namespace Catan.Core.Engine
             _random = random;
         }
 
-        public void InitializeNewGame(int playerCount, float mapSize)
+        public int InitializeNewGame(int playerCount, float mapSize)
         {
             Map.GenerateFullMap(mapSize);
 
-            ReadyPlayer(playerCount);
+            int firstPlayerId = ReadyPlayer(playerCount);
             ReadyBoard();
             PrepareDevelopmentDeck();
             InitializeRobber();
+
+            return firstPlayerId;
         }
 
         private void InitializeRobber()
@@ -136,7 +140,7 @@ namespace Catan.Core.Engine
             LastRoll = diceOne + diceTwo;
         }
 
-        public void ReadyPlayer(int playerNumber)
+        public int ReadyPlayer(int playerNumber)
         {
             for (int i = 1; i <= playerNumber; i++)
             {
@@ -156,6 +160,8 @@ namespace Catan.Core.Engine
             PlayerList.Shuffle(_random);
             CurrentPlayerIndex = FirstRoundsIndices.ElementAt(0);
             CurrentPlayer = PlayerList[CurrentPlayerIndex];
+
+            return CurrentPlayerIndex;
         }
 
         public Queue<int> SetupFirstRoundsIndices(int playerNumber)
@@ -413,6 +419,8 @@ namespace Catan.Core.Engine
             Turn++;
 
             SetAfterRollTo(false);
+            VillagePlacedThisTurn = false;
+            RoadPlacedThisTurn = false;
         }
 
         public DevelopmentCard DevCardPlayedMutation(DevelopmentCard card)
@@ -548,6 +556,8 @@ namespace Catan.Core.Engine
 
             player.CountPoints();
 
+            VillagePlacedThisTurn = true;
+
             UpdateRoadChampion();
         }
 
@@ -558,6 +568,8 @@ namespace Catan.Core.Engine
             player.Buildings.Add(road);
 
             edge.Owner = player;
+
+            RoadPlacedThisTurn = true;
 
             UpdateRoadChampion();
         }

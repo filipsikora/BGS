@@ -1,7 +1,8 @@
-﻿using Catan.Core.Results;
+﻿using Catan.Core.DomainEvents;
+using Catan.Core.Models;
+using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
-using Catan.Core.Models;
 
 namespace Catan.Core.PhaseLogic
 {
@@ -11,16 +12,19 @@ namespace Catan.Core.PhaseLogic
 
         public ResultYearOfPlenty Handle(ResourceCostOrStock requested)
         {
-            var result = RulesDevCards.YearOfPlentyPlayedRight(Session.GetBank(), requested);
+            var validation = RulesDevCards.YearOfPlentyPlayedRight(Session.GetBank(), requested);
 
-            if (!result.Success)
+            if (!validation.Success)
             {
-                return ResultYearOfPlenty.Fail(result.Reason);
+                return ResultYearOfPlenty.Fail(validation.Reason);
             }
 
             Session.UseYearOfPlentyMutation(requested);
 
-            return ResultYearOfPlenty.Ok(requested, EnumGamePhases.NormalRound);
+            var result = ResultYearOfPlenty.Ok(requested, EnumGamePhases.NormalRound);
+            result.AddDomainEvent(new PlayerStateChangedEvent(Session.GetCurrentPlayerId()));
+
+            return result;
         }
     }
 }

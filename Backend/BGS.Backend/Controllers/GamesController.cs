@@ -3,8 +3,6 @@ using BGS.GameAbstractions.Interfaces;
 using Catan.Backend.Models;
 using BGS.Shared.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Primitives;
 using BGS.Shared.Data;
 
 namespace BGS.Backend.Controllers
@@ -30,9 +28,9 @@ namespace BGS.Backend.Controllers
 
 
             var factory = _factoryMapper.GetFactory(gameType);
-            var gameId = _gameManager.CreateGame(factory);
+            (var gameId, int firstPlayerId) = _gameManager.CreateGame(factory);
 
-            return Ok(new CreateGameResponseDto { GameId = gameId });
+            return Ok(new CreateGameResponseDto { GameId = gameId, FirstPlayerId = firstPlayerId });
         }
 
         [HttpPost("{gameId}/command")]
