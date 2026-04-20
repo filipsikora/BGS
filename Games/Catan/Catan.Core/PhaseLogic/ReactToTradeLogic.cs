@@ -1,4 +1,5 @@
-﻿using Catan.Core.Results;
+﻿using Catan.Core.DomainEvents;
+using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
@@ -18,14 +19,17 @@ namespace Catan.Core.PhaseLogic
             var seller = Session.GetPlayerById(context.SellerId);
             var buyer = Session.GetPlayerById(context.BuyerId);
 
-            var result = RulesTrade.CanAcceptTrade(seller, buyer, context.Offered, context.Desired, context);
+            var validation = RulesTrade.CanAcceptTrade(seller, buyer, context.Offered, context.Desired, context);
 
-            if (!result.Success)
-                return ResultPlayerTrade.Fail(result.Reason, context.SellerId, context.BuyerId);
+            if (!validation.Success)
+                return ResultPlayerTrade.Fail(validation.Reason, context.SellerId, context.BuyerId);
 
             Session.PlayerTradeDoneMutation(seller, buyer, context.Offered, context.Desired);
 
-            return ResultPlayerTrade.Ok(context.SellerId, context.BuyerId, context.Offered, context.Desired, EnumGamePhases.NormalRound);
+            var result = ResultPlayerTrade.Ok(context.SellerId, context.BuyerId, context.Offered, context.Desired, EnumGamePhases.NormalRound);
+            result.AddDomainEvent(new PlayerStateChangedEvent(result.SellerId));
+
+            return result;
         }
     }
 }

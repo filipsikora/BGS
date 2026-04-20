@@ -1,4 +1,5 @@
-﻿using Catan.Core.Results;
+﻿using Catan.Core.DomainEvents;
+using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
@@ -18,11 +19,11 @@ namespace Catan.Core.PhaseLogic
             if (!exists)
                 return ResultStealResource.Fail(thief.ID, victim.ID, ConditionFailureReason.DoesNotExist);
 
-            var result = RulesRobber.CanSteal(victim, context);
+            var validation = RulesRobber.CanSteal(victim, context);
 
-            if (!result.Success)
+            if (!validation.Success)
             {
-                return ResultStealResource.Fail(thief.ID, victimId, result.Reason);
+                return ResultStealResource.Fail(thief.ID, victimId, validation.Reason);
             }
 
             Session.CardStolenMutation(victim, resource);
@@ -31,7 +32,10 @@ namespace Catan.Core.PhaseLogic
 
             var nextPhase = afterRoll ? EnumGamePhases.NormalRound : EnumGamePhases.BeforeRoll;
             
-            return ResultStealResource.Ok(thief.ID, victimId, resource, nextPhase);
+            var result = ResultStealResource.Ok(thief.ID, victimId, resource, nextPhase);
+            result.AddDomainEvent(new PlayerStateChangedEvent(result.ThiefId));
+
+            return result;
         }
     }
 }

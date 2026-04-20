@@ -52,6 +52,26 @@ namespace Catan.Core.Conditions
 
             return ResultCondition.Fail(ConditionFailureReason.NotNextToLastVillage);
         }
+
+        public static ResultCondition InitialVillagePlaced(bool villagePlaced)
+        {
+            if (villagePlaced)
+            {
+                return ResultCondition.Fail(ConditionFailureReason.InitialVillageBuilt);
+            }
+
+            return ResultCondition.Ok();
+        }
+
+        public static ResultCondition InitialRoadPlaced(bool roadPlaced)
+        {
+            if (roadPlaced)
+            {
+                return ResultCondition.Fail(ConditionFailureReason.InitialRoadBuilt);
+            }
+
+            return ResultCondition.Ok();
+        }
     }
 }
  

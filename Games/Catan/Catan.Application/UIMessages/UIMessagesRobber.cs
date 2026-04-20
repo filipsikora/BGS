@@ -20,4 +20,13 @@ namespace Catan.Application.UIMessages
             VictimsIds = victimsIds;
         }
     }
+
+    public sealed class RobberPlacedMessage : IUIMessages
+    {
+        public int HexId { get; }
+        public RobberPlacedMessage(int hexId)
+        {
+            HexId = hexId;
+        }
+    }
 }

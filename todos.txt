@@ -35,10 +35,3 @@ ISSUE: queries are weak
 SOLUTION: implement a query interface and query objects
 
 STATE: once the game is running and before step 3
-
-6.
-ISSUE: domainevents and uimessages are mixed
-
-SOLUTION: keep only game events and make the client do all the rest
-
-STATE: it's polishing and learning good practice, so once all is working and before moving on to the next game

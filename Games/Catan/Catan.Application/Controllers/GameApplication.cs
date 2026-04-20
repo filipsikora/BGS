@@ -25,11 +25,16 @@ namespace Catan.Application
             {
                 var nextPhase = result.NextPhase.Value;
                 Current = CreateApplicationPhase(nextPhase);
-                IUIMessages? UImessages = Current.Enter();
+                IUIMessages uiMessage = Current.Enter();
 
-                if (UImessages != null)
-                    result.AddUIMessage(UImessages);
+                if (uiMessage != null)
+                {
+                    result.AddUIMessage(uiMessage);
+                }
             }
+
+            var uiMessages = Helpers.Mappers.MapDomainEventToUiMessageList(result.DomainEvents);
+            result.AddUIMessagesList(uiMessages);
 
             return result;
         }

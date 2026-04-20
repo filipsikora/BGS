@@ -9,15 +9,14 @@ namespace Catan.Core.Rules
     {
         public static ResultCondition CanBuildInitialVillage(Player player, Vertex vertex, GameSession session)
         {
-            if (player == null) throw new Exception("Player is null");
-            if (vertex == null) throw new Exception("Vertex is null");
-
-            if (session == null) throw new Exception("Session is null");
             return ResultCondition.Combine(
                 ConditionsMap.PositionExists(vertex.Id, id => session.GetVertexById(id)),
                 ConditionsBuildings.HasAvailable(EnumBuildings.Village, player),
                 ConditionsMap.IsNotOwned(vertex),
-                ConditionsBuildings.NoSettlementsInRange(vertex));
+                ConditionsBuildings.NoSettlementsInRange(vertex),
+                ConditionsBuildings.InitialVillagePlaced(session.GetVillagePlacedThisTurn()),
+                ConditionsTurn.IsInitialRound(session.CheckIfIsInitialRound())
+                );
         }
 
         public static ResultCondition CanBuildInitialRoad(Player player, Edge edge, Vertex vertex, GameSession session)
@@ -27,7 +26,10 @@ namespace Catan.Core.Rules
                 ConditionsBuildings.HasAvailable(EnumBuildings.Road, player),
                 ConditionsMap.IsNotOwned(edge),
                 ConditionsMap.HasAccessToPosition(player, edge),
-                ConditionsBuildings.AdjacentToLastVillage(edge, vertex));
+                ConditionsBuildings.AdjacentToLastVillage(edge, vertex),
+                ConditionsBuildings.InitialVillagePlaced(!session.GetVillagePlacedThisTurn()),
+                ConditionsBuildings.InitialRoadPlaced(session.GetRoadPlacedThisTurn()),
+                ConditionsTurn.IsInitialRound(session.CheckIfIsInitialRound()));
         }
 
         public static ResultCondition CanBuildVillage(Player player, Vertex vertex, GameSession session)

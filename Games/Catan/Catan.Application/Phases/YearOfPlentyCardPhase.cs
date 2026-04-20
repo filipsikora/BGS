@@ -70,7 +70,7 @@ namespace Catan.Application.Phases
                 return GameResult.Fail().AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, $"Player{playerId} received {key} {amount} from Year Of Plenty card"));
             }
 
-            return GameResult.Ok(result.NextPhase).AddDomainEvent(new PlayerStateChangedEvent(playerId));
+            return GameResult.Ok(result.NextPhase).AddDomainEventsList(result.DomainEvents);
         }
     }
 }

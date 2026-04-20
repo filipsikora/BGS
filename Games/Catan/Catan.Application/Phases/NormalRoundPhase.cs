@@ -1,6 +1,5 @@
 ﻿using Catan.Application.Controllers;
 using Catan.Application.UIMessages;
-using Catan.Core.DomainEvents;
 using Catan.Core.Models;
 using Catan.Application.Commands;
 using Catan.Shared.Data;
@@ -109,8 +108,8 @@ namespace Catan.Application.Phases
             {
                 return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(result.PlayerId, result.Reason));
             }
-            
-            return GameResult.Ok().AddDomainEvent(new VillagePlacedEvent(id, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
+
+            return GameResult.Ok().AddDomainEventsList(result.DomainEvents);
         }
 
         private GameResult HandleRoadRequested(BuildRoadCommand signal)
@@ -125,7 +124,7 @@ namespace Catan.Application.Phases
                 return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(result.PlayerId, result.Reason));
             }
 
-            return GameResult.Ok().AddDomainEvent(new RoadPlacedEvent(id, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
+            return GameResult.Ok().AddDomainEventsList(result.DomainEvents);
         }
 
         private GameResult HandleTownRequested(UpgradeVillageCommand signal)
@@ -140,7 +139,7 @@ namespace Catan.Application.Phases
                 return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(result.PlayerId, result.Reason));
             }
 
-            return GameResult.Ok().AddDomainEvent(new TownPlacedEvent(id, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
+            return GameResult.Ok().AddDomainEventsList(result.DomainEvents);
         }
 
         private GameResult HandleTradeRequested(OfferTradeCommand signal)
@@ -164,7 +163,7 @@ namespace Catan.Application.Phases
         {
             var result = Facade.UseFinishTurn();
 
-            return GameResult.Ok(result.NextPhase).AddUIMessage(new TurnNumberChangedMessage(result.NewTurnNumber)).AddDomainEvent(new PlayerStateChangedEvent(result.NewCurrentPlayerId));
+            return GameResult.Ok(result.NextPhase).AddDomainEventsList(result.DomainEvents);
         }
 
         private GameResult HandleDevelopmentCardsBuyRequested(BuyDevelopmentCardCommand signal)
@@ -176,7 +175,7 @@ namespace Catan.Application.Phases
                 return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(result.PlayerId, result.Reason));
             }
 
-            return GameResult.Ok().AddDomainEvent(new DevelopmentCardBoughtEvent(result.DevCardId.Value)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
+            return GameResult.Ok().AddDomainEventsList(result.DomainEvents);
         }
     }
 }

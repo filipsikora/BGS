@@ -1,4 +1,5 @@
-﻿using Catan.Core.Results;
+﻿using Catan.Core.DomainEvents;
+using Catan.Core.Results;
 using Catan.Shared.Data;
 
 namespace Catan.Core.PhaseLogic
@@ -31,7 +32,10 @@ namespace Catan.Core.PhaseLogic
                 }
             }
 
-            return ResultRollDice.Ok(resultRoll, resultDistributionList, nextPhase, rolledSevenButNoVictims); ;
+            var result = ResultRollDice.Ok(resultRoll, resultDistributionList, nextPhase, rolledSevenButNoVictims);
+            result.AddDomainEvent(new RolledNumberChangedEvent(resultRoll));
+
+            return result;
         }
     }
 }

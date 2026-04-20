@@ -10,13 +10,13 @@ namespace Catan.Backend.GameManagement
 {
     public class CatanGameFactory : IGameFactory
     {
-        public IGameInstance CreateGame()
+        public (IGameInstance, int) CreateGame()
         {
             var random = new RandomProvider();
             var map = new HexMap(random);
             var gameState = new GameState(random, map);
 
-            gameState.InitializeNewGame(2, 1f);
+            var firstPlayerId = gameState.InitializeNewGame(2, 1f);
 
             var session = new GameSession(gameState);
 
@@ -32,7 +32,7 @@ namespace Catan.Backend.GameManagement
             var app = new GameApplication(facade);
             var registry = new CatanCommandRegistry();
 
-            return new CatanGameInstance(app, registry);
+            return (new CatanGameInstance(app, registry), firstPlayerId);
         }
     }
 }

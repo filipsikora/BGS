@@ -1,5 +1,4 @@
 ﻿using Catan.Shared.Interfaces;
-using System.Collections.Generic;
 
 namespace Catan.Shared.Dtos.UiMessages
 {
@@ -19,6 +18,15 @@ namespace Catan.Shared.Dtos.UiMessages
         public PotentialVictimsFoundDto(List<int> victimsIds)
         {
             VictimsIds = victimsIds;
+        }
+    }
+
+    public sealed class RobberPlacedMessageDto : IUiMessageDto
+    {
+        public int HexId { get; }
+        public RobberPlacedMessageDto(int hexId)
+        {
+            HexId = hexId;
         }
     }
 }
