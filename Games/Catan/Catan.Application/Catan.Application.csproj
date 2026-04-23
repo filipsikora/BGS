@@ -3,7 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Catan.Core\Catan.Core.csproj" />
     <ProjectReference Include="..\Catan.Shared\Catan.Shared.csproj" />
-    <ProjectReference Include="..\..\..\GameAbstractions\BGS.GameAbstractions\BGS.GameAbstractions.csproj" />
+    <ProjectReference Include="..\..\..\Backend\BGS.GameAbstractions\BGS.GameAbstractions.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

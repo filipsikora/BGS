@@ -224,6 +224,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
+          "BGS.GameAbstractions": "1.0.0",
           "Catan.Core": "1.0.0",
           "Catan.Shared": "1.0.0"
         },
@@ -241,6 +242,7 @@
           "BGS.GameAbstractions": "1.0.0",
           "BGS.Shared": "1.0.0",
           "Catan.Application": "1.0.0",
+          "Catan.Core": "1.0.0",
           "Catan.Shared": "1.0.0"
         },
         "compile": {

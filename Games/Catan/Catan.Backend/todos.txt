@@ -13,11 +13,11 @@ SOLUTION: replace them with string objects received from path, then have them us
 STATE: mostly done, i will want to replace more random strings with const   -------------------
 
 3.
-ISSUE: validation is scattered all over the place, i think it is separated nicely (core, app, backend), but will need to check. also i'm not sure if the errors are returned well
+ISSUE: some parts of logic are not validated in core (ending turn possible in firstrounds before placing buildings). this will be fixed with the client, but needs to be addressed in core as well
 
-SOLUTION: make a layer that reads errors and translates them, check every error once the game runs
+SOLUTION: fix the game, do it all at once when it is finished with clientless tests
 
-STATE: later issue, once all is done
+STATE: fiest priority after fixing the game -----------------------------
 
 4. 
 ISSUE: new dictionary transport solution breaks the order in which the player has his cards
@@ -33,7 +33,7 @@ ISSUE: nextPhase is decided in core
 
 SOLUTION: i can move it to application layer
 
-STATE: meh i mean i can do it but i dont think its urgent, i will keep that in mind for future games though
+STATE: meh i mean i can do it but i dont think its urgent, i will keep that in mind for future games though --------------------------
 
 6.
 ISSUE: controllers in Unity do too much
@@ -41,14 +41,14 @@ ISSUE: controllers in Unity do too much
 SOLUTION: once i move from hotseat i will need to separate global events from local (player-scoped), only global ones will be dealt by controllers subbing eventbus (robber moved, building placed, game-wide logs), the rest will
 need to come from the player client. i will need to figure out how to take care of it including playerId
 
-STATE: important, but not until i move to simultanous game (once the initial db is up and the game is playable)
+STATE: important, but not until i move to simultanous game (once the initial db is up and the game is playable) -----------------------------
 
 7.
-ISSUE: some parts of logic are not validated in core (ending turn possible in firstrounds before placing buildings). this will be fixed with the client, but needs to be addressed in core as well
+ISSUE: domainevents and uimessages are separated in the wrong way and it blocks fixing code
 
-SOLUTION: fix the game, do it all at once when it is finished with clientless tests
+SOLUTION: core returns domainevents, application maps it to uimessages and sends it to the client
 
-STATE: fiest priority after fixing the game
+STATE: done and tested, works well. while doing this i also fixed initialization and turn + player displaying in the client
 
 8.
 ISSUE: use cases buildvillage and buildinitialvillage aren't good? i am not sure, will need to check it out, but perhaps i need to combine them into one and add a check inside to split them so that the client can't send a wrong
@@ -56,11 +56,14 @@ command
 
 SOLUTION: either let them be or merge them and split on the backend side
 
-STATE: to do once the game is running
+STATE: to do once the game is running ---------------------------
 
-9. 
-ISSUE: domainevents and uimessages are separated in the wrong way and it blocks fixing code
+9
+ISSUE: game is hotseat
 
-SOLUTION: core returns domainevents, application maps it to uimessages and sends it to the client
+SOLUTION: requiring player identification, selectedvertex or edge need to come from the client with the command, 
 
-STATE: asap
+10.
+ISSUE: validation is lacking, especially from early days of unity coding
+
+SOLUTION: 

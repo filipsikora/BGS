@@ -244,6 +244,9 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
+              "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj": {
+                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj"
+              },
               "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Core\\Catan.Core.csproj": {
                 "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Core\\Catan.Core.csproj"
               },
@@ -320,6 +323,9 @@
               },
               "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Application\\Catan.Application.csproj": {
                 "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Application\\Catan.Application.csproj"
+              },
+              "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Core\\Catan.Core.csproj": {
+                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Core\\Catan.Core.csproj"
               },
               "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Shared\\Catan.Shared.csproj": {
                 "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Shared\\Catan.Shared.csproj"

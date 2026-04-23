@@ -91,6 +91,16 @@
           }
         }
       },
+      "BGS.GameAbstractions/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/BGS.GameAbstractions.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BGS.GameAbstractions.dll": {}
+        }
+      },
       "Catan.Core/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
@@ -299,6 +309,11 @@
         "quikgraph_logo.png"
       ]
     },
+    "BGS.GameAbstractions/1.0.0": {
+      "type": "project",
+      "path": "../../../Backend/BGS.GameAbstractions/BGS.GameAbstractions.csproj",
+      "msbuildProject": "../../../Backend/BGS.GameAbstractions/BGS.GameAbstractions.csproj"
+    },
     "Catan.Core/1.0.0": {
       "type": "project",
       "path": "../Catan.Core/Catan.Core.csproj",
@@ -312,6 +327,7 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
+      "BGS.GameAbstractions >= 1.0.0",
       "Catan.Core >= 1.0.0",
       "Catan.Shared >= 1.0.0"
     ]
@@ -343,6 +359,9 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
+            "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj": {
+              "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.GameAbstractions\\BGS.GameAbstractions.csproj"
+            },
             "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Core\\Catan.Core.csproj": {
               "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Games\\Catan\\Catan.Core\\Catan.Core.csproj"
             },

@@ -54,7 +54,7 @@ namespace BGS.Backend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Internal server error" });
+                return StatusCode(500, new { error = $"{ex}" });
             }
         }
 
