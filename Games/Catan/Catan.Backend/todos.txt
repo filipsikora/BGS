@@ -63,7 +63,4 @@ ISSUE: game is hotseat
 
 SOLUTION: requiring player identification, selectedvertex or edge need to come from the client with the command, 
 
-10.
-ISSUE: validation is lacking, especially from early days of unity coding
-
-SOLUTION: 
+STATE: most of the refactor i will need to do once i can move to simultanous game, but during refactoring earlier i will add some elements, like tokens for authentication ----------------------
