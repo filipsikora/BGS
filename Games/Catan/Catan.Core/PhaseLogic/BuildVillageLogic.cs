@@ -11,14 +11,15 @@ namespace Catan.Core.PhaseLogic
         public ResultBuildVillage Handle(int vertexId)
         {
             var player = Session.GetCurrentPlayer();
-            var vertex = Session.GetVertexById(vertexId);
 
-            var validation = RulesBuilding.CanBuildVillage(player, vertex, Session);
+            var validation = RulesBuilding.CanBuildVillage(player, vertexId, Session);
 
             if (!validation.Success)
             {
                 return ResultBuildVillage.Fail(validation.Reason, player.ID, vertexId);
             }
+
+            var vertex = Session.GetVertexById(vertexId);
 
             Session.VillagePaidAndBuiltMutation(vertex);
 

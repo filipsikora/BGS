@@ -15,11 +15,15 @@ namespace Catan.Core.Rules
                 ConditionsPlayer.PlayerExists(victim));
         }
 
-        public static ResultCondition CanBlock(HexTile hex)
+        public static ResultCondition CanBlock(int hexId, GameSession session)
         {
-            return ResultCondition.Combine(
-                ConditionsMap.HexExists(hex),
-                ConditionsMap.IsNotBlocked(hex));
+            var exists = ConditionsMap.HexExists(hexId, session);
+            if (!exists.Success)
+                return exists;
+
+            var hex = session.GetHexById(hexId);
+
+            return ConditionsMap.IsNotBlocked(hex));
         }
 
         public static ResultCondition ValidVictim(Player victim, List<int> possibleVictimsIds)

@@ -11,9 +11,8 @@ namespace Catan.Core.PhaseLogic
         public ResultBuildInitialVillage Handle(int vertexId)
         {
             var player = Session.GetCurrentPlayer();
-            var vertex = Session.GetVertexById(vertexId);
 
-            var validation = RulesBuilding.CanBuildInitialVillage(player, vertex, Session);
+            var validation = RulesBuilding.CanBuildInitialVillage(player, vertexId, Session);
 
             if (!validation.Success)
             {
@@ -21,6 +20,7 @@ namespace Catan.Core.PhaseLogic
             }
 
             var secondVillage = player.Points == 1;
+            var vertex = Session.GetVertexById(vertexId);
 
             Session.VillageBuiltMutation(vertex, secondVillage);
 

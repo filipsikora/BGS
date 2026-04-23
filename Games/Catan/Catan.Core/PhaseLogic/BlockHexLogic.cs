@@ -10,13 +10,14 @@ namespace Catan.Core.PhaseLogic
 
         public ResultBlockHex Handle(int hexId)
         {
-            var hex = Session.GetHexById(hexId);
-            var validation = RulesRobber.CanBlock(hex);
+            var validation = RulesRobber.CanBlock(hexId, Session);
 
             if (!validation.Success)
             {
                 return ResultBlockHex.Fail(validation.Reason);
             }
+
+            var hex = Session.GetHexById(hexId);
 
             Session.BlockHexMutation(hex);
 

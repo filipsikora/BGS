@@ -4,7 +4,7 @@ using Catan.Application.Commands;
 
 namespace Catan.Application.Phases
 {
-    public class RoadBuildingPhase : BaseBuildPhase
+    public class RoadBuildingPhase : BasePhase
     {
         public RoadBuildingPhase(Facade facade) : base(facade) { }
 
@@ -25,23 +25,15 @@ namespace Catan.Application.Phases
 
         private GameResult HandleEdgeClicked(EdgeClickedCommand signal)
         {
-            SelectedEdgeId = signal.EdgeId;
-
-            var village = false;
-            var road = true;
-            var town = false;
+            var (village, road, town) = Facade.GetEdgeBuildOptions(signal.EdgeId);
 
             return GameResult.Ok().AddUIMessage(new EdgeHighlightedMessage(signal.EdgeId)).AddUIMessage(new BuildOptionsSentMessage(village, road, town));
-
         }
 
         private GameResult HandleRoadRequested(BuildRoadCommand signal)
         {
             var playerId = Facade.GetCurrentPlayerId();
-            var id = SelectedEdgeId.Value;
-            var result = Facade.UseBuildFreeRoad(id);
-
-            ResetSelection();
+            var result = Facade.UseBuildFreeRoad(signal.EdgeId);
 
             if (!result.Success)
             {

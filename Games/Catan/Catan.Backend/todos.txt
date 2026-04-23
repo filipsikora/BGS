@@ -61,6 +61,20 @@ STATE: to do once the game is running ---------------------------
 9
 ISSUE: game is hotseat
 
-SOLUTION: requiring player identification, selectedvertex or edge need to come from the client with the command, 
+SOLUTION: requiring player identification, selectedvertex or edge need to come from the client with the command, getplayerbyid needs to have nulls fixed like positions
 
 STATE: most of the refactor i will need to do once i can move to simultanous game, but during refactoring earlier i will add some elements, like tokens for authentication ----------------------
+
+10.
+ISSUE: dto is passed and used 
+
+SOLUTION: check out if i should have a model for it before i create a command, but i dont think so. 
+
+STATE: i think meh but will need to check it once all is done, mainly i get green message it can be null even though i validate earlier
+
+11
+ISSUE: vertices and edges are stored in list
+
+SOLUTION: i think dictionary might be a better choice, both for lookup and utility
+
+STATE: i dont think i will want to bother with that, but important to remember for later games

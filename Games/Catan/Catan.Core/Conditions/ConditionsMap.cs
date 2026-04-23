@@ -18,25 +18,19 @@ namespace Catan.Core.Conditions
             return ResultCondition.Ok();
         }
 
-        public static ResultCondition PositionExists(int id, Func<int, IPositionData?> getPositionFunc)
+        public static ResultCondition VertexExists(int vertexId, GameSession session)
         {
-            var position = getPositionFunc(id);
-
-            if (position == null)
-            {
-                return ResultCondition.Fail(ConditionFailureReason.DoesNotExist);
-            }
-            return ResultCondition.Ok();
+            return session.TryGetVertexById(vertexId) ? ResultCondition.Ok() : ResultCondition.Fail(ConditionFailureReason.DoesNotExist);
         }
 
-        public static ResultCondition HexExists(HexTile hex)
+        public static ResultCondition EdgeExists(int edgeId, GameSession session)
         {
-            if (hex == null)
-            {
-                return ResultCondition.Fail(ConditionFailureReason.DoesNotExist);
-            }
+            return session.TryGetEdgeById(edgeId) ? ResultCondition.Ok() : ResultCondition.Fail(ConditionFailureReason.DoesNotExist);
+        }
 
-            return ResultCondition.Ok();
+        public static ResultCondition HexExists(int hexId, GameSession session)
+        {
+            return session.TryGetHexById(hexId) ? ResultCondition.Ok() : ResultCondition.Fail(ConditionFailureReason.DoesNotExist);
         }
 
         public static ResultCondition IsNotBlocked(HexTile hex)

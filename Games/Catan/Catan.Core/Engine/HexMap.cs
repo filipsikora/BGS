@@ -18,11 +18,47 @@ namespace Catan.Core.Engine
 
         public List<Edge> Edges { get; set; } = new List<Edge>();
 
-        public Vertex? GetVertexById(int id) => VertexList.FirstOrDefault(v => v.Id == id);
+        public Vertex GetVertexById(int id)
+        {
+            Vertex? vertex = VertexList.Find(v => v.Id == id);
 
-        public Edge? GetEdgeById(int id) => Edges.FirstOrDefault(e => e.Id == id);
+            return vertex ?? throw new KeyNotFoundException($"Vertex {id} not found");
+        }
 
-        public HexTile? GetHexById(int id) => HexList.FirstOrDefault(h => h.Id == id);
+        public Edge GetEdgeById(int id)
+        {
+            Edge? edge = Edges.Find(e => e.Id == id);
+
+            return edge ?? throw new KeyNotFoundException($"Edge {id} not found");
+        }
+
+        public HexTile GetHexById(int id)
+        {
+            HexTile? hexTile = HexList.Find(h => h.Id == id);
+
+            return hexTile ?? throw new KeyNotFoundException($"HexTile {id} not found");
+        }
+
+        public bool TryGetVertexById(int vertexId)
+        {
+            Vertex? vertex = VertexList.Find(v => v.Id == vertexId);
+
+            return vertex != null;
+        }
+
+        public bool TryGetEdgeById(int edgeId)
+        {
+            Edge? edge = Edges.Find(e => e.Id == edgeId);
+
+            return edge != null;
+        }
+
+        public bool TryGetHexById(int hexId)
+        {
+            HexTile? hex = HexList.Find(h => h.Id == hexId);
+
+            return hex != null;
+        }
 
         private readonly IRandomProvider _random;
 

@@ -6,6 +6,7 @@ using Catan.Core.PhaseLogic;
 using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace Catan.Core
 {
@@ -107,7 +108,7 @@ namespace Catan.Core
 
             return exists;
         }
-
+        
         public bool GetPlayersLeftToDiscard() => _game.GetPlayersLeftToDiscard();
 
         public int GetNextToDiscardId() => _game.CardDiscardingProgress.PlayersToDiscard.Peek();
@@ -134,6 +135,14 @@ namespace Catan.Core
         public bool GetVillagePlacedThisTurn() => _game.VillagePlacedThisTurn;
         public bool GetRoadPlacedThisTurn() => _game.RoadPlacedThisTurn;
 
+        public EnumBuildings GetBuildOptionsForVertex(Vertex v) => v.HasTown ? EnumBuildings.None : v.HasVillage ? EnumBuildings.Town : EnumBuildings.Village;
+
+        public EnumBuildings GetBuildOptionsForEdge(Edge e) => e.IsOwned ? EnumBuildings.None : EnumBuildings.Road;
+
+        public bool TryGetVertexById(int vertexId) => _game.Map.TryGetVertexById(vertexId);
+        public bool TryGetEdgeById(int edgeId) => _game.Map.TryGetEdgeById(edgeId);
+        public bool TryGetHexById(int hexId) => _game.Map.TryGetHexById(hexId);
+
         public int GetCurrentPlayerTradeRatio(EnumResourceType resource)
         {
             if (_game.CurrentPlayer.Ports.Count != 0)
@@ -149,6 +158,18 @@ namespace Catan.Core
             }
 
             return 4;
+        }
+
+        public (bool village, bool road, bool town) GetVertexBuildOptions(int vertexId, int playerId)
+        {
+            var player = GetPlayerById(playerId);
+
+            return (RulesPlacement.CanPlaceVillage(vertexId, this).Success, false, RulesPlacement.CanPlaceTown(player, vertexId, this).Success);
+        }
+
+        public (bool village, bool road, bool town) GetEdgeBuildOptions(int edgeId)
+        {
+            return (false, RulesPlacement.CanPlaceRoad(edgeId, this).Success, false);
         }
 
         public List<int> GetAdjacentToHexPlayersIds(int hexId)
@@ -224,6 +245,7 @@ namespace Catan.Core
 
         internal Player GetCurrentPlayer() => _game.CurrentPlayer;
         internal Player GetPlayerById(int playerId) => _game.GetPlayerById(playerId);
+        internal Player GetPlayerByIndex(int index) => _game.PlayerList[index];
 
         internal ResourceCostOrStock GetBank() => _game.Bank;
 

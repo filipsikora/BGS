@@ -79,23 +79,23 @@ namespace Catan.Backend.GameManagement
 
             _commandDictionary[EnumCommandType.BuildVillageCommand] = json =>
             {
-                Deserialize<EmptyDto>(json);
+                var dto = Deserialize<VillageBuiltDto>(json);
 
-                return new BuildVillageCommand();
+                return new BuildVillageCommand(dto.VertexId.Value);
             };
 
             _commandDictionary[EnumCommandType.BuildRoadCommand] = json =>
             {
-                Deserialize<EmptyDto>(json);
+                var dto = Deserialize<RoadBuiltDto>(json);
 
-                return new BuildRoadCommand();
+                return new BuildRoadCommand(dto.EdgeId.Value);
             };
 
             _commandDictionary[EnumCommandType.UpgradeVillageCommand] = json =>
             {
-                Deserialize<EmptyDto>(json);
+                var dto = Deserialize<TownBuildDto>(json);
 
-                return new UpgradeVillageCommand();
+                return new UpgradeVillageCommand(dto.VertexId.Value);
             };
 
             // DevelopmentCardsCommands

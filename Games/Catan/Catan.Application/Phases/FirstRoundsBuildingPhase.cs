@@ -7,7 +7,7 @@ using Catan.Shared.Data;
 
 namespace Catan.Application.Phases
 {
-    public class FirstRoundsBuildingPhase : BaseBuildPhase
+    public class FirstRoundsBuildingPhase : BasePhase
     {
         private bool villagePlaced = false;
         private bool roadPlaced = false;
@@ -39,7 +39,7 @@ namespace Catan.Application.Phases
                     return HandleTurnEnded(c);
 
                 case StartGameCommand c:
-                    return GameResult.Ok(EnumGamePhases.FirstRoundsBuilding); // problem?
+                    return GameResult.Ok(EnumGamePhases.FirstRoundsBuilding); // not used?
 
                 default:
                     return GameResult.Fail();
@@ -47,17 +47,11 @@ namespace Catan.Application.Phases
         }
 
         private GameResult HandleVertexClicked(VertexClickedCommand signal)
-        {
-            Console.WriteLine($"Phase instance (vertex): {GetHashCode()}");
-
+        { 
             if (villagePlaced)
                 return GameResult.Fail().AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, "Build a road now"));
 
-            SelectedVertexId = signal.VertexId;
-
-            bool village = true;
-            bool road = false;
-            bool town = false;
+            var (village, road, town) = Facade.GetVertexBuildOptions(signal.VertexId, Facade.GetCurrentPlayerId());
 
             return GameResult.Ok().AddUIMessage(new VertexHighlightedMessage(signal.VertexId)).AddUIMessage(new BuildOptionsSentMessage(village, road, town));
         }
@@ -70,24 +64,14 @@ namespace Catan.Application.Phases
             if (roadPlaced)
                 return GameResult.Fail().AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, "Finish turn now"));
 
-            SelectedEdgeId = signal.EdgeId;
-
-            bool village = false;
-            bool road = true;
-            bool town = false;
+            var (village, road, town) = Facade.GetEdgeBuildOptions(signal.EdgeId);
 
             return GameResult.Ok().AddUIMessage(new EdgeHighlightedMessage(signal.EdgeId)).AddUIMessage(new BuildOptionsSentMessage(village, road, town));
         }
 
         private GameResult HandleBuildVillage(BuildVillageCommand signal)
         {
-            Console.WriteLine($"Phase instance (build): {GetHashCode()}");
-            Console.WriteLine($"SelectedVertexId: {SelectedVertexId}");
-
-            int id = SelectedVertexId.Value;
-            var result = Facade.UseBuildInitialVillage(id);
-
-            var selectionMessage = ResetSelection();
+            var result = Facade.UseBuildInitialVillage(signal.VertexId);
 
             if (!result.Success)
             {
@@ -96,25 +80,22 @@ namespace Catan.Application.Phases
 
             villagePlaced = true;
 
-            return GameResult.Ok().AddUIMessage(selectionMessage).AddDomainEventsList(result.DomainEvents);
+            return GameResult.Ok().AddDomainEventsList(result.DomainEvents);
         }
 
         private GameResult HandleBuildRoad(BuildRoadCommand signal)
         {
-            int id = SelectedEdgeId.Value;
             var vertexId = Facade.GetLastPlacedVillagePositionId();
-            var result = Facade.UseBuildInitialRoad(id, vertexId);
-
-            var selectionMessage = ResetSelection();
+            var result = Facade.UseBuildInitialRoad(signal.EdgeId, vertexId);
 
             if (!result.Success)
             {
-                return GameResult.Fail().AddUIMessage((new ActionRejectedMessage(result.PlayerId, result.Reason)));
+                return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(result.PlayerId, result.Reason));
             }
             
             roadPlaced = true;
 
-            return GameResult.Ok().AddUIMessage(selectionMessage).AddDomainEventsList(result.DomainEvents);
+            return GameResult.Ok().AddDomainEventsList(result.DomainEvents);
         }
 
         private GameResult HandleTurnEnded(EndTurnCommand signal)

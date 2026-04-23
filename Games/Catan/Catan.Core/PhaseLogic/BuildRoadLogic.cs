@@ -11,14 +11,15 @@ namespace Catan.Core.PhaseLogic
         public ResultBuildRoad Handle(int edgeId)
         {
             var player = Session.GetCurrentPlayer();
-            var edge = Session.GetEdgeById(edgeId);
 
-            var validation = RulesBuilding.CanBuildRoad(player, edge, Session);
+            var validation = RulesBuilding.CanBuildRoad(player, edgeId, Session);
 
             if (!validation.Success)
             {
                 return ResultBuildRoad.Fail(validation.Reason, player.ID, edgeId);
             }
+
+            var edge = Session.GetEdgeById(edgeId);
 
             Session.RoadPaidAndBuiltMutation(edge);
 

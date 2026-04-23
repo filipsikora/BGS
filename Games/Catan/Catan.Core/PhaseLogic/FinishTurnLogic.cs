@@ -33,7 +33,7 @@ namespace Catan.Core.PhaseLogic
             var nextPhase = initialRoundsRemaining ? EnumGamePhases.FirstRoundsBuilding : EnumGamePhases.BeforeRoll;
 
             var result = ResultFinishTurn.Ok(player.ID, initialRoundsRemaining, nextTurnNumber, nextPhase);
-            result.AddDomainEvent(new PlayerStateChangedEvent(nextIndex + 1)).AddDomainEvent(new TurnNumberChangedEvent(nextTurnNumber));
+            result.AddDomainEvent(new PlayerStateChangedEvent(Session.GetPlayerByIndex(nextIndex).ID)).AddDomainEvent(new TurnNumberChangedEvent(nextTurnNumber));
 
             return result;
         }

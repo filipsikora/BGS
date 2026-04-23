@@ -11,15 +11,15 @@ namespace Catan.Core.PhaseLogic
         public ResultBuildInitialRoad Handle(int edgeId, int vertexId)
         {
             var player = Session.GetCurrentPlayer();
-            var edge = Session.GetEdgeById(edgeId);
-            var vertex = Session.GetVertexById(vertexId);
 
-            var validation = RulesBuilding.CanBuildInitialRoad(player, edge, vertex, Session);
+            var validation = RulesBuilding.CanBuildInitialRoad(player, edgeId, vertexId, Session);
 
             if (!validation.Success)
             {
                 return ResultBuildInitialRoad.Fail(validation.Reason, player.ID, edgeId);
             }
+
+            var edge = Session.GetEdgeById(edgeId);
 
             Session.RoadBuiltMutation(edge);
 
