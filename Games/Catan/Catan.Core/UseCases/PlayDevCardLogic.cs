@@ -2,9 +2,9 @@
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class PlayDevCardLogic : BaseLogic
+    public sealed class PlayDevCardLogic : BaseUseCase
     {
         public PlayDevCardLogic(GameSession session) : base(session) { }
 
@@ -61,7 +61,7 @@ namespace Catan.Core.PhaseLogic
 
             Session.DevCardPlayedMutation(card);
 
-            return ResultPlayDevCard.Ok(player.ID, card.ID, card.Type, nextPhase);
+            return ApplyPhase(ResultPlayDevCard.Ok(player.ID, card.ID, card.Type, nextPhase));
         }
     }
 }

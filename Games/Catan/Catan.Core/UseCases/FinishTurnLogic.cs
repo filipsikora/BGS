@@ -3,16 +3,16 @@ using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class FinishTurnLogic : BaseLogic
+    public sealed class FinishTurnLogic : BaseUseCase
     {
         public FinishTurnLogic(GameSession session) : base(session) { }
 
         public ResultFinishTurn Handle()
         {
             var player = Session.GetCurrentPlayer();
-            var initialRound = Session.CheckIfIsInitialRound();
+            var initialRound = Session.CheckIfIsCorePhase(EnumGamePhases.FirstRoundsBuilding);
 
             var validation = RulesTurn.CanFinishInitialTurn(Session, initialRound);
             Console.WriteLine($"initialRound: {initialRound}, result: {validation.Success}");
@@ -35,7 +35,7 @@ namespace Catan.Core.PhaseLogic
             var result = ResultFinishTurn.Ok(player.ID, initialRoundsRemaining, nextTurnNumber, nextPhase);
             result.AddDomainEvent(new PlayerStateChangedEvent(Session.GetPlayerByIndex(nextIndex).ID)).AddDomainEvent(new TurnNumberChangedEvent(nextTurnNumber));
 
-            return result;
+            return ApplyPhase(result);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Catan.Core.Models;
 using Catan.Core.Results;
 using Catan.Core.Data;
+using Catan.Shared.Data;
 
 namespace Catan.Core.Rules
 {
@@ -20,7 +21,7 @@ namespace Catan.Core.Rules
                 ConditionsMap.IsNotOwned(vertex),
                 ConditionsBuildings.NoSettlementsInRange(vertex),
                 ConditionsBuildings.InitialVillagePlaced(session.GetVillagePlacedThisTurn()),
-                ConditionsTurn.IsInitialRound(session.CheckIfIsInitialRound())
+                ConditionsTurn.IsCorrectPhase(EnumGamePhases.FirstRoundsBuilding, session)
                 );
         }
 
@@ -44,7 +45,8 @@ namespace Catan.Core.Rules
                 ConditionsBuildings.AdjacentToLastVillage(edge, vertex),
                 ConditionsBuildings.InitialVillagePlaced(!session.GetVillagePlacedThisTurn()),
                 ConditionsBuildings.InitialRoadPlaced(session.GetRoadPlacedThisTurn()),
-                ConditionsTurn.IsInitialRound(session.CheckIfIsInitialRound()));
+                ConditionsTurn.IsCorrectPhase(EnumGamePhases.FirstRoundsBuilding, session)
+                );
         }
 
         public static ResultCondition CanBuildVillage(Player player, int vertexId, GameSession session)
@@ -103,7 +105,8 @@ namespace Catan.Core.Rules
             return ResultCondition.Combine(
                 ConditionsBuildings.HasAvailable(EnumBuildings.Road, player),
                 ConditionsMap.IsNotOwned(edge),
-                ConditionsMap.HasAccessToPosition(player, edge));
+                ConditionsMap.HasAccessToPosition(player, edge),
+                ConditionsTurn.IsCorrectPhase(EnumGamePhases.RoadBuilding, session));
         }
     }
 }

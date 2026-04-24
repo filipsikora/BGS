@@ -3,9 +3,9 @@ using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class ReactToTradeLogic : BaseLogic
+    public sealed class ReactToTradeLogic : BaseUseCase
     {
         public ReactToTradeLogic(GameSession session) : base(session) { }
 
@@ -29,7 +29,7 @@ namespace Catan.Core.PhaseLogic
             var result = ResultPlayerTrade.Ok(context.SellerId, context.BuyerId, context.Offered, context.Desired, EnumGamePhases.NormalRound);
             result.AddDomainEvent(new PlayerStateChangedEvent(result.SellerId));
 
-            return result;
+            return ApplyPhase(result);
         }
     }
 }

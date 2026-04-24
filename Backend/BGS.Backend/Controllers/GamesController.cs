@@ -26,7 +26,6 @@ namespace BGS.Backend.Controllers
             if (!Enum.TryParse<EnumGames>(request.GameType, out var gameType))
                 return StatusCode(500, new { error = $"Failed to parse GameType: {gameType}" });
 
-
             var factory = _factoryMapper.GetFactory(gameType);
             (var gameId, int firstPlayerId) = _gameManager.CreateGame(factory);
 

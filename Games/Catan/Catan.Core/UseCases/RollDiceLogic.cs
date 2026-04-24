@@ -2,9 +2,9 @@
 using Catan.Core.Results;
 using Catan.Shared.Data;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class RollDiceLogic : BaseLogic
+    public sealed class RollDiceLogic : BaseUseCase
     {
         public RollDiceLogic(GameSession session) : base(session) { }
 
@@ -35,7 +35,7 @@ namespace Catan.Core.PhaseLogic
             var result = ResultRollDice.Ok(resultRoll, resultDistributionList, nextPhase, rolledSevenButNoVictims);
             result.AddDomainEvent(new RolledNumberChangedEvent(resultRoll));
 
-            return result;
+            return ApplyPhase(result);
         }
     }
 }

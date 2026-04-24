@@ -3,9 +3,9 @@ using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class OfferTradeLogic : BaseLogic
+    public sealed class OfferTradeLogic : BaseUseCase
     {
         public OfferTradeLogic(GameSession session) : base(session) { }
 
@@ -24,7 +24,7 @@ namespace Catan.Core.PhaseLogic
 
             Session.CreatePlayerTradeOfferedContext(seller.ID, buyer.ID, seller.Name, buyer.Name, offered, desired);
 
-            return ResultPlayerTrade.Ok(seller.ID, buyerId, offered, desired, EnumGamePhases.TradeRequest);
+            return ApplyPhase(ResultPlayerTrade.Ok(seller.ID, buyerId, offered, desired, EnumGamePhases.TradeRequest));
         }
     }
 }

@@ -2,9 +2,9 @@
 using Catan.Core.Results;
 using Catan.Core.Rules;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class BuyDevCardLogic : BaseLogic
+    public sealed class BuyDevCardLogic : BaseUseCase
     {
         public BuyDevCardLogic(GameSession session) : base(session) { }
 
@@ -28,7 +28,7 @@ namespace Catan.Core.PhaseLogic
             var result = ResultBuyDevCard.Ok(player.ID, devCardId, devCardType, null);
             result.AddDomainEvent(new DevelopmentCardBoughtEvent(result.DevCardId.Value)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
 
-            return result;
+            return ApplyPhase(result);
         }
     }
 }

@@ -3,9 +3,9 @@ using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class BuildFreeRoadLogic : BaseLogic
+    public sealed class BuildFreeRoadLogic : BaseUseCase
     {
         public BuildFreeRoadLogic(GameSession session) : base(session) { }
 
@@ -29,7 +29,7 @@ namespace Catan.Core.PhaseLogic
             var result = ResultBuildFreeRoad.Ok(player.ID, edgeId, nextPhase);
             result.AddDomainEvent(new RoadPlacedEvent(edgeId, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
 
-            return result;
+            return ApplyPhase(result);
         }
     }
 }

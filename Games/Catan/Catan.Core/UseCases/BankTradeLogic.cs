@@ -3,9 +3,9 @@ using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class BankTradeLogic : BaseLogic
+    public sealed class BankTradeLogic : BaseUseCase
     {
         public BankTradeLogic(GameSession session) : base(session) { }
 
@@ -26,7 +26,7 @@ namespace Catan.Core.PhaseLogic
             var result = ResultBankTrade.Ok(player.ID, offered, desired, ratio, EnumGamePhases.NormalRound);
             result.AddDomainEvent(new PlayerStateChangedEvent(player.ID));
 
-            return result;
+            return ApplyPhase(result);
         }
     }
 }

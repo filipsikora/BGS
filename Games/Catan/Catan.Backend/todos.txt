@@ -13,7 +13,7 @@ SOLUTION: replace them with string objects received from path, then have them us
 STATE: mostly done, i will want to replace more random strings with const   -------------------
 
 3.
-ISSUE: some parts of logic are not validated in core (ending turn possible in firstrounds before placing buildings). this will be fixed with the client, but needs to be addressed in core as well
+ISSUE: some parts of logic are not validated in core. this will be fixed with the client, but needs to be addressed in core as well
 
 SOLUTION: fix the game, do it all at once when it is finished with clientless tests
 
@@ -28,18 +28,11 @@ both list and dictionary, one used for display, one used for costs
 STATE: this stems from a design choice i made when i had no idea what was i doing and didn't think i'd actually reach unity phase. the next planned game won't have this issue, since resources work differently, so i am not sure
 i want to be bothered with refactoring this whole system (resource models will be needed for the future games, but not really resource list), so i might ignore it
 
-5. 
-ISSUE: nextPhase is decided in core
-
-SOLUTION: i can move it to application layer
-
-STATE: meh i mean i can do it but i dont think its urgent, i will keep that in mind for future games though --------------------------
-
 6.
 ISSUE: controllers in Unity do too much
 
 SOLUTION: once i move from hotseat i will need to separate global events from local (player-scoped), only global ones will be dealt by controllers subbing eventbus (robber moved, building placed, game-wide logs), the rest will
-need to come from the player client. i will need to figure out how to take care of it including playerId
+need to come from the player client. i will need to figure out how to take care of it including playerId, validation for phase specific use cases?
 
 STATE: important, but not until i move to simultanous game (once the initial db is up and the game is playable) -----------------------------
 
@@ -78,3 +71,10 @@ ISSUE: vertices and edges are stored in list
 SOLUTION: i think dictionary might be a better choice, both for lookup and utility
 
 STATE: i dont think i will want to bother with that, but important to remember for later games
+
+12
+ISSUE: selectedVErtex and edge are stored in application phase which won't work for multiplayer
+
+SOLUTION: move cache to the client and modify the command shape
+
+STATE: mostly done on the backend side, while doing it i also fixed some null issues that would be silent until testing out of client limits (vertexId: 560 or null), also modified buildingsoptions to not be hardcoded

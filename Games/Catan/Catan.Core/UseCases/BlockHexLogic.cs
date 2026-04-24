@@ -2,9 +2,9 @@
 using Catan.Core.Results;
 using Catan.Core.Rules;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class BlockHexLogic : BaseLogic
+    public sealed class BlockHexLogic : BaseUseCase
     {
         public BlockHexLogic(GameSession session) : base(session) { }
 
@@ -27,7 +27,7 @@ namespace Catan.Core.PhaseLogic
             var result = ResultBlockHex.Ok(hex.Id, canSteal, potentialVictimsIds, null);
             result.AddDomainEvent(new RobberPlacedEvent(hexId));
 
-            return result;
+            return ApplyPhase(result);
         }
     }
 }

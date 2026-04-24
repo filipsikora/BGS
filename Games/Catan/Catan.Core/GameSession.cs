@@ -2,11 +2,10 @@
 using Catan.Core.Data;
 using Catan.Core.Engine;
 using Catan.Core.Models;
-using Catan.Core.PhaseLogic;
+using Catan.Core.UseCases;
 using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
-using Microsoft.AspNetCore.Http;
 
 namespace Catan.Core
 {
@@ -85,10 +84,11 @@ namespace Catan.Core
         public ResultPlayerTrade UseOfferTrade(int buyerId, ResourceCostOrStock desired) => _offerTrade.Handle(buyerId, desired);
         public ResultPlayerTrade UseReactToTrade() => _reactToTrade.Handle();
         public ResultYearOfPlenty UseYearOfPlenty(ResourceCostOrStock resources) => _useYearOfPlenty.Handle(resources);
-        
+
 
         // getters //
 
+        public EnumGamePhases GetCurrentCorePhase() => _game.CurrentPhase;
         public int GetCurrentPlayerId() => _game.CurrentPlayer.ID;
         public int GetCurrentPlayersRoadsLeft() => _game.CurrentPlayer.BuildingCount(EnumBuildings.Road);
         public int GetCurrentPlayerResourceAmount(EnumResourceType resource) => _game.CurrentPlayer.Resources.Get(resource);
@@ -124,7 +124,7 @@ namespace Catan.Core
         public bool CheckIfExactCardsAmountSelected(ResourceCostOrStock resources, int amount) => ConditionsResources.HasExactResourcesNumber(resources, amount).Success;
 
         public bool CheckIfInitialRoundsRemaining() => _game.FirstRoundsIndices.Count > 0;
-        public bool CheckIfIsInitialRound() => _game.Turn <= _game.PlayerList.Count * 2;
+        public bool CheckIfIsCorePhase(EnumGamePhases phase) => _game.CurrentPhase == phase;
 
         public int GetBlockedHexId() => _game.GetBlockedHexId();
 
@@ -342,6 +342,7 @@ namespace Catan.Core
 
         internal void SetVillageBuiltThisTurn(bool built) => _game.VillagePlacedThisTurn = built;
         internal void SetRoadBuiltThisTurn(bool built) => _game.RoadPlacedThisTurn = built;
+        internal void SetCorePhase(EnumGamePhases newPhase) => _game.CurrentPhase = newPhase;
 
         // wrappers //
 

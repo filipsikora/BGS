@@ -17,6 +17,8 @@ namespace Catan.Backend.GameManagement
             var gameState = new GameState(random, map);
 
             var firstPlayerId = gameState.InitializeNewGame(2, 1f);
+            Console.WriteLine($"firstplayerid {firstPlayerId}");
+            Console.WriteLine($"{gameState.CurrentPlayerIndex}, {gameState.CurrentPlayer.ToString()}");
 
             var session = new GameSession(gameState);
 

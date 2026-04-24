@@ -22,6 +22,7 @@ namespace Catan.Core.Engine
         public bool AnyoneHasTenPoints { get; set; } = false;
 
         public Queue<int> FirstRoundsIndices { get; set; } = new();
+        public EnumGamePhases CurrentPhase { get; set; } = EnumGamePhases.FirstRoundsBuilding;
 
         public int LastRoll { get; set; } = 0;
         public bool AfterRoll { get; set; }
@@ -161,7 +162,7 @@ namespace Catan.Core.Engine
             CurrentPlayerIndex = FirstRoundsIndices.ElementAt(0);
             CurrentPlayer = PlayerList[CurrentPlayerIndex];
 
-            return CurrentPlayerIndex;
+            return CurrentPlayer.ID;
         }
 
         public Queue<int> SetupFirstRoundsIndices(int playerNumber)

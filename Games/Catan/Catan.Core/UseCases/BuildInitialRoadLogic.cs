@@ -2,9 +2,9 @@
 using Catan.Core.Results;
 using Catan.Core.Rules;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class BuildInitialRoadLogic : BaseLogic
+    public sealed class BuildInitialRoadLogic : BaseUseCase
     {
         public BuildInitialRoadLogic(GameSession session) : base(session) { }
 
@@ -26,7 +26,7 @@ namespace Catan.Core.PhaseLogic
             var result = ResultBuildInitialRoad.Ok(player.ID, edgeId, null);
             result.AddDomainEvent(new RoadPlacedEvent(edgeId, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
 
-            return result;
+            return ApplyPhase(result);
         }
     }
 }

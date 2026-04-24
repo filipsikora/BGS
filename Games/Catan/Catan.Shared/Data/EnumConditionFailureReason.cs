@@ -29,9 +29,9 @@
         NotRoadsLeft,
         NotEnoughResourcesInBank,
         NotEnoughResources,
-        NotInitialRound,
         InitialVillageBuilt,
         InitialRoadBuilt,
-        InitialRoundNotFinished
+        InitialRoundNotFinished,
+        NotCorrectPhase
     }
 }

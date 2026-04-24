@@ -5,14 +5,19 @@ namespace Catan.Core.Conditions
 {
     public static class ConditionsTurn
     {
-        public static ResultCondition IsInitialRound(bool initialRound)
+        public static ResultCondition IsCorrectPhase(EnumGamePhases phase, GameSession session)
         {
-            if (!initialRound)
+            if (session.CheckIfIsCorePhase(phase))
             {
-                return ResultCondition.Fail(ConditionFailureReason.NotInitialRound);
+                return ResultCondition.Ok();
             }
 
-            return ResultCondition.Ok();
+            return ResultCondition.Fail(ConditionFailureReason.NotCorrectPhase);
+        }
+
+        internal static bool IsCorrectPhase(object firstRoundsBuilding, GameSession session)
+        {
+            throw new NotImplementedException();
         }
     }
 }

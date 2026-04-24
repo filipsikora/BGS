@@ -23,7 +23,7 @@ namespace Catan.Core.Rules
 
             var hex = session.GetHexById(hexId);
 
-            return ConditionsMap.IsNotBlocked(hex));
+            return ConditionsMap.IsNotBlocked(hex);
         }
 
         public static ResultCondition ValidVictim(Player victim, List<int> possibleVictimsIds)

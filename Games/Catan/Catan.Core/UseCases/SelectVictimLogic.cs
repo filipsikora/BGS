@@ -2,9 +2,9 @@
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class SelectVictimLogic : BaseLogic
+    public sealed class SelectVictimLogic : BaseUseCase
     {
         public SelectVictimLogic(GameSession session) : base(session) { }
 
@@ -21,7 +21,7 @@ namespace Catan.Core.PhaseLogic
 
             Session.CreateCardsStealingContext(victim.ID);
 
-            return ResultCondition.Ok(EnumGamePhases.CardStealing);
+            return ApplyPhase(ResultCondition.Ok(EnumGamePhases.CardStealing));
         }
     }
 }

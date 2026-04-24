@@ -3,9 +3,9 @@ using Catan.Core.DomainEvents;
 using Catan.Core.Results;
 using Catan.Shared.Data;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class UseMonopolyLogic : BaseLogic
+    public sealed class UseMonopolyLogic : BaseUseCase
     {
         public UseMonopolyLogic(GameSession session) : base(session) { }
 
@@ -25,7 +25,7 @@ namespace Catan.Core.PhaseLogic
             var result = ResultMonopolyCard.Ok(player.ID, victimsIdsAndAmounts, resource, EnumGamePhases.NormalRound);
             result.AddDomainEvent(new PlayerStateChangedEvent(result.ThiefId));
 
-            return result;
+            return ApplyPhase(result);
         }
     }
 }

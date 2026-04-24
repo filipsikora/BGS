@@ -2,9 +2,9 @@
 using Catan.Core.Results;
 using Catan.Core.Rules;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class BuildVillageLogic : BaseLogic
+    public sealed class BuildVillageLogic : BaseUseCase
     {
         public BuildVillageLogic(GameSession session) : base(session) { }
 
@@ -26,7 +26,7 @@ namespace Catan.Core.PhaseLogic
             var result = ResultBuildVillage.Ok(player.ID, vertexId, null);
             result.AddDomainEvent(new VillagePlacedEvent(vertexId, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
 
-            return result;
+            return ApplyPhase(result);
         }
     }
 }

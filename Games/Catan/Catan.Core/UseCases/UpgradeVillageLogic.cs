@@ -2,9 +2,9 @@
 using Catan.Core.Results;
 using Catan.Core.Rules;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class UpgradeVillageLogic : BaseLogic
+    public sealed class UpgradeVillageLogic : BaseUseCase
     {
         public UpgradeVillageLogic(GameSession session) : base(session) { }
 
@@ -25,7 +25,7 @@ namespace Catan.Core.PhaseLogic
             var result = ResultUpgradeVillage.Ok(player.ID, vertexId, null);
             result.AddDomainEvent(new TownPlacedEvent(vertexId, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
 
-            return result;
+            return ApplyPhase(result);
         }
     }
 }

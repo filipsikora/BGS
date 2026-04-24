@@ -1,5 +1,6 @@
 ﻿using Catan.Core.Conditions;
 using Catan.Core.Results;
+using Catan.Shared.Data;
 
 namespace Catan.Core.Rules
 {
@@ -8,7 +9,7 @@ namespace Catan.Core.Rules
         public static ResultCondition CanFinishInitialTurn(GameSession session, bool initialRound)
         {
             return ResultCondition.Combine(
-                ConditionsTurn.IsInitialRound(initialRound),
+                ConditionsTurn.IsCorrectPhase(EnumGamePhases.FirstRoundsBuilding, session),
                 ConditionsBuildings.InitialVillagePlaced(!session.GetVillagePlacedThisTurn()),
                 ConditionsBuildings.InitialRoadPlaced(!session.GetRoadPlacedThisTurn()));
         }
