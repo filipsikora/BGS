@@ -24,7 +24,7 @@ namespace Catan.Core.UseCases
             Session.RoadBuiltMutation(edge);
             Session.RoadBuildingContextMutation();
 
-            EnumGamePhases? nextPhase = Session.GetRoadsLeftToBuild() == 0 ? EnumGamePhases.NormalRound : null;
+            EnumGamePhases? nextPhase = Session.GetRoadsLeftToBuild() ? null : EnumGamePhases.NormalRound;
 
             var result = ResultBuildFreeRoad.Ok(player.ID, edgeId, nextPhase);
             result.AddDomainEvent(new RoadPlacedEvent(edgeId, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));

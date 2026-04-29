@@ -22,6 +22,7 @@ namespace Catan.Core.UseCases
             Session.BlockHexMutation(hex);
 
             var potentialVictimsIds = Session.GetPossibleVictimsIds();
+
             var canSteal = potentialVictimsIds.Count > 0;
 
             var result = ResultBlockHex.Ok(hex.Id, canSteal, potentialVictimsIds, null);

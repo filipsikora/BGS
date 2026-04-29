@@ -12,11 +12,11 @@ namespace Catan.Core.UseCases
         {
             var victim = Session.GetPlayerById(victimId);
             var possibleVictimsIds = Session.GetPossibleVictimsIds();
-            var result = RulesRobber.ValidVictim(victim, possibleVictimsIds);
+            var validation = RulesRobber.ValidVictim(victim, possibleVictimsIds);
 
-            if (!result.Success)
+            if (!validation.Success)
             {
-                return ResultCondition.Fail(result.Reason);
+                return ResultCondition.Fail(validation.Reason);
             }
 
             Session.CreateCardsStealingContext(victim.ID);

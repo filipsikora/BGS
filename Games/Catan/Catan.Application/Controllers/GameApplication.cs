@@ -15,6 +15,7 @@ namespace Catan.Application
         {
             Facade = facade;
             Current = CreateApplicationPhase(EnumGamePhases.FirstRoundsBuilding);
+            Current.Enter();
         }
 
         public GameResult Execute(ICommand command)

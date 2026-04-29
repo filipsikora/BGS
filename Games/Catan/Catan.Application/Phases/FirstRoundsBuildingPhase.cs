@@ -48,14 +48,17 @@ namespace Catan.Application.Phases
 
         private GameResult HandleVertexClicked(VertexClickedCommand signal)
         { 
-            if (villagePlaced)
+            if (villagePlaced && !roadPlaced)
                 return GameResult.Fail().AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, "Build a road now"));
+
+            if (villagePlaced && roadPlaced)
+                return GameResult.Fail().AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, "Finish turn now"));
 
             var (village, road, town) = Facade.GetVertexBuildOptions(signal.VertexId, Facade.GetCurrentPlayerId());
 
             return GameResult.Ok().AddUIMessage(new VertexHighlightedMessage(signal.VertexId)).AddUIMessage(new BuildOptionsSentMessage(village, road, town));
         }
-
+        
         private GameResult HandleEdgeClicked(EdgeClickedCommand signal)
         {
             if (!villagePlaced)
@@ -66,7 +69,7 @@ namespace Catan.Application.Phases
 
             var (village, road, town) = Facade.GetEdgeBuildOptions(signal.EdgeId);
 
-            return GameResult.Ok().AddUIMessage(new EdgeHighlightedMessage(signal.EdgeId)).AddUIMessage(new BuildOptionsSentMessage(village, road, town));
+            return GameResult.Ok().AddUIMessage(new EdgeHighlightedMessage(signal.EdgeId)).AddUIMessage(new BuildOptionsSentMessage(village, road, town));  
         }
 
         private GameResult HandleBuildVillage(BuildVillageCommand signal)

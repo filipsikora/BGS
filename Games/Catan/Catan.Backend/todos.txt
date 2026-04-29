@@ -6,7 +6,7 @@ SOLUTION: remove GetValidatedData(), make Validate return void, make queries use
 STATE: done
 
 2. 
-ISSUE: controller has too many strings
+ISSUE: controllerurl has too many strings
 
 SOLUTION: replace them with string objects received from path, then have them used and passed in backend
 
@@ -54,9 +54,9 @@ STATE: to do once the game is running ---------------------------
 9
 ISSUE: game is hotseat
 
-SOLUTION: requiring player identification, selectedvertex or edge need to come from the client with the command, getplayerbyid needs to have nulls fixed like positions
+SOLUTION: requiring player identification, selectedvertex or edge need to come from the client with the command, getplayerbyid needs to have nulls fixed like positions, auth tokens
 
-STATE: most of the refactor i will need to do once i can move to simultanous game, but during refactoring earlier i will add some elements, like tokens for authentication ----------------------
+STATE: most of the refactor i will need to do once i can move to simultanous game, but during refactoring earlier i will add some elements, for now buildcommands are done ----------------------
 
 10.
 ISSUE: dto is passed and used 
@@ -77,4 +77,19 @@ ISSUE: selectedVErtex and edge are stored in application phase which won't work 
 
 SOLUTION: move cache to the client and modify the command shape
 
-STATE: mostly done on the backend side, while doing it i also fixed some null issues that would be silent until testing out of client limits (vertexId: 560 or null), also modified buildingsoptions to not be hardcoded
+STATE: done, while doing it i also fixed some null issues that would be silent until testing out of client limits (vertexId: 560 or null), modified buildingsoptions to not be hardcoded, and fixed firstplayerid issues
+
+13
+ISSUE: game starts in initialphases, which means that first enter() is not executed, because of that first uimessage is not shown. 
+
+SOLUTION: not sure if i want to bother with it for this game, i might just add this uimessage in the client enter, but for future games i will want to take it into consideration and start in a setupphase or send a setup signal. i will
+check out if adding a uimessageslist to the return from a factory and a field to creategameresponse makes sense, but i prefer the first option
+
+STATE: not sure if i want to fix it
+
+14
+ISSUE: same issue as in 12, but for year of plenty
+
+SOLUTION: maybe use phase context? not sure about it, will get back to it and refactor all phase context in simultanous
+
+STATE: can wait --------------------------------------------------------

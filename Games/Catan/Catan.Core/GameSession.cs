@@ -117,7 +117,7 @@ namespace Catan.Core
 
         public int GetLastPlacedVillagePositionId() => _game.LastPlacedVillagePosition.Id;
 
-        public int GetRoadsLeftToBuild() => _game.RoadBuildingProgress.RoadsLeftToBuild;
+        public bool GetRoadsLeftToBuild() => _game.RoadBuildingProgress == null ? false : true;
 
         public bool CheckIfCardsSelected(ResourceCostOrStock resources) => resources.Total() > 0;
 
@@ -201,6 +201,16 @@ namespace Catan.Core
 
             var possibleVictimsIds = GetAdjacentToHexPlayersIds(blockedHexId.Value);
             possibleVictimsIds.Remove(GetCurrentPlayerId());
+
+            foreach (var possibleVictimId in possibleVictimsIds.ToList())
+            {
+                var victim = GetPlayerById(possibleVictimId);
+
+                if (victim.Resources.Total() == 0)
+                {
+                    possibleVictimsIds.Remove(possibleVictimId);
+                }
+            }
 
             return possibleVictimsIds;
         }

@@ -55,7 +55,7 @@ namespace Catan.Application.Controllers
 
         public int GetLastPlacedVillagePositionId() => _session.GetLastPlacedVillagePositionId();
 
-        public int GetRoadsLeftToBuild() => _session.GetRoadsLeftToBuild();
+        public bool GetRoadsLeftToBuild() => _session.GetRoadsLeftToBuild();
 
         public bool CheckIfCardsSelected(ResourceCostOrStock resources) => _session.CheckIfCardsSelected(resources);
 

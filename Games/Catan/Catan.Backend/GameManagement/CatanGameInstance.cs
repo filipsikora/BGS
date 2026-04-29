@@ -23,8 +23,6 @@ namespace Catan.Backend.GameManagement
 
         public object Execute(object request)
         {
-            Console.WriteLine($"GameInstance hash: {GetHashCode()}");
-
             lock (_lock)
             {
                 if (request is not CommandRequestDto dto)
