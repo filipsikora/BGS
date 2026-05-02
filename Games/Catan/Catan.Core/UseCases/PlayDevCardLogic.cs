@@ -1,10 +1,11 @@
-﻿using Catan.Core.Results;
+﻿using Catan.Core.DomainEvents;
+using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class PlayDevCardLogic : BaseLogic
+    public sealed class PlayDevCardLogic : BaseUseCase
     {
         public PlayDevCardLogic(GameSession session) : base(session) { }
 
@@ -13,12 +14,12 @@ namespace Catan.Core.PhaseLogic
             var player = Session.GetCurrentPlayer();
             var card = Session.GetDevCardById(cardId);
             var afterRoll = Session.GetAfterRoll();
-            var result = RulesDevCards.CanPlayDevCard(player, card, afterRoll);
+            var validation = RulesDevCards.CanPlayDevCard(player, card, afterRoll);
             var nextPhase = EnumGamePhases.NormalRound;
 
-            if (!result.Success)
+            if (!validation.Success)
             {
-                return ResultPlayDevCard.Fail(result.Reason, player.ID);
+                return ResultPlayDevCard.Fail(validation.Reason, player.ID);
             }
 
             switch (card.Type)
@@ -32,10 +33,10 @@ namespace Catan.Core.PhaseLogic
                     break;
 
                 case EnumDevelopmentCardTypes.RoadBuilding:
-                    result = RulesDevCards.CanPlayRoadBuilding(player);
+                    validation = RulesDevCards.CanPlayRoadBuilding(player);
 
-                    if (!result.Success)
-                        return ResultPlayDevCard.Fail(result.Reason, player.ID);
+                    if (!validation.Success)
+                        return ResultPlayDevCard.Fail(validation.Reason, player.ID);
 
 
                     var roadsAvailable = Math.Min(Session.GetCurrentPlayersRoadsLeft(), 2);
@@ -49,10 +50,10 @@ namespace Catan.Core.PhaseLogic
                     break;
 
                 case EnumDevelopmentCardTypes.YearOfPlenty:
-                    result = RulesDevCards.CanPlayYearOfPlenty(Session.GetBank(), 2);
+                    validation = RulesDevCards.CanPlayYearOfPlenty(Session.GetBank(), 2);
 
-                    if (!result.Success)
-                        return ResultPlayDevCard.Fail(result.Reason, player.ID);
+                    if (!validation.Success)
+                        return ResultPlayDevCard.Fail(validation.Reason, player.ID);
 
 
                     nextPhase = EnumGamePhases.YearOfPlentyCard;
@@ -61,7 +62,10 @@ namespace Catan.Core.PhaseLogic
 
             Session.DevCardPlayedMutation(card);
 
-            return ResultPlayDevCard.Ok(player.ID, card.ID, card.Type, nextPhase);
+            var result = ResultPlayDevCard.Ok(player.ID, card.ID, card.Type, nextPhase);
+            result.AddDomainEvent(new PlayerStateChangedEvent(player.ID));
+
+            return ApplyPhase(result);
         }
     }
 }

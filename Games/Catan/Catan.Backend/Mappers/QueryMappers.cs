@@ -98,6 +98,7 @@ namespace Catan.Backend.Mappers
                 "resources-availability" => EnumQueryName.ResourcesAvailability,
                 "trade-offer-data" => EnumQueryName.TradeOfferData,
                 "victim-cards" => EnumQueryName.VictimCards,
+                "some-players-names" => EnumQueryName.SomePlayersNames,
                 _ => throw new Exception($"Unknown query name: {queryName}")
             };
         }

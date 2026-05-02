@@ -40,7 +40,7 @@ namespace Catan.Application.Phases
                 return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(playerId, result.Reason));
             }
 
-            return GameResult.Ok(result.NextPhase);
+            return GameResult.Ok(result.NextPhase).AddDomainEventsList(result.DomainEvents);
         }
     }
 }

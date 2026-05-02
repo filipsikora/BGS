@@ -4,9 +4,9 @@ using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class UseYearOfPlentyLogic : BaseLogic
+    public sealed class UseYearOfPlentyLogic : BaseUseCase
     {
         public UseYearOfPlentyLogic(GameSession session) : base(session) { }
 
@@ -24,7 +24,7 @@ namespace Catan.Core.PhaseLogic
             var result = ResultYearOfPlenty.Ok(requested, EnumGamePhases.NormalRound);
             result.AddDomainEvent(new PlayerStateChangedEvent(Session.GetCurrentPlayerId()));
 
-            return result;
+            return ApplyPhase(result);
         }
     }
 }

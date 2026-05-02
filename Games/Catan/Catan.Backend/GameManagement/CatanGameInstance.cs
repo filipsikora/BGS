@@ -21,10 +21,11 @@ namespace Catan.Backend.GameManagement
             _registry = registry;
         }
 
+        public GameApplication Application => _gameApplication; // just for testing
+
+
         public object Execute(object request)
         {
-            Console.WriteLine($"GameInstance hash: {GetHashCode()}");
-
             lock (_lock)
             {
                 if (request is not CommandRequestDto dto)

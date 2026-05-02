@@ -1,9 +1,10 @@
 ﻿using Catan.Core;
+using Catan.Core.Models;
 using Catan.Core.Queries.Interfaces;
 using Catan.Core.Results;
+using Catan.Core.Rules;
 using Catan.Core.Snapshots;
 using Catan.Shared.Data;
-using Catan.Core.Models;
 
 namespace Catan.Application.Controllers
 {
@@ -30,6 +31,10 @@ namespace Catan.Application.Controllers
             _turnsQuery = turnsQuery;
         }
 
+        // setters //
+
+        public void SetCorePhase(EnumGamePhases phase) => _session.SetCorePhase(phase);
+
         // getters//
         public EnumGamePhases GetNextPhaseFromAfterRoll() => _session.GetNextPhaseFromAfterRoll();
         public EnumGamePhases? GetNextPhaseAfterDiscarding() => _session.GetNextPhaseAfterDiscarding();
@@ -54,13 +59,20 @@ namespace Catan.Application.Controllers
 
         public int GetLastPlacedVillagePositionId() => _session.GetLastPlacedVillagePositionId();
 
-        public int GetRoadsLeftToBuild() => _session.GetRoadsLeftToBuild();
+        public bool GetRoadsLeftToBuild() => _session.GetRoadsLeftToBuild();
 
         public bool CheckIfCardsSelected(ResourceCostOrStock resources) => _session.CheckIfCardsSelected(resources);
 
         public bool CheckIfExactCardsAmountSelected(ResourceCostOrStock resources, int amount) => _session.CheckIfExactCardsAmountSelected(resources, amount);
 
         public int GetDesertHexId() => _session.GetDesertHexId();
+
+        public (bool village, bool road, bool town) GetVertexBuildOptions(int vertexId, int playerId) => _session.GetVertexBuildOptions(vertexId, playerId);
+        public (bool village, bool road, bool town) GetEdgeBuildOptions(int edgeId) => _session.GetEdgeBuildOptions(edgeId);
+
+
+
+
 
         // use cases//
 

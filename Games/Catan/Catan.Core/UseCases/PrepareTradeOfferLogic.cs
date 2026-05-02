@@ -3,9 +3,9 @@ using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class PrepareTradeOfferLogic : BaseLogic
+    public sealed class PrepareTradeOfferLogic : BaseUseCase
     {
         public PrepareTradeOfferLogic(GameSession session) : base(session) { }
 
@@ -21,7 +21,7 @@ namespace Catan.Core.PhaseLogic
 
             Session.CreateTradeDraftContext(offered);
 
-            return ResultCondition.Ok(EnumGamePhases.TradeOffer);
+            return ApplyPhase(ResultCondition.Ok(EnumGamePhases.TradeOffer));
         }
     }
 }

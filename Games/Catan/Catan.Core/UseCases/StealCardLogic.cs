@@ -3,9 +3,9 @@ using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class StealCardLogic : BaseLogic
+    public sealed class StealCardLogic : BaseUseCase
     {
         public StealCardLogic(GameSession session) : base(session) { }
 
@@ -35,7 +35,7 @@ namespace Catan.Core.PhaseLogic
             var result = ResultStealResource.Ok(thief.ID, victimId, resource, nextPhase);
             result.AddDomainEvent(new PlayerStateChangedEvent(result.ThiefId));
 
-            return result;
+            return ApplyPhase(result);
         }
     }
 }

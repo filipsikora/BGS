@@ -2,9 +2,9 @@
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class SelectVictimLogic : BaseLogic
+    public sealed class SelectVictimLogic : BaseUseCase
     {
         public SelectVictimLogic(GameSession session) : base(session) { }
 
@@ -12,16 +12,16 @@ namespace Catan.Core.PhaseLogic
         {
             var victim = Session.GetPlayerById(victimId);
             var possibleVictimsIds = Session.GetPossibleVictimsIds();
-            var result = RulesRobber.ValidVictim(victim, possibleVictimsIds);
+            var validation = RulesRobber.ValidVictim(victim, possibleVictimsIds);
 
-            if (!result.Success)
+            if (!validation.Success)
             {
-                return ResultCondition.Fail(result.Reason);
+                return ResultCondition.Fail(validation.Reason);
             }
 
             Session.CreateCardsStealingContext(victim.ID);
 
-            return ResultCondition.Ok(EnumGamePhases.CardStealing);
+            return ApplyPhase(ResultCondition.Ok(EnumGamePhases.CardStealing));
         }
     }
 }

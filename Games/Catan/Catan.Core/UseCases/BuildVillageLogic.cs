@@ -2,30 +2,31 @@
 using Catan.Core.Results;
 using Catan.Core.Rules;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class BuildVillageLogic : BaseLogic
+    public sealed class BuildVillageLogic : BaseUseCase
     {
         public BuildVillageLogic(GameSession session) : base(session) { }
 
         public ResultBuildVillage Handle(int vertexId)
         {
             var player = Session.GetCurrentPlayer();
-            var vertex = Session.GetVertexById(vertexId);
 
-            var validation = RulesBuilding.CanBuildVillage(player, vertex, Session);
+            var validation = RulesBuilding.CanBuildVillage(player, vertexId, Session);
 
             if (!validation.Success)
             {
                 return ResultBuildVillage.Fail(validation.Reason, player.ID, vertexId);
             }
 
+            var vertex = Session.GetVertexById(vertexId);
+
             Session.VillagePaidAndBuiltMutation(vertex);
 
             var result = ResultBuildVillage.Ok(player.ID, vertexId, null);
             result.AddDomainEvent(new VillagePlacedEvent(vertexId, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
 
-            return result;
+            return ApplyPhase(result);
         }
     }
 }

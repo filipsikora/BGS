@@ -3,9 +3,9 @@ using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
 
-namespace Catan.Core.PhaseLogic
+namespace Catan.Core.UseCases
 {
-    public sealed class DiscardCardsLogic : BaseLogic
+    public sealed class DiscardCardsLogic : BaseUseCase
     {
         public DiscardCardsLogic(GameSession session) : base(session) { }
 
@@ -24,7 +24,7 @@ namespace Catan.Core.PhaseLogic
 
             EnumGamePhases? nextPhase = Session.GetCardDiscardingContextExistance() ? null : EnumGamePhases.RobberPlacing;
 
-            return ResultCondition.Ok(nextPhase);
+            return ApplyPhase(ResultCondition.Ok(nextPhase));
         }
     }
 }

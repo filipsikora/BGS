@@ -2,7 +2,7 @@
 using Catan.Core.Data;
 using Catan.Core.Engine;
 using Catan.Core.Models;
-using Catan.Core.PhaseLogic;
+using Catan.Core.UseCases;
 using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
@@ -84,10 +84,11 @@ namespace Catan.Core
         public ResultPlayerTrade UseOfferTrade(int buyerId, ResourceCostOrStock desired) => _offerTrade.Handle(buyerId, desired);
         public ResultPlayerTrade UseReactToTrade() => _reactToTrade.Handle();
         public ResultYearOfPlenty UseYearOfPlenty(ResourceCostOrStock resources) => _useYearOfPlenty.Handle(resources);
-        
+
 
         // getters //
 
+        public EnumGamePhases GetCurrentCorePhase() => _game.CurrentPhase;
         public int GetCurrentPlayerId() => _game.CurrentPlayer.ID;
         public int GetCurrentPlayersRoadsLeft() => _game.CurrentPlayer.BuildingCount(EnumBuildings.Road);
         public int GetCurrentPlayerResourceAmount(EnumResourceType resource) => _game.CurrentPlayer.Resources.Get(resource);
@@ -107,7 +108,7 @@ namespace Catan.Core
 
             return exists;
         }
-
+        
         public bool GetPlayersLeftToDiscard() => _game.GetPlayersLeftToDiscard();
 
         public int GetNextToDiscardId() => _game.CardDiscardingProgress.PlayersToDiscard.Peek();
@@ -116,14 +117,14 @@ namespace Catan.Core
 
         public int GetLastPlacedVillagePositionId() => _game.LastPlacedVillagePosition.Id;
 
-        public int GetRoadsLeftToBuild() => _game.RoadBuildingProgress.RoadsLeftToBuild;
+        public bool GetRoadsLeftToBuild() => _game.RoadBuildingProgress == null ? false : true;
 
         public bool CheckIfCardsSelected(ResourceCostOrStock resources) => resources.Total() > 0;
 
         public bool CheckIfExactCardsAmountSelected(ResourceCostOrStock resources, int amount) => ConditionsResources.HasExactResourcesNumber(resources, amount).Success;
 
         public bool CheckIfInitialRoundsRemaining() => _game.FirstRoundsIndices.Count > 0;
-        public bool CheckIfIsInitialRound() => _game.Turn <= _game.PlayerList.Count * 2;
+        public bool CheckIfIsCorePhase(EnumGamePhases phase) => _game.CurrentPhase == phase;
 
         public int GetBlockedHexId() => _game.GetBlockedHexId();
 
@@ -133,6 +134,14 @@ namespace Catan.Core
 
         public bool GetVillagePlacedThisTurn() => _game.VillagePlacedThisTurn;
         public bool GetRoadPlacedThisTurn() => _game.RoadPlacedThisTurn;
+
+        public EnumBuildings GetBuildOptionsForVertex(Vertex v) => v.HasTown ? EnumBuildings.None : v.HasVillage ? EnumBuildings.Town : EnumBuildings.Village;
+
+        public EnumBuildings GetBuildOptionsForEdge(Edge e) => e.IsOwned ? EnumBuildings.None : EnumBuildings.Road;
+
+        public bool TryGetVertexById(int vertexId) => _game.Map.TryGetVertexById(vertexId);
+        public bool TryGetEdgeById(int edgeId) => _game.Map.TryGetEdgeById(edgeId);
+        public bool TryGetHexById(int hexId) => _game.Map.TryGetHexById(hexId);
 
         public int GetCurrentPlayerTradeRatio(EnumResourceType resource)
         {
@@ -149,6 +158,18 @@ namespace Catan.Core
             }
 
             return 4;
+        }
+
+        public (bool village, bool road, bool town) GetVertexBuildOptions(int vertexId, int playerId)
+        {
+            var player = GetPlayerById(playerId);
+
+            return (RulesPlacement.CanPlaceVillage(vertexId, this).Success, false, RulesPlacement.CanPlaceTown(player, vertexId, this).Success);
+        }
+
+        public (bool village, bool road, bool town) GetEdgeBuildOptions(int edgeId)
+        {
+            return (false, RulesPlacement.CanPlaceRoad(edgeId, this).Success, false);
         }
 
         public List<int> GetAdjacentToHexPlayersIds(int hexId)
@@ -180,6 +201,16 @@ namespace Catan.Core
 
             var possibleVictimsIds = GetAdjacentToHexPlayersIds(blockedHexId.Value);
             possibleVictimsIds.Remove(GetCurrentPlayerId());
+
+            foreach (var possibleVictimId in possibleVictimsIds.ToList())
+            {
+                var victim = GetPlayerById(possibleVictimId);
+
+                if (victim.Resources.Total() == 0)
+                {
+                    possibleVictimsIds.Remove(possibleVictimId);
+                }
+            }
 
             return possibleVictimsIds;
         }
@@ -224,6 +255,7 @@ namespace Catan.Core
 
         internal Player GetCurrentPlayer() => _game.CurrentPlayer;
         internal Player GetPlayerById(int playerId) => _game.GetPlayerById(playerId);
+        internal Player GetPlayerByIndex(int index) => _game.PlayerList[index];
 
         internal ResourceCostOrStock GetBank() => _game.Bank;
 
@@ -320,6 +352,7 @@ namespace Catan.Core
 
         internal void SetVillageBuiltThisTurn(bool built) => _game.VillagePlacedThisTurn = built;
         internal void SetRoadBuiltThisTurn(bool built) => _game.RoadPlacedThisTurn = built;
+        public void SetCorePhase(EnumGamePhases newPhase) => _game.CurrentPhase = newPhase; // public for testing
 
         // wrappers //
 

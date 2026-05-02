@@ -6,7 +6,7 @@ using Catan.Shared.Data;
 
 namespace Catan.Application.Phases
 {
-    public class NormalRoundPhase : BaseBuildPhase
+    public class NormalRoundPhase : BasePhase
     {
         private readonly ResourceCostOrStock _selected = new();
 
@@ -73,36 +73,21 @@ namespace Catan.Application.Phases
 
         private GameResult HandleVertexClicked(VertexClickedCommand signal)
         {
-            SelectedVertexId = signal.VertexId;
-            SelectedEdgeId = null;
-
-            var village = true;
-            var road = false;
-            var town = true;
+            var (village, road, town) = Facade.GetVertexBuildOptions(signal.VertexId, Facade.GetCurrentPlayerId());
 
             return GameResult.Ok().AddUIMessage(new VertexHighlightedMessage(signal.VertexId)).AddUIMessage(new BuildOptionsSentMessage(village, road, town));
-
         }
 
         private GameResult HandleEdgeClicked(EdgeClickedCommand signal)
         {
-            SelectedVertexId = null;
-            SelectedEdgeId = signal.EdgeId;
-
-            var village = false;
-            var road = true;
-            var town = false;
+            var (village, road, town) = Facade.GetEdgeBuildOptions(signal.EdgeId);
 
             return GameResult.Ok().AddUIMessage(new EdgeHighlightedMessage(signal.EdgeId)).AddUIMessage(new BuildOptionsSentMessage(village, road, town));
-
         }
 
         private GameResult HandleVillageRequested(BuildVillageCommand signal)
         {
-            int id = SelectedVertexId.Value;
-            var result = Facade.UseBuildVillage(id);
-
-            ResetSelection();
+            var result = Facade.UseBuildVillage(signal.VertexId);
 
             if (!result.Success)
             {
@@ -114,10 +99,7 @@ namespace Catan.Application.Phases
 
         private GameResult HandleRoadRequested(BuildRoadCommand signal)
         {
-            int id = SelectedEdgeId.Value;
-            var result = Facade.UseBuildRoad(id);
-
-            ResetSelection();
+            var result = Facade.UseBuildRoad(signal.EdgeId);
 
             if (!result.Success)
             {
@@ -129,10 +111,7 @@ namespace Catan.Application.Phases
 
         private GameResult HandleTownRequested(UpgradeVillageCommand signal)
         {
-            int id = SelectedVertexId.Value;
-            var result = Facade.UseUpgradeVillage(id);
-
-            ResetSelection();
+            var result = Facade.UseUpgradeVillage(signal.VertexId);
 
             if (!result.Success)
             {

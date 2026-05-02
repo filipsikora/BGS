@@ -2,6 +2,7 @@
 using Catan.Application.UIMessages;
 using Catan.Core.DomainEvents;
 using Catan.Core.Interfaces;
+using Catan.Core.Models;
 
 namespace Catan.Application.Helpers
 {
@@ -19,7 +20,7 @@ namespace Catan.Application.Helpers
 
             return uiMessages;
         }
-        
+
         public static IUIMessages MapDomainEventToUiMessage(IDomainEvent domainEvent)
         {
             return domainEvent switch

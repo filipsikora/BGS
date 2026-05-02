@@ -3,7 +3,6 @@ using Catan.Application.UIMessages;
 using Catan.Core.Models;
 using Catan.Application.Commands;
 using Catan.Shared.Data;
-using Catan.Core.DomainEvents;
 
 namespace Catan.Application.Phases
 {
@@ -55,22 +54,23 @@ namespace Catan.Application.Phases
         private GameResult HandleResourcesSelected(CardSelectionAcceptedCommand signal)
         {
             var playerId = Facade.GetCurrentPlayerId();
-            var result = Facade.UseYearOfPlenty(_cardsDesired);
+            var validation = Facade.UseYearOfPlenty(_cardsDesired);
 
-            if (!result.Success)
+            if (!validation.Success)
             {
-                return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(playerId, result.Reason));
+                return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(playerId, validation.Reason));
             }
+            var result = GameResult.Ok();
 
-            foreach (var (key, amount) in result.Requested.ResourceDictionary)
+            foreach (var (key, amount) in validation.Requested.ResourceDictionary)
             {
                 if (amount <= 0)
                     continue;
 
-                return GameResult.Fail().AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, $"Player{playerId} received {key} {amount} from Year Of Plenty card"));
+                result.AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, $"Player{playerId} received {key} {amount} from Year Of Plenty card"));
             }
 
-            return GameResult.Ok(result.NextPhase).AddDomainEventsList(result.DomainEvents);
+            return GameResult.Ok(validation.NextPhase).AddDomainEventsList(validation.DomainEvents);
         }
     }
 }

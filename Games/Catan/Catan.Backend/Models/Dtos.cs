@@ -79,6 +79,24 @@ namespace Catan.Backend.Models
         public void Validate() => DtoValidation.RequirePositiveInt(PlayerId, nameof(PlayerId));
     }
 
+    public class VillageBuiltDto : IValidatableDto
+    {
+        public int? VertexId { get; set; }
+        public void Validate() => DtoValidation.RequirePositiveInt(VertexId, nameof(VertexId));
+    }
+
+    public class RoadBuiltDto : IValidatableDto
+    {
+        public int? EdgeId { get; set; }
+        public void Validate() => DtoValidation.RequirePositiveInt(EdgeId, nameof(EdgeId));
+    }
+
+    public class TownBuildDto : IValidatableDto
+    {
+        public int? VertexId { get; set; }
+        public void Validate() => DtoValidation.RequirePositiveInt(VertexId, nameof(VertexId));
+    }
+
     public class EmptyDto : IValidatableDto
     {
         public void Validate() { }

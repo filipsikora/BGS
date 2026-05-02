@@ -41,7 +41,7 @@ namespace Catan.Application.Phases
             var result = Facade.UseBlockHex(hexId);
 
             if (!result.Success)
-                return GameResult.Fail();
+                return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(Facade.GetCurrentPlayerId(), result.Reason));
 
 
             var gameResult = HandleVictimsAfterBlocking(result.CanSteal, result.PotentialVictimsIds);
@@ -51,7 +51,7 @@ namespace Catan.Application.Phases
             return gameResult.AddDomainEventsList(result.DomainEvents);
         }
 
-        private GameResult HandleVictimsAfterBlocking(bool canSteal, List<int> potentialVictimsIds)
+        private GameResult HandleVictimsAfterBlocking(bool canSteal, List<int>? potentialVictimsIds)
         {
             if (!canSteal)
             {
