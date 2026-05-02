@@ -31,6 +31,10 @@ namespace Catan.Application.Controllers
             _turnsQuery = turnsQuery;
         }
 
+        // setters //
+
+        public void SetCorePhase(EnumGamePhases phase) => _session.SetCorePhase(phase);
+
         // getters//
         public EnumGamePhases GetNextPhaseFromAfterRoll() => _session.GetNextPhaseFromAfterRoll();
         public EnumGamePhases? GetNextPhaseAfterDiscarding() => _session.GetNextPhaseAfterDiscarding();

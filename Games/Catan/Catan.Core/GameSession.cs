@@ -352,7 +352,7 @@ namespace Catan.Core
 
         internal void SetVillageBuiltThisTurn(bool built) => _game.VillagePlacedThisTurn = built;
         internal void SetRoadBuiltThisTurn(bool built) => _game.RoadPlacedThisTurn = built;
-        internal void SetCorePhase(EnumGamePhases newPhase) => _game.CurrentPhase = newPhase;
+        public void SetCorePhase(EnumGamePhases newPhase) => _game.CurrentPhase = newPhase; // public for testing
 
         // wrappers //
 

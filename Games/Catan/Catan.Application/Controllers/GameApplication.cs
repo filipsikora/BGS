@@ -18,6 +18,8 @@ namespace Catan.Application
             Current.Enter();
         }
 
+        public BasePhase CreatePhase(EnumGamePhases phase) => CreateApplicationPhase(phase); // for tests
+
         public GameResult Execute(ICommand command)
         {
             var result = Current.Handle(command);

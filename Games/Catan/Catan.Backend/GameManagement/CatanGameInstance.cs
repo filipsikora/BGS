@@ -21,6 +21,9 @@ namespace Catan.Backend.GameManagement
             _registry = registry;
         }
 
+        public GameApplication Application => _gameApplication; // just for testing
+
+
         public object Execute(object request)
         {
             lock (_lock)
