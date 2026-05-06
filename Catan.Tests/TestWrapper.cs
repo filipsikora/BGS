@@ -31,4 +31,10 @@ public class TestGame
         Facade.SetCorePhase(EnumGamePhases.NormalRound);
         return this;
     }
+
+    public TestGame InInitialiRound()
+    {
+        Facade.SetCorePhase(EnumGamePhases.FirstRoundsBuilding);
+        return this;
+    }
 }

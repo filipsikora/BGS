@@ -16,7 +16,7 @@ namespace Catan.Core.UseCases
             var devCardType = devCard.Type;
             var devCardsLeftList = Session.GetDevCardsLeft();
 
-            var validation = RulesDevCards.CanBuyDevCard(player, devCard, devCardsLeftList);
+            var validation = RulesDevCards.CanBuyDevCard(player, devCard, devCardsLeftList, Session);
 
             if (!validation.Success)
             {

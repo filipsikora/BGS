@@ -9,14 +9,14 @@ namespace BGS.Backend
 
         public GameManager() { }
 
-        public (Guid, int) CreateGame(IGameFactory factory)
+        public Guid CreateGame(IGameFactory factory, int playerNumber)
         {
             var gameId = Guid.NewGuid();
-            (var game, int firstPlayerId) = factory.CreateGame();
+            var game = factory.CreateGame(playerNumber);
 
             _games[gameId] = game;
 
-            return (gameId, firstPlayerId);
+            return gameId;
         }
 
         public IGameInstance GetGame(Guid gameId)

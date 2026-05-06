@@ -94,11 +94,27 @@
       "BGS.GameAbstractions/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "BGS.Shared": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/BGS.GameAbstractions.dll": {}
         },
         "runtime": {
           "bin/placeholder/BGS.GameAbstractions.dll": {}
+        }
+      },
+      "BGS.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "Newtonsoft.Json": "9.0.0"
+        },
+        "compile": {
+          "bin/placeholder/BGS.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BGS.Shared.dll": {}
         }
       },
       "Catan.Core/1.0.0": {
@@ -313,6 +329,11 @@
       "type": "project",
       "path": "../../../Backend/BGS.GameAbstractions/BGS.GameAbstractions.csproj",
       "msbuildProject": "../../../Backend/BGS.GameAbstractions/BGS.GameAbstractions.csproj"
+    },
+    "BGS.Shared/1.0.0": {
+      "type": "project",
+      "path": "../../../Backend/BGS.Shared/BGS.Shared.csproj",
+      "msbuildProject": "../../../Backend/BGS.Shared/BGS.Shared.csproj"
     },
     "Catan.Core/1.0.0": {
       "type": "project",

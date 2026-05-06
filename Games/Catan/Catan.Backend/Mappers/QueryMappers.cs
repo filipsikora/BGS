@@ -19,6 +19,33 @@ namespace Catan.Backend.Mappers
             };
         }
 
+        public static FullPlayerDto MapFullPlayerToDto(FullPlayerDataSnapshot dataSnapshot, PlayerResourcesSnapshot resourcesSnapshot)
+        {
+            var devCardsDto = dataSnapshot.DevCards.Select(devCard => new DevelopmentCardDto
+            {
+                Id = devCard.Id,
+                IsNew = devCard.IsNew,
+                IsPlayable = devCard.IsPlayable,
+                Type = devCard.Type.ToString()
+            }).ToList();
+
+            return new FullPlayerDto
+            {
+                Data = new FullPlayerDataDto
+                {
+                    Name = dataSnapshot.Name,
+                    BuildingsLeft = dataSnapshot.BuildingsLeft,
+                    Points = dataSnapshot.Points,
+                    Knights = dataSnapshot.Knights,
+                    VictoryPoints = dataSnapshot.VictoryPoints,
+                    ExtraPoints = dataSnapshot.ExtraPoints,
+                    DevCards = devCardsDto
+                },
+
+                Resources = MapPlayerCardsToDto(resourcesSnapshot)
+            };
+        }
+
         public static PlayerCardsDto MapPlayerCardsToDto(PlayerResourcesSnapshot snapshot)
         {
             return new PlayerCardsDto

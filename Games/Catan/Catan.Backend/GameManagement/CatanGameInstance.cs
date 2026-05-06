@@ -5,6 +5,7 @@ using Catan.Shared.Data;
 using Catan.Shared.Dtos;
 using BGS.Shared.Dtos;
 using Microsoft.AspNetCore.Http;
+using BGS.Shared.Data;
 
 namespace Catan.Backend.GameManagement
 {
@@ -15,6 +16,14 @@ namespace Catan.Backend.GameManagement
 
         private readonly object _lock = new();
 
+        private readonly List<int> _playersIds = new();
+
+        public Guid GameId { get; private set; }
+        public EnumGameInstanceState State { get; private set; } = EnumGameInstanceState.Lobby;
+        public int CurrentPlayers => _playersIds.Count;
+        public int DesiredPlayerNumber { get; private set; }
+        public bool CanJoin => State == EnumGameInstanceState.Lobby && CurrentPlayers < DesiredPlayerNumber;
+
         public CatanGameInstance(GameApplication gameApplication, CatanCommandRegistry registry)
         {
             _gameApplication = gameApplication;
@@ -24,7 +33,7 @@ namespace Catan.Backend.GameManagement
         public GameApplication Application => _gameApplication; // just for testing
 
 
-        public object Execute(object request)
+        public CommandResponseDto Execute(CommandRequestDto request)
         {
             lock (_lock)
             {
@@ -56,6 +65,7 @@ namespace Catan.Backend.GameManagement
                     EnumQueryName.NotCurrentPlayerNames => HandlerNotCurrentPlayerNamesQuery(),
                     EnumQueryName.TradeOfferData => HandleTradeOfferDataQuery(),
                     EnumQueryName.SomePlayersNames => HandleSomePlayersNamesQuery(ParseListInt(dict, "playerIds")),
+                    EnumQueryName.FullPlayer => HandleFullPlayerQuery(ParseInt(dict, "playerId")),
                     _ => throw new Exception($"Unknown query: {query}")
                 };
             }
@@ -139,6 +149,15 @@ namespace Catan.Backend.GameManagement
             return dto;
         }
 
+        private FullPlayerDto HandleFullPlayerQuery(int playerId)
+        {
+            var data = _gameApplication.Facade.GetFullPlayerData(playerId);
+            var resources = _gameApplication.Facade.GetPlayersCards(playerId);
+            var dto = QueryMappers.MapFullPlayerToDto(data, resources);
+
+            return dto;
+        }
+
         private int ParseInt(IQueryCollection dict, string key)
         {
             if (!dict.TryGetValue(key, out var value))
@@ -157,4 +176,4 @@ namespace Catan.Backend.GameManagement
                 .ToList();
         }
     }
-}   
+}

@@ -10,7 +10,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Catan.Tests;
 
-public class BuildVillage
+public class Buildings
 {
     [Fact]
     public void BuildNormalVillageInFirstRound_ShouldFail()
@@ -39,7 +39,7 @@ public class BuildVillage
 
         var result = game.Facade.UseBuildInitialVillage(1);
 
-        Assert.True(result.Success);
+        Assert.False(result.Success);
         
     }
 }

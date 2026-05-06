@@ -22,6 +22,15 @@ namespace Catan.Core.Queries.InMemory
             return player.DevelopmentCardsByID.Select(id => FindCard(id)).Select(card => Map(card, afterRoll)).ToList();
         }
 
+        public List<DevelopmentCardSnapshot> GetPlayerDevCardsById(int playerId)
+        {
+            var player = _session.GetPlayerById(playerId);
+
+            bool afterRoll = _session.GetAfterRoll();
+
+            return player.DevelopmentCardsByID.Select(id => FindCard(id)).Select(card => Map(card, afterRoll)).ToList();
+        }
+
         private DevelopmentCard FindCard(int id)
         {
             return _session.GetDevCardById(id);

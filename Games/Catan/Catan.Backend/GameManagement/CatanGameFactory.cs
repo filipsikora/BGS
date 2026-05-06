@@ -10,13 +10,17 @@ namespace Catan.Backend.GameManagement
 {
     public class CatanGameFactory : IGameFactory
     {
-        public (IGameInstance, int) CreateGame()
+        public int MaxPlayers { get; private set; } = 4;
+        public int MinPlayers { get; private set; } = 2;
+
+        public IGameInstance CreateGame(int playerNumber)
         {
+
             var random = new RandomProvider();
             var map = new HexMap(random);
             var gameState = new GameState(random, map);
 
-            var firstPlayerId = gameState.InitializeNewGame(2, 1f);
+            var firstPlayerId = gameState.InitializeNewGame(playerNumber, 1f);
 
             var session = new GameSession(gameState);
 
@@ -26,13 +30,14 @@ namespace Catan.Backend.GameManagement
             var resourcesQuery = new InMemoryResourcesQueryService(session);
             var tradeQuery = new InMemoryTradeQueryServices(session);
             var turnsQuery = new InMemoryTurnsQueryService(session);
+            var gameStateQuery = new InMemoryGameStateQueryServices(session, devCardQuery);
 
-            var facade = new Facade(session, boardQuery, devCardQuery, playersQuery, resourcesQuery, tradeQuery, turnsQuery);
+            var facade = new Facade(session, boardQuery, devCardQuery, playersQuery, resourcesQuery, tradeQuery, turnsQuery, gameStateQuery);
 
             var app = new GameApplication(facade);
             var registry = new CatanCommandRegistry();
 
-            return (new CatanGameInstance(app, registry), firstPlayerId);
+            return (new CatanGameInstance(app, registry));
         }
     }
 }

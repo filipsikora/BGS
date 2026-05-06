@@ -115,7 +115,11 @@
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.Shared\\BGS.Shared.csproj": {
+                "projectPath": "C:\\Users\\borgw\\source\\repos\\BGS\\Backend\\BGS.Shared\\BGS.Shared.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

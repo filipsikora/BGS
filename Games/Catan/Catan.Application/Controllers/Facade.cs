@@ -18,9 +18,10 @@ namespace Catan.Application.Controllers
         private readonly IResourcesQueryService _resourcesQuery;
         private readonly ITradeQueryService _tradeQuery;
         private readonly ITurnsQueryService _turnsQuery;
+        private readonly IGameStateQueryService _gameStateQuery;
 
         public Facade(GameSession session, IBoardQueryService boardQuery, IDevCardsQueryService devcardQuery, IPlayersQueryService playersQuery, 
-            IResourcesQueryService resourcesQuery, ITradeQueryService tradeQuery, ITurnsQueryService turnsQuery)
+            IResourcesQueryService resourcesQuery, ITradeQueryService tradeQuery, ITurnsQueryService turnsQuery, IGameStateQueryService gameStateQuery)
         {
             _session = session;
             _boardQuery = boardQuery;
@@ -29,6 +30,7 @@ namespace Catan.Application.Controllers
             _resourcesQuery = resourcesQuery;
             _tradeQuery = tradeQuery;
             _turnsQuery = turnsQuery;
+            _gameStateQuery = gameStateQuery;
         }
 
         // setters //
@@ -109,5 +111,6 @@ namespace Catan.Application.Controllers
 
         public IReadOnlyList<PlayerNameSnapshot> GetNotCurrentPlayersNames() => _playersQuery.GetNotCurrentPlayersNames();
         public TradeOfferedSnapshot GetTradeOfferData() => _tradeQuery.GetTradeOfferData();
+        public FullPlayerDataSnapshot GetFullPlayerData(int playerId) => _gameStateQuery.GetFullPlayerData(playerId);
     }
 }

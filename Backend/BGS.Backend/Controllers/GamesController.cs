@@ -24,12 +24,16 @@ namespace BGS.Backend.Controllers
         public IActionResult CreateGame([FromBody] CreateGameRequestDto request)
         {
             if (!Enum.TryParse<EnumGames>(request.GameType, out var gameType))
-                return StatusCode(500, new { error = $"Failed to parse GameType: {gameType}" });
+                return BadRequest($"Failed to parse GameType: {gameType}");
 
             var factory = _factoryMapper.GetFactory(gameType);
-            (var gameId, int firstPlayerId) = _gameManager.CreateGame(factory);
 
-            return Ok(new CreateGameResponseDto { GameId = gameId, FirstPlayerId = firstPlayerId });
+            if (request.PlayerNumber < factory.MinPlayers || request.PlayerNumber > factory.MaxPlayers)
+                return BadRequest("Wrong player number");
+
+            var gameId = _gameManager.CreateGame(factory, request.PlayerNumber);
+
+            return Ok(new CreateGameResponseDto { GameId = gameId });
         }
 
         [HttpPost("{gameId}/command")]

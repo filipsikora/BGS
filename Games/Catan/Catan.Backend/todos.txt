@@ -93,3 +93,17 @@ ISSUE: same issue as in 12, but for year of plenty
 SOLUTION: maybe use phase context? not sure about it, will get back to it and refactor all phase context in simultanous
 
 STATE: can wait --------------------------------------------------------
+
+15
+ISSUE: enumbuildings is in core
+
+SOLUTION: check why is it so and possibly move it along with other data to shared
+
+STATE: to do after multiplayer refactor
+
+16
+ISSUE: snapshots and dtos are a mess
+
+SOLUTION: sit down on them and make sense out of them
+
+STATE: pff i mean they work and i might just fix it in the next game

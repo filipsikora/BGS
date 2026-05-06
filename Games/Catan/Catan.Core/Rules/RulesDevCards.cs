@@ -2,6 +2,7 @@
 using Catan.Core.Data;
 using Catan.Core.Models;
 using Catan.Core.Results;
+using Catan.Shared.Data;
 
 namespace Catan.Core.Rules
 {
@@ -17,13 +18,21 @@ namespace Catan.Core.Rules
                 ConditionsDevCards.CanBePlayedNow(card, afterRoll));
         }
 
-        public static ResultCondition CanBuyDevCard(Player player, DevelopmentCard? card, List<DevelopmentCard> devCardsLeft)
+        public static ResultCondition CanBuyDevCard(Player player, DevelopmentCard? card, List<DevelopmentCard> devCardsLeft, GameSession session)
         {
+            var possiblePhases = new List<EnumGamePhases>()
+            { 
+                EnumGamePhases.BeforeRoll, 
+                EnumGamePhases.NormalRound 
+            };
+
             return ResultCondition.Combine(
                 ConditionsDevCards.DevCardsLeft(devCardsLeft.Count),
                 ConditionsDevCards.DevCardExists(card),
                 ConditionsDevCards.IsNotOwned(card),
-                ConditionsResources.CanAfford(player.Resources, DevelopmentCard.Cost));
+                ConditionsResources.CanAfford(player.Resources, DevelopmentCard.Cost),
+                ConditionsTurn.IsCorrectPhase(EnumGamePhases.NormalRound, session),
+                ConditionsTurn.IsEitherPhaseCorrect(possiblePhases, session));
         }
 
         public static ResultCondition CanPlayYearOfPlenty(ResourceCostOrStock bank, int number)
