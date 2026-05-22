@@ -1,6 +1,6 @@
-﻿using Catan.Core.Snapshots;
-using Catan.Core.Queries.Interfaces;
-using Catan.Core.Data;
+﻿using Catan.Core.Queries.Interfaces;
+using Catan.Core.Runtime;
+using Catan.Core.Snapshots.ClientQueries;
 
 namespace Catan.Core.Queries.InMemory
 {
@@ -13,29 +13,9 @@ namespace Catan.Core.Queries.InMemory
             _session = session;
         }
 
-        public PlayerResourcesSnapshot GetPlayersCards(int playerId)
-        {
-            var player = _session.GetPlayerById(playerId);
+        public PlayerResourcesSnapshot GetPlayersCards(int playerId) => _session.GetPlayerssResourcesData(playerId);
 
-            return new PlayerResourcesSnapshot(player.Resources.ToDictionary());
-        }
-
-        public PlayerDataSnapshot GetPlayersData(int playerId)
-        {
-            var player = _session.GetPlayerById(playerId);
-            var playerBuildingsLeft = new Dictionary<string, int>();
-
-            foreach (var buildingType in BuildingDataRegistry.MaxPerPlayer.Keys)
-            {
-                int maxAvailable = BuildingDataRegistry.MaxPerPlayer[buildingType];
-                int playerUsed = player.BuildingCount(buildingType);
-                int playerLeft = maxAvailable - playerUsed;
-
-                playerBuildingsLeft.Add(BuildingDataRegistry.Name[buildingType], playerLeft);
-            }
-
-            return new PlayerDataSnapshot(player.Name, playerBuildingsLeft, player.Points, player.KnightsUsed, player.VictoryPointsCardsUsed, player.ExtraPoints);
-        }
+        public PlayerDataSnapshot GetPlayersData(int playerId) => _session.GetPlayerData(playerId);
 
         public CurrentPlayerIdSnapshot GetCurrentPlayerId()
         {
@@ -44,58 +24,12 @@ namespace Catan.Core.Queries.InMemory
             return new CurrentPlayerIdSnapshot(currentPlayerId);
         }
 
-        public List<PlayerNameSnapshot> GetAllPlayersNames()
-        {
-            var allPlayersNamesList = new List<PlayerNameSnapshot>();
+        public List<PlayerNameSnapshot> GetAllPlayersNames() => _session.GetAllPlayersNamesData();
 
-            foreach (var player in _session.GetAllPlayersView())
-            {
-                var playerNameData = new PlayerNameSnapshot(player.ID, player.Name);
+        public List<PlayerNameSnapshot> GetSomePlayersNames(List<int> playersIds) => _session.GetSomePlayersNamesData(playersIds);
 
-                allPlayersNamesList.Add(playerNameData);
-            }
+        public List<PlayerNameSnapshot> GetNotCurrentPlayersNames() => _session.GetNotCurrentPlayerNamesData();
 
-            return allPlayersNamesList;
-        }
-
-        public List<PlayerNameSnapshot> GetSomePlayersNames(List<int> playersIds)
-        {
-            var playersData = new List<PlayerNameSnapshot>();
-
-            foreach (var playerId in playersIds)
-            {
-                var player = _session.GetPlayerById(playerId);
-                var playerNameData = new PlayerNameSnapshot(player.ID, player.Name);
-
-                playersData.Add(playerNameData);
-            }
-
-            return playersData;
-        }
-
-        public List<PlayerNameSnapshot> GetNotCurrentPlayersNames()
-        {
-            var playersData = new List<PlayerNameSnapshot>();
-            var currentPlayer = _session.GetCurrentPlayer();
-
-            foreach (var player in _session.GetAllPlayersView())
-            {
-                if (player == currentPlayer)
-                    continue;
-
-                var playerData = new PlayerNameSnapshot(player.ID, player.Name);
-                playersData.Add(playerData);
-            }
-
-            return playersData;
-        }
-
-        public PlayerResourcesSnapshot GetVictimsCards()
-        {
-            var victimId = _session.GetVictimId();
-            var victimCards = GetPlayersCards(victimId);
-
-            return victimCards;
-        }
+        public PlayerResourcesSnapshot GetVictimsCards() => _session.GetVictimCardsData();
     }
 }

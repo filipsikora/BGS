@@ -31,7 +31,7 @@ namespace BGS.Backend
         {
             return _games.TryGetValue(gameId, out game);
         }
-
+            
         public IEnumerable<Guid> GetAllGamesIds()
         {
             return _games.Keys;

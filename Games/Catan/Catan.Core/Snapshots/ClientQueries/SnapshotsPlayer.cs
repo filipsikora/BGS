@@ -1,8 +1,45 @@
 ﻿using Catan.Shared.Data;
 using System.Collections.Generic;
 
-namespace Catan.Core.Snapshots
+namespace Catan.Core.Snapshots.ClientQueries
 {
+    public sealed class FullPlayerSnapshot
+    {
+        public PlayerResourcesSnapshot Resources;
+        public FullPlayerDataSnapshot Data;
+
+        public FullPlayerSnapshot(PlayerResourcesSnapshot resources, FullPlayerDataSnapshot data)
+        {
+            Resources = resources;
+            Data = data;
+        }
+    }
+
+    public sealed class FullPlayerDataSnapshot
+    {
+        public string Name;
+
+        public Dictionary<string, int> BuildingsLeft;
+
+        public int Points;
+        public int Knights;
+        public int VictoryPoints;
+        public int ExtraPoints;
+
+        public List<DevelopmentCardSnapshot> DevCards;
+
+        public FullPlayerDataSnapshot(string name, Dictionary<string, int> buildingsLeft, int points, int knights, int victoryPoints, int extraPoints, List<DevelopmentCardSnapshot> devCards)
+        {
+            Name = name;
+            BuildingsLeft = buildingsLeft;
+            Points = points;
+            Knights = knights;
+            VictoryPoints = victoryPoints;
+            ExtraPoints = extraPoints;
+            DevCards = devCards;
+        }
+    }
+
     public sealed class PlayerResourcesSnapshot
     {
         public Dictionary<EnumResourceType, int> PlayerResources;

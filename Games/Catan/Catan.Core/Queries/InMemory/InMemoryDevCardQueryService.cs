@@ -1,7 +1,6 @@
-﻿using Catan.Core.Snapshots;
-using Catan.Core.Queries.Interfaces;
-using Catan.Core.Models;
-using Catan.Shared.Data;
+﻿using Catan.Core.Queries.Interfaces;
+using Catan.Core.Runtime;
+using Catan.Core.Snapshots.ClientQueries;
 
 namespace Catan.Core.Queries.InMemory
 {
@@ -14,33 +13,8 @@ namespace Catan.Core.Queries.InMemory
             _session = session;
         }
 
-        public IReadOnlyList<DevelopmentCardSnapshot> GetCurrentPlayerDevCards()
-        {
-            var player = _session.GetCurrentPlayer();
-            bool afterRoll = _session.GetAfterRoll();
+        public IReadOnlyList<DevelopmentCardSnapshot> GetCurrentPlayerDevCards() => _session.GetCurrentPlayerDevCards();
 
-            return player.DevelopmentCardsByID.Select(id => FindCard(id)).Select(card => Map(card, afterRoll)).ToList();
-        }
-
-        public List<DevelopmentCardSnapshot> GetPlayerDevCardsById(int playerId)
-        {
-            var player = _session.GetPlayerById(playerId);
-
-            bool afterRoll = _session.GetAfterRoll();
-
-            return player.DevelopmentCardsByID.Select(id => FindCard(id)).Select(card => Map(card, afterRoll)).ToList();
-        }
-
-        private DevelopmentCard FindCard(int id)
-        {
-            return _session.GetDevCardById(id);
-        }
-
-        private DevelopmentCardSnapshot Map(DevelopmentCard card, bool afterRoll)
-        {
-            bool isPlayable = !card.IsNew && (afterRoll || card.Type == EnumDevelopmentCardTypes.Knight);
-
-            return new DevelopmentCardSnapshot(card.ID, card.Type, card.IsNew, isPlayable);
-        }
+        public IReadOnlyList<DevelopmentCardSnapshot> GetPlayerDevCardsById(int playerId) => _session.GetPlayerDevCardsById(playerId);
     }
 }

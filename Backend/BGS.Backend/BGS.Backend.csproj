@@ -9,12 +9,16 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Games\Catan\Catan.Backend\Catan.Backend.csproj" />
-    <ProjectReference Include="..\..\Backend\BGS.GameAbstractions\BGS.GameAbstractions.csproj" />
+    <ProjectReference Include="..\BGS.Persistence\BGS.Persistence.csproj" />
     <ProjectReference Include="..\BGS.GameAbstractions\BGS.GameAbstractions.csproj" />
     <ProjectReference Include="..\BGS.Shared\BGS.Shared.csproj" />
   </ItemGroup>

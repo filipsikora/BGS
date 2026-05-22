@@ -1,7 +1,7 @@
 ﻿using Catan.Shared.Data;
 using System.Collections.Generic;
 
-namespace Catan.Core.Snapshots
+namespace Catan.Core.Snapshots.ClientQueries
 {
     public sealed class TradeOfferedSnapshot
     {

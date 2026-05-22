@@ -1,7 +1,24 @@
 ﻿using Catan.Shared.Data;
 
-namespace Catan.Core.Snapshots
+namespace Catan.Core.Snapshots.ClientQueries
 {
+    public sealed class FullPhaseContextSnapshot
+    {
+        public TradeOfferContextSnapshot? TradeOffer;
+        public TradeRequestContextSnapshot? TradeDraft;
+        public RoadBuildingContextSnapshot? RoadBuilding;
+        public CardDiscardContextSnapshot? CardDiscarding;
+        public CardStealingContextSnapshot? CardStealing;
+
+        public FullPhaseContextSnapshot(TradeOfferContextSnapshot? tradeOffer, TradeRequestContextSnapshot? tradeDraft, RoadBuildingContextSnapshot? roadBuilding, CardDiscardContextSnapshot? cardDiscarding, CardStealingContextSnapshot? cardStealing)
+        {
+            TradeOffer = tradeOffer;
+            TradeDraft = tradeDraft;
+            RoadBuilding = roadBuilding;
+            CardDiscarding = cardDiscarding;
+            CardStealing = cardStealing;
+        }
+    }
     public sealed class TradeOfferContextSnapshot
     {
         public int SellerId { get; }

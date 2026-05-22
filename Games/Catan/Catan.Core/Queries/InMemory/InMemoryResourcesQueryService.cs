@@ -1,6 +1,7 @@
-﻿using Catan.Core.Snapshots;
-using Catan.Core.Queries.Interfaces;
+﻿using Catan.Core.Queries.Interfaces;
 using Catan.Shared.Data;
+using Catan.Core.Runtime;
+using Catan.Core.Snapshots.ClientQueries;
 
 namespace Catan.Core.Queries.InMemory
 {

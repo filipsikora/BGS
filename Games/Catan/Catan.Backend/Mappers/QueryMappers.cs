@@ -1,4 +1,4 @@
-﻿using Catan.Core.Snapshots;
+﻿using Catan.Core.Snapshots.ClientQueries;
 using Catan.Shared.Data;
 using Catan.Shared.Dtos;
 

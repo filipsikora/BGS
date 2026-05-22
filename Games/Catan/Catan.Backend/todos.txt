@@ -99,7 +99,7 @@ ISSUE: enumbuildings is in core
 
 SOLUTION: check why is it so and possibly move it along with other data to shared
 
-STATE: to do after multiplayer refactor
+STATE: to do after multiplayer refactor ---------------------------------
 
 16
 ISSUE: snapshots and dtos are a mess
@@ -107,3 +107,25 @@ ISSUE: snapshots and dtos are a mess
 SOLUTION: sit down on them and make sense out of them
 
 STATE: pff i mean they work and i might just fix it in the next game
+
+17
+ISSUE: catan.backend.gamefactory knows catan.core
+
+SOLUTION: make it gameinstancefactory and call catangamefactory from appliaction
+
+STATE: to do at some point -------------------------------------
+
+18
+ISSUE: gamestate has logic
+
+SOLUTION: introduce logicholders on gamestate level owned by gamesession and move logic there and expose it via gamesession
+
+STATE: doing it now, gamesession methods already moved, board queries methods moved as well. other queries left to redo, also will need to introduce write layer to move parts of the logic (gameflowreader) to, but this can wait
+--------------------------------
+
+19
+ISSUE: blockedHexId can be null
+
+SOLUTION: check if it is null at the very beginning of the game, i dont think so and also i dont think it really matters for the methods i am using right now, but check nonetheless
+
+STATE: possibly a small thing, i think i can skip it and if the code breaks there it will need to be fixed
