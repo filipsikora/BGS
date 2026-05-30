@@ -26,9 +26,9 @@ namespace Catan.Core.Snapshots.ClientQueries
         public int VictoryPoints;
         public int ExtraPoints;
 
-        public List<DevelopmentCardSnapshot> DevCards;
+        public IReadOnlyList<DevelopmentCardSnapshot> DevCards;
 
-        public FullPlayerDataSnapshot(string name, Dictionary<string, int> buildingsLeft, int points, int knights, int victoryPoints, int extraPoints, List<DevelopmentCardSnapshot> devCards)
+        public FullPlayerDataSnapshot(string name, Dictionary<string, int> buildingsLeft, int points, int knights, int victoryPoints, int extraPoints, IReadOnlyList<DevelopmentCardSnapshot> devCards)
         {
             Name = name;
             BuildingsLeft = buildingsLeft;

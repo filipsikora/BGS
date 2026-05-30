@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <None Include="Runtime\PlayersStateReader.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Catan.Shared\Catan.Shared.csproj" />
   </ItemGroup>
 

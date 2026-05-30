@@ -64,7 +64,7 @@ namespace Catan.Core.Runtime
             foreach (var player in players)
             {
                 var playerData = new PlayerNameSnapshot(player.ID, player.Name);
-                playersData.Add(playerData);
+                playersData.Add(playerData);    
             }
 
             return playersData;
@@ -75,6 +75,25 @@ namespace Catan.Core.Runtime
             var victimCards = GetPlayersCards(victim);
 
             return victimCards;
+        }
+
+        public FullPlayerSnapshot GetFullPlayerData(Player player, IReadOnlyList<DevelopmentCardSnapshot> playerDevCards)
+        {
+            var playerBuildingsLeft = new Dictionary<string, int>();
+
+            foreach (var buildingType in BuildingDataRegistry.MaxPerPlayer.Keys)
+            {
+                int maxAvailable = BuildingDataRegistry.MaxPerPlayer[buildingType];
+                int playerUsed = player.BuildingCount(buildingType);
+                int playerLeft = maxAvailable - playerUsed;
+
+                playerBuildingsLeft.Add(BuildingDataRegistry.Name[buildingType], playerLeft);
+            }
+
+            return new FullPlayerSnapshot(
+                GetPlayersCards(player),
+                new FullPlayerDataSnapshot(player.Name, playerBuildingsLeft, player.Points, player.KnightsUsed, player.VictoryPointsCardsUsed, player.ExtraPoints, playerDevCards)
+                );
         }
     }
 }

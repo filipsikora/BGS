@@ -17,5 +17,7 @@ namespace Catan.Core.Queries.Interfaces
         List<PlayerNameSnapshot> GetNotCurrentPlayersNames();
 
         PlayerResourcesSnapshot GetVictimsCards();
+
+        FullPlayerDataSnapshot GetFullPlayerData(int playerId);
     }
 }

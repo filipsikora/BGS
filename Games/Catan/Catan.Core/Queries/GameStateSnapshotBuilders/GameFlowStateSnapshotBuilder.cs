@@ -23,5 +23,13 @@ namespace Catan.Core.Queries.GameStateSnapshotBuilders
                 _session.GetCurrentCorePhase()
                 );
         }
+
+        public FullBankSnapshot GetFullBankData()
+        {
+            return new FullBankSnapshot(
+                _session.GetBank().ToDictionary(),
+                _session.GetDevCardsInBankData()
+                );
+        }
     }
 }

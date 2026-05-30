@@ -1,11 +1,12 @@
 ﻿using Catan.Core.Models;
+using Catan.Core.Snapshots.ClientQueries;
 using Catan.Shared.Data;
 
 namespace Catan.Core.Runtime
 {
-    public sealed class GameFlowStateLogicHolder
+    public sealed class GameFlowStateReader
     {
-        public GameFlowStateLogicHolder() { }
+        public GameFlowStateReader() { }
 
         public (int, bool) GetNextIndex(Queue<int> firstRoundsIndices, int currentPlayerIndex, int playerNumber)
         {
@@ -27,5 +28,29 @@ namespace Catan.Core.Runtime
 
             return (nextIndex, initialRoundsRemaining);
         }
+
+        public ResourcesAvailabilitySnapshot GetResourcesAvailabilityData(ResourceCostOrStock bank)
+        {
+            var resourcesAvailability = new Dictionary<EnumResourceType, bool>();
+
+            foreach (var (type, amount) in bank.ResourceDictionary)
+            {
+                bool available = amount > 0;
+
+                resourcesAvailability.Add(type, available);
+            }
+
+            return new ResourcesAvailabilitySnapshot(resourcesAvailability);
+        }
+
+        public List<DevelopmentCardSnapshot> GetDevCardsInBankData(List<DevelopmentCard> devCardsLeft)
+        {
+            return devCardsLeft.Select(devCard => new DevelopmentCardSnapshot(
+                devCard.ID,
+                devCard.Type,
+                devCard.IsNew,
+                false)).ToList();
+        }
     }
+
 }

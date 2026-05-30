@@ -13,8 +13,8 @@ namespace Catan.Core.Queries.InMemory
             _session = session;
         }
 
-        public IReadOnlyList<DevelopmentCardSnapshot> GetCurrentPlayerDevCards() => _session.GetCurrentPlayerDevCards();
+        public IReadOnlyList<DevelopmentCardSnapshot> GetCurrentPlayerDevCards() => _session.GetCurrentPlayerDevCardsData();
 
-        public IReadOnlyList<DevelopmentCardSnapshot> GetPlayerDevCardsById(int playerId) => _session.GetPlayerDevCardsById(playerId);
+        public IReadOnlyList<DevelopmentCardSnapshot> GetPlayerDevCardsById(int playerId) => _session.GetPlayerDevCardsByIdData(playerId);
     }
 }

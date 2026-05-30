@@ -14,18 +14,6 @@ namespace Catan.Core.Queries.InMemory
             _session = session;
         }
 
-        public ResourcesAvailabilitySnapshot GetResourcesAvailability()
-        {
-            var resourcesAvailability = new Dictionary<EnumResourceType, bool>();
-
-            foreach (var (type, amount) in _session.GetBank().ResourceDictionary)
-            {
-                bool available = amount > 0;
-
-                resourcesAvailability.Add(type, available);
-            }
-
-            return new ResourcesAvailabilitySnapshot(resourcesAvailability);
-        }
+        public ResourcesAvailabilitySnapshot GetResourcesAvailability() => _session.GetResourcesAvailabilityData();
     }
 }

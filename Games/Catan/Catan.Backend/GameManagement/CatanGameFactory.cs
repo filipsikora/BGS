@@ -1,10 +1,10 @@
 ﻿using BGS.GameAbstractions.Interfaces;
 using Catan.Application;
 using Catan.Application.Controllers;
-using Catan.Core;
 using Catan.Core.Engine;
 using Catan.Core.Queries.InMemory;
 using Catan.Core.Helpers;
+using Catan.Core.Runtime;
 
 namespace Catan.Backend.GameManagement
 {
@@ -30,9 +30,8 @@ namespace Catan.Backend.GameManagement
             var resourcesQuery = new InMemoryResourcesQueryService(session);
             var tradeQuery = new InMemoryTradeQueryServices(session);
             var turnsQuery = new InMemoryTurnsQueryService(session);
-            var gameStateQuery = new InMemoryGameStateQueryServices(session, devCardQuery);
 
-            var facade = new Facade(session, boardQuery, devCardQuery, playersQuery, resourcesQuery, tradeQuery, turnsQuery, gameStateQuery);
+            var facade = new Facade(session, boardQuery, devCardQuery, playersQuery, resourcesQuery, tradeQuery, turnsQuery);
 
             var app = new GameApplication(facade);
             var registry = new CatanCommandRegistry();

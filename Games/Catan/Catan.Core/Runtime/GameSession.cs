@@ -167,6 +167,8 @@ namespace Catan.Core.Runtime
         public PlayerResourcesSnapshot GetPlayerssResourcesData(int playerId) => _playersReader.GetPlayersCards(GetPlayerById(playerId));
         public PlayerDataSnapshot GetPlayerData(int playerId) => _playersReader.GetPlayersData(GetPlayerById(playerId));
         public PlayerResourcesSnapshot GetVictimCardsData() => _playersReader.GetVictimsCards(GetPlayerById(GetVictimId()));
+        public FullPlayerSnapshot GetFullPlayerData(int playerId) => _playersReader.GetFullPlayerData(GetPlayerById(playerId), GetPlayerDevCardsByIdData(playerId));
+
 
         // game flow //
 
@@ -190,6 +192,8 @@ namespace Catan.Core.Runtime
 
             return (context != null, context);
         }
+        internal CardDiscardContext? GetCardDiscardingContext() => _game.CardDiscardingProgress;
+        internal CardStealingContext? GetCardStealingContext() => _game.CardStealingProgress;
 
         public bool GetPlayersLeftToDiscard() => _thiefReader.GetPlayersLeftToDiscard(_game.PlayerList);
         public bool GetCardDiscardingContextExistance() => _game.CardDiscardingProgress != null;
@@ -201,6 +205,7 @@ namespace Catan.Core.Runtime
 
         // buildings //
 
+        internal RoadBuildingContext? GetRoadBuildingContext() => _game.RoadBuildingProgress;
         public (bool village, bool road, bool town) GetVertexBuildOptions(int vertexId, int playerId)
         {
             var player = GetPlayerById(playerId);
@@ -227,12 +232,8 @@ namespace Catan.Core.Runtime
         // trade //
 
         internal ResourceCostOrStock GetOfferedResources() => _game.TradeDraft.Offered;
-        internal (bool exists, PlayerTradeContext? context) TryGetPlayerTradeContext()
-        {
-            PlayerTradeContext? context = _game.LastPlayerTradeOffered;
-
-            return (context != null, context);
-        }
+        internal PlayerTradeContext? TryGetPlayerTradeContext() => _game.LastPlayerTradeOffered;
+        internal TradeDraftContext? TryGetTradeDraftContext() => _game.TradeDraft;
 
         public int GetCurrentPlayerTradeRatio(EnumResourceType resource) => _tradeReader.GetCurrentPlayerTradeRatio(resource, _game.CurrentPlayer, _game.Map.PortList.Find(port => port.Type == resource));
 
@@ -240,6 +241,7 @@ namespace Catan.Core.Runtime
 
         internal ResourceCostOrStock GetBank() => _game.Bank;
 
+        public ResourcesAvailabilitySnapshot GetResourcesAvailabilityData() => _gameFlowReader.GetResourcesAvailabilityData(GetBank());
         public bool CheckIfCardsSelected(ResourceCostOrStock resources) => resources.Total() > 0;
         public bool CheckIfExactCardsAmountSelected(ResourceCostOrStock resources, int amount) => ConditionsResources.HasExactResourcesNumber(resources, amount).Success;
         public (int, bool) GetNextIndex() => _gameFlowReader.GetNextIndex(_game.FirstRoundsIndices, _game.CurrentPlayerIndex, _game.PlayerList.Count);
@@ -249,8 +251,10 @@ namespace Catan.Core.Runtime
         internal DevelopmentCard GetFirstDevCard() => _game.DevelopmentCardsDeckAvailable[0];
         internal DevelopmentCard GetDevCardById(int cardId) => _game.GetDevCardById(cardId);
         internal List<DevelopmentCard> GetDevCardsLeft() => _game.DevelopmentCardsDeckAvailable;
-        public IReadOnlyList<DevelopmentCardSnapshot> GetCurrentPlayerDevCards() => _devCardsReader.GetCurrentPlayerDevCards(_game.CurrentPlayer.DevelopmentCardsByID.Select(id => GetDevCardById(id)).ToList(), GetAfterRoll());
-        public IReadOnlyList<DevelopmentCardSnapshot> GetPlayerDevCardsById(int playerId) => _devCardsReader.GetPlayerDevCardsById(GetPlayerById(playerId).DevelopmentCardsByID.Select(id => GetDevCardById(id)).ToList(), GetAfterRoll());
+
+        public List<DevelopmentCardSnapshot> GetDevCardsInBankData() => _gameFlowReader.GetDevCardsInBankData(_game.DevelopmentCardsDeckAvailable);
+        public IReadOnlyList<DevelopmentCardSnapshot> GetCurrentPlayerDevCardsData() => _devCardsReader.GetCurrentPlayerDevCardsData(_game.CurrentPlayer.DevelopmentCardsByID.Select(id => GetDevCardById(id)).ToList(), GetAfterRoll());
+        public IReadOnlyList<DevelopmentCardSnapshot> GetPlayerDevCardsByIdData(int playerId) => _devCardsReader.GetPlayerDevCardsByIdData(GetPlayerById(playerId).DevelopmentCardsByID.Select(id => GetDevCardById(id)).ToList(), GetAfterRoll());
 
         // GameStateSnapshot //
 

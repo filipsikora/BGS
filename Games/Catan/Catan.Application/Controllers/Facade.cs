@@ -1,7 +1,6 @@
 ﻿using Catan.Core.Models;
 using Catan.Core.Queries.Interfaces;
 using Catan.Core.Results;
-using Catan.Core.Rules;
 using Catan.Core.Runtime;
 using Catan.Core.Snapshots.ClientQueries;
 using Catan.Shared.Data;
@@ -18,10 +17,9 @@ namespace Catan.Application.Controllers
         private readonly IResourcesQueryService _resourcesQuery;
         private readonly ITradeQueryService _tradeQuery;
         private readonly ITurnsQueryService _turnsQuery;
-        private readonly IGameStateQueryService _gameStateQuery;
 
         public Facade(GameSession session, IBoardQueryService boardQuery, IDevCardsQueryService devcardQuery, IPlayersQueryService playersQuery, 
-            IResourcesQueryService resourcesQuery, ITradeQueryService tradeQuery, ITurnsQueryService turnsQuery, IGameStateQueryService gameStateQuery)
+            IResourcesQueryService resourcesQuery, ITradeQueryService tradeQuery, ITurnsQueryService turnsQuery)
         {
             _session = session;
             _boardQuery = boardQuery;
@@ -30,7 +28,6 @@ namespace Catan.Application.Controllers
             _resourcesQuery = resourcesQuery;
             _tradeQuery = tradeQuery;
             _turnsQuery = turnsQuery;
-            _gameStateQuery = gameStateQuery;
         }
 
         // setters //
@@ -111,7 +108,7 @@ namespace Catan.Application.Controllers
 
         public IReadOnlyList<PlayerNameSnapshot> GetNotCurrentPlayersNames() => _playersQuery.GetNotCurrentPlayersNames();
         public TradeOfferedSnapshot GetTradeOfferData() => _tradeQuery.GetTradeOfferData();
-        public FullPlayerDataSnapshot GetFullPlayerData(int playerId) => _gameStateQuery.GetFullPlayerData(playerId);
+        public FullPlayerDataSnapshot GetFullPlayerData(int playerId) => _playersQuery.GetFullPlayerData(playerId);
 
         // gamestatesnapshot //
 

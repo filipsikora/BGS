@@ -8,12 +8,12 @@ namespace Catan.Core.Runtime
     {
         public DevCardsStateReader() { }
 
-        public IReadOnlyList<DevelopmentCardSnapshot> GetCurrentPlayerDevCards(IReadOnlyList<DevelopmentCard> currentPlayerDevCardw, bool afterRoll)
+        public IReadOnlyList<DevelopmentCardSnapshot> GetCurrentPlayerDevCardsData(IReadOnlyList<DevelopmentCard> currentPlayerDevCardw, bool afterRoll)
         {
             return currentPlayerDevCardw.Select(card => Map(card, afterRoll)).ToList();
         }
 
-        public List<DevelopmentCardSnapshot> GetPlayerDevCardsById(List<DevelopmentCard> playerDevCards, bool afterRoll)
+        public List<DevelopmentCardSnapshot> GetPlayerDevCardsByIdData(List<DevelopmentCard> playerDevCards, bool afterRoll)
         {
             return playerDevCards.Select(card => Map(card, afterRoll)).ToList();
         }
@@ -25,5 +25,4 @@ namespace Catan.Core.Runtime
             return new DevelopmentCardSnapshot(card.ID, card.Type, card.IsNew, isPlayable);
         }
     }
-}
 }

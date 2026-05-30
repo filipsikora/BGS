@@ -1,4 +1,5 @@
 ﻿using Catan.Core.DomainEvents;
+using Catan.Core.Engine;
 using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Core.Runtime;
@@ -12,9 +13,9 @@ namespace Catan.Core.UseCases
 
         public ResultPlayerTrade Handle()
         {
-            var (exists, context) = Session.TryGetPlayerTradeContext();
+            PlayerTradeContext? context = Session.TryGetPlayerTradeContext();
 
-            if (!exists)
+            if (context == null)
                 return ResultPlayerTrade.Fail(ConditionFailureReason.DoesNotExist, default, default);
 
             var seller = Session.GetPlayerById(context.SellerId);
