@@ -149,7 +149,7 @@ namespace Catan.Backend.GameManagement
             return dto;
         }
 
-        private FullPlayerDto HandleFullPlayerQuery(int playerId)
+        private FullPlayerDto HandleFullPlayerQuery(int playerId) // not used now i think, can be made into long polling later //
         {
             var data = _gameApplication.Facade.GetFullPlayerData(playerId);
             var resources = _gameApplication.Facade.GetPlayersCards(playerId);

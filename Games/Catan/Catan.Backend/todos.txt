@@ -120,8 +120,7 @@ ISSUE: gamestate has logic
 
 SOLUTION: introduce logicholders on gamestate level owned by gamesession and move logic there and expose it via gamesession
 
-STATE: doing it now, gamesession methods already moved, board queries methods moved as well. other queries left to redo, also will need to introduce write layer to move parts of the logic (gameflowreader) to, but this can wait
---------------------------------
+STATE: most of this moving is done, will need to check if i want to introduce write level extraction too --------------------------------
 
 19
 ISSUE: blockedHexId can be null
@@ -129,3 +128,10 @@ ISSUE: blockedHexId can be null
 SOLUTION: check if it is null at the very beginning of the game, i dont think so and also i dont think it really matters for the methods i am using right now, but check nonetheless
 
 STATE: possibly a small thing, i think i can skip it and if the code breaks there it will need to be fixed
+
+20
+ISSUE: snapshotbuilder is on gameSession level
+
+SOLUTION: move it up? facade or independent service? not sure
+
+STATE: need to check it --------------------------------------

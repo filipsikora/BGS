@@ -112,6 +112,5 @@ namespace Catan.Application.Controllers
 
         // gamestatesnapshot //
 
-        public 
     }
 }
