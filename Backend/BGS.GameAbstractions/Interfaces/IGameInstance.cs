@@ -10,6 +10,7 @@ namespace BGS.GameAbstractions.Interfaces
 
         Guid GameId { get; }
         EnumGameInstanceState State { get; }
+        Dictionary<Guid, int> PlayerTokens { get; }
         int CurrentPlayers { get; }
         int DesiredPlayerNumber { get; }
     }

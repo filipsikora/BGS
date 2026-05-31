@@ -24,10 +24,14 @@ namespace Catan.Backend.GameManagement
         public int DesiredPlayerNumber { get; private set; }
         public bool CanJoin => State == EnumGameInstanceState.Lobby && CurrentPlayers < DesiredPlayerNumber;
 
-        public CatanGameInstance(GameApplication gameApplication, CatanCommandRegistry registry)
+        public Dictionary<Guid, int> PlayerTokens { get; private set; }
+
+        public CatanGameInstance(GameApplication gameApplication, CatanCommandRegistry registry, Dictionary<Guid, int> playerTokens, int playerNumber)
         {
             _gameApplication = gameApplication;
             _registry = registry;
+            DesiredPlayerNumber = playerNumber;
+            PlayerTokens = playerTokens;
         }
 
         public GameApplication Application => _gameApplication; // just for testing

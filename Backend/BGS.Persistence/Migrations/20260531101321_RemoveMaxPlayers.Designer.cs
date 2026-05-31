@@ -3,6 +3,7 @@ using System;
 using BGS.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BGS.Persistence.Migrations
 {
     [DbContext(typeof(BgsDBContext))]
-    partial class BgsDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260531101321_RemoveMaxPlayers")]
+    partial class RemoveMaxPlayers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,6 +34,9 @@ namespace BGS.Persistence.Migrations
                     b.Property<string>("GameType")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("MaxPlayers")
+                        .HasColumnType("integer");
 
                     b.Property<string>("StateJson")
                         .IsRequired()

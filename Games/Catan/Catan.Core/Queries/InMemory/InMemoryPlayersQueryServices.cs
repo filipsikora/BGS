@@ -32,6 +32,6 @@ namespace Catan.Core.Queries.InMemory
 
         public PlayerResourcesSnapshot GetVictimsCards() => _session.GetVictimCardsData();
 
-        public FullPlayerDataSnapshot GetFullPlayerData(int playerId) => _session.GetFullPlayerData(playerId);
+        public FullPlayerSnapshot GetFullPlayerData(int playerId) => _session.GetFullPlayerData(playerId);
     }
 }

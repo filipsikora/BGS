@@ -14,10 +14,10 @@ public class TestGame
         _gameApplication = gameApplication;
     }
 
-    public static TestGame New()
+    public static TestGame New(int playerNumber)
     {
         var factory = new CatanGameFactory();
-        var (instance, _) = factory.CreateGame();
+        var instance = factory.CreateGame(playerNumber);
 
         var catan = (CatanGameInstance)instance;
         var application = catan.Application;

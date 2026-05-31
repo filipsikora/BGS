@@ -19,9 +19,9 @@ namespace Catan.Backend.Mappers
             };
         }
 
-        public static FullPlayerDto MapFullPlayerToDto(FullPlayerDataSnapshot dataSnapshot, PlayerResourcesSnapshot resourcesSnapshot)
+        public static FullPlayerDto MapFullPlayerToDto(FullPlayerSnapshot dataSnapshot, PlayerResourcesSnapshot resourcesSnapshot)
         {
-            var devCardsDto = dataSnapshot.DevCards.Select(devCard => new DevelopmentCardDto
+            var devCardsDto = dataSnapshot.Data.DevCards.Select(devCard => new DevelopmentCardDto
             {
                 Id = devCard.Id,
                 IsNew = devCard.IsNew,
@@ -33,12 +33,12 @@ namespace Catan.Backend.Mappers
             {
                 Data = new FullPlayerDataDto
                 {
-                    Name = dataSnapshot.Name,
-                    BuildingsLeft = dataSnapshot.BuildingsLeft,
-                    Points = dataSnapshot.Points,
-                    Knights = dataSnapshot.Knights,
-                    VictoryPoints = dataSnapshot.VictoryPoints,
-                    ExtraPoints = dataSnapshot.ExtraPoints,
+                    Name = dataSnapshot.Data.Name,
+                    BuildingsLeft = dataSnapshot.Data.BuildingsLeft,
+                    Points = dataSnapshot.Data.Points,
+                    Knights = dataSnapshot.Data.Knights,
+                    VictoryPoints = dataSnapshot.Data.VictoryPoints,
+                    ExtraPoints = dataSnapshot.Data.ExtraPoints,
                     DevCards = devCardsDto
                 },
 

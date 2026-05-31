@@ -15,12 +15,18 @@ namespace Catan.Backend.GameManagement
 
         public IGameInstance CreateGame(int playerNumber)
         {
-
             var random = new RandomProvider();
             var map = new HexMap(random);
             var gameState = new GameState(random, map);
 
-            var firstPlayerId = gameState.InitializeNewGame(playerNumber, 1f);
+            var playerTokens = new Dictionary<Guid, int>();
+
+            for (int playerId = 1; playerId <= playerNumber; playerId++)
+            {
+                var playerToken = Guid.NewGuid();
+
+                playerTokens.Add(playerToken, playerId);
+            }
 
             var session = new GameSession(gameState);
 
@@ -36,7 +42,7 @@ namespace Catan.Backend.GameManagement
             var app = new GameApplication(facade);
             var registry = new CatanCommandRegistry();
 
-            return (new CatanGameInstance(app, registry));
+            return (new CatanGameInstance(app, registry, playerTokens, playerNumber));
         }
     }
 }

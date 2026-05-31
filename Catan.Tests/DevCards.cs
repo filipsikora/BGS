@@ -15,7 +15,7 @@ public class DevCards
     [Fact]
     public void BuyDevCardInInitialPhase_ShouldFail()
     {
-        var game = TestGame.New().InInitialiRound();
+        var game = TestGame.New(2).InInitialiRound();
 
         var result = game.Facade.UseBuyDevCard();
 

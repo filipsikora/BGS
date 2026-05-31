@@ -10,6 +10,5 @@ namespace BGS.Persistence.Entities
         public string StateJson { get; set; }
         public string Status { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public int MaxPlayers { get; set; }
     }
 }

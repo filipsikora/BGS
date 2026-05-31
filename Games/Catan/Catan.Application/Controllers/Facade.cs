@@ -108,7 +108,7 @@ namespace Catan.Application.Controllers
 
         public IReadOnlyList<PlayerNameSnapshot> GetNotCurrentPlayersNames() => _playersQuery.GetNotCurrentPlayersNames();
         public TradeOfferedSnapshot GetTradeOfferData() => _tradeQuery.GetTradeOfferData();
-        public FullPlayerDataSnapshot GetFullPlayerData(int playerId) => _playersQuery.GetFullPlayerData(playerId);
+        public FullPlayerSnapshot GetFullPlayerData(int playerId) => _playersQuery.GetFullPlayerData(playerId);
 
         // gamestatesnapshot //
 
