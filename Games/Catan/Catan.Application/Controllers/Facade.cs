@@ -3,6 +3,7 @@ using Catan.Core.Queries.Interfaces;
 using Catan.Core.Results;
 using Catan.Core.Runtime;
 using Catan.Core.Snapshots.ClientQueries;
+using Catan.Core.Snapshots.Persistence;
 using Catan.Shared.Data;
 
 namespace Catan.Application.Controllers
@@ -112,5 +113,7 @@ namespace Catan.Application.Controllers
 
         // gamestatesnapshot //
 
+        public GameStateSnapshot GetGameStateData() => _session.GetGameStateData();
+        public GameStatePerPlayerSnapshot GetGameStatePerPlayerData(int playerId) => _session.GetGameStatePerPlayerData(playerId);
     }
 }

@@ -259,6 +259,7 @@ namespace Catan.Core.Runtime
         // GameStateSnapshot //
 
         public GameStateSnapshot GetGameStateData() => GameStateSnapshotBuilder.GetGameStateData();
+        public GameStatePerPlayerSnapshot GetGameStatePerPlayerData(int playerId) => GameStateSnapshotBuilder.GetGameStatePerPlayerData(playerId);
 
         // internal setters //
 

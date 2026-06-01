@@ -1,6 +1,7 @@
 using BGS.Backend;
 using BGS.Backend.Helpers;
 using BGS.GameAbstractions.Interfaces;
+using BGS.Persistence;
 using BGS.Persistence.Context;
 using Catan.Backend.GameManagement;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ builder.Services.AddDbContext<BgsDBContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default"));
 });
+builder.Services.AddScoped<IGameRepository, EfGameRepository>();
 
 var app = builder.Build();
 
