@@ -330,21 +330,6 @@ namespace Catan.Core.Engine
 
         // getters //
 
-        public Queue<Player> GetCardsDiscardingPlayers()
-        {
-            var playersToDiscard = new Queue<Player>(PlayerList.Where(p => p.Resources.Total() > 7));
-
-            return playersToDiscard;
-        }
-
-        public bool GetPlayersLeftToDiscard()
-        {
-            var playersToDiscard = new Queue<Player>(PlayerList.Where(p => p.Resources.Total() > 7));
-            var playersLeftToDiscard = playersToDiscard.Count > 0;
-
-            return playersLeftToDiscard;
-        }
-
         public int GetCardDiscardingProgress()
         {
             return CardDiscardingProgress.PlayersToDiscard.Count();
@@ -380,9 +365,9 @@ namespace Catan.Core.Engine
             return LastRoll;
         }
 
-        public int GetBlockedHexId()
+        public int? GetBlockedHexId()
         {
-            return Map.HexList.Find(h => h.isBlocked).Id;
+            return Map.HexList.Find(h => h.isBlocked)?.Id;
         }
 
         // setters //

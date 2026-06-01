@@ -5,6 +5,8 @@ using Catan.Shared.Data;
 using Catan.Shared.Dtos;
 using BGS.Shared.Dtos;
 using Microsoft.AspNetCore.Http;
+using BGS.Shared.Data;
+using Catan.Backend.Helpers;
 
 namespace Catan.Backend.GameManagement
 {
@@ -15,16 +17,28 @@ namespace Catan.Backend.GameManagement
 
         private readonly object _lock = new();
 
-        public CatanGameInstance(GameApplication gameApplication, CatanCommandRegistry registry)
+        private readonly List<int> _playersIds = new();
+
+        public Guid GameId { get; private set; }
+        public EnumGameInstanceState State { get; private set; } = EnumGameInstanceState.Lobby;
+        public int CurrentPlayers => _playersIds.Count;
+        public int DesiredPlayerNumber { get; private set; }
+        public bool CanJoin => State == EnumGameInstanceState.Lobby && CurrentPlayers < DesiredPlayerNumber;
+
+        public Dictionary<Guid, int> PlayerTokens { get; private set; }
+
+        public CatanGameInstance(GameApplication gameApplication, CatanCommandRegistry registry, Dictionary<Guid, int> playerTokens, int playerNumber)
         {
             _gameApplication = gameApplication;
             _registry = registry;
+            DesiredPlayerNumber = playerNumber;
+            PlayerTokens = playerTokens;
         }
 
         public GameApplication Application => _gameApplication; // just for testing
 
 
-        public object Execute(object request)
+        public CommandResponseDto Execute(CommandRequestDto request)
         {
             lock (_lock)
             {
@@ -56,9 +70,18 @@ namespace Catan.Backend.GameManagement
                     EnumQueryName.NotCurrentPlayerNames => HandlerNotCurrentPlayerNamesQuery(),
                     EnumQueryName.TradeOfferData => HandleTradeOfferDataQuery(),
                     EnumQueryName.SomePlayersNames => HandleSomePlayersNamesQuery(ParseListInt(dict, "playerIds")),
+                    EnumQueryName.FullPlayer => HandleFullPlayerQuery(ParseInt(dict, "playerId")),
                     _ => throw new Exception($"Unknown query: {query}")
                 };
             }
+        }
+
+        public string GetGameStateDataString()
+        {
+            var snapshot = _gameApplication.GetGameStateData();
+            var json = GameStateSerializer.SerializeGameState(snapshot);
+
+            return json;
         }
 
         private BoardDto HandleBoardQuery()
@@ -139,6 +162,15 @@ namespace Catan.Backend.GameManagement
             return dto;
         }
 
+        private FullPlayerDto HandleFullPlayerQuery(int playerId) // not used now i think, can be made into long polling later //
+        {
+            var data = _gameApplication.Facade.GetFullPlayerData(playerId);
+            var resources = _gameApplication.Facade.GetPlayersCards(playerId);
+            var dto = QueryMappers.MapFullPlayerToDto(data, resources);
+
+            return dto;
+        }
+
         private int ParseInt(IQueryCollection dict, string key)
         {
             if (!dict.TryGetValue(key, out var value))
@@ -157,4 +189,4 @@ namespace Catan.Backend.GameManagement
                 .ToList();
         }
     }
-}   
+}

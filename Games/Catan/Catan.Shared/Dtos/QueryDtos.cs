@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Catan.Shared.Data;
 
 namespace Catan.Shared.Dtos
 {
@@ -11,6 +12,24 @@ namespace Catan.Shared.Dtos
         public int Knights { get; set; }
         public int VictoryPoints { get; set; }
         public int ExtraPoints { get; set; }
+    }
+
+    public sealed class FullPlayerDto
+    {
+        public FullPlayerDataDto Data { get; set; }
+        public PlayerCardsDto Resources { get; set; }
+    }
+
+    public sealed class FullPlayerDataDto
+    {
+        public string Name { get; set; }
+        public Dictionary<string, int> BuildingsLeft { get; set; }
+
+        public int Points { get; set; }
+        public int Knights { get; set; }
+        public int VictoryPoints { get; set; }
+        public int ExtraPoints { get; set; }
+        public List<DevelopmentCardDto> DevCards { get; set; }
     }
 
     public sealed class PlayerCardsDto

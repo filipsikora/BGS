@@ -1,6 +1,6 @@
 ﻿using Catan.Shared.Data;
 
-namespace Catan.Core.Snapshots
+namespace Catan.Core.Snapshots.ClientQueries
 {
     public sealed class DevelopmentCardSnapshot
     {

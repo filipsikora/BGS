@@ -1,4 +1,4 @@
-﻿using Catan.Core.Snapshots;
+﻿using Catan.Core.Snapshots.ClientQueries;
 using Catan.Shared.Data;
 using Catan.Shared.Dtos;
 
@@ -16,6 +16,33 @@ namespace Catan.Backend.Mappers
                 Knights = snapshot.Knights,
                 VictoryPoints = snapshot.VictoryPoints,
                 ExtraPoints = snapshot.ExtraPoints
+            };
+        }
+
+        public static FullPlayerDto MapFullPlayerToDto(FullPlayerSnapshot dataSnapshot, PlayerResourcesSnapshot resourcesSnapshot)
+        {
+            var devCardsDto = dataSnapshot.Data.DevCards.Select(devCard => new DevelopmentCardDto
+            {
+                Id = devCard.Id,
+                IsNew = devCard.IsNew,
+                IsPlayable = devCard.IsPlayable,
+                Type = devCard.Type.ToString()
+            }).ToList();
+
+            return new FullPlayerDto
+            {
+                Data = new FullPlayerDataDto
+                {
+                    Name = dataSnapshot.Data.Name,
+                    BuildingsLeft = dataSnapshot.Data.BuildingsLeft,
+                    Points = dataSnapshot.Data.Points,
+                    Knights = dataSnapshot.Data.Knights,
+                    VictoryPoints = dataSnapshot.Data.VictoryPoints,
+                    ExtraPoints = dataSnapshot.Data.ExtraPoints,
+                    DevCards = devCardsDto
+                },
+
+                Resources = MapPlayerCardsToDto(resourcesSnapshot)
             };
         }
 

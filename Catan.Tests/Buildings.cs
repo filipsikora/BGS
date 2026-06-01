@@ -10,12 +10,12 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Catan.Tests;
 
-public class BuildVillage
+public class Buildings
 {
     [Fact]
-    public void BuildNormalVillageInFirstRound_ShouldFail()
+    public void BuildNormalVillageInFirstRound_ShouldFailint()
     {
-        var game = TestGame.New();
+        var game = TestGame.New(2);
 
         var result = game.Facade.UseBuildVillage(1);
 
@@ -25,7 +25,7 @@ public class BuildVillage
     [Fact]
     public void BuildInitialVillageInFirstRound_ShouldPass()
     {
-        var game = TestGame.New();
+        var game = TestGame.New(2);
 
         var result = game.Facade.UseBuildInitialVillage(1);
 
@@ -35,11 +35,11 @@ public class BuildVillage
     [Fact]
     public void BuildInitialVillageInNormalRound_ShouldFail()
     {
-        var game = TestGame.New().InNormalRound();
+        var game = TestGame.New(2).InNormalRound();
 
         var result = game.Facade.UseBuildInitialVillage(1);
 
-        Assert.True(result.Success);
+        Assert.False(result.Success);
         
     }
 }

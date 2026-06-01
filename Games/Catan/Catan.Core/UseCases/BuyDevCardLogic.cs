@@ -1,6 +1,7 @@
 ﻿using Catan.Core.DomainEvents;
 using Catan.Core.Results;
 using Catan.Core.Rules;
+using Catan.Core.Runtime;
 
 namespace Catan.Core.UseCases
 {
@@ -16,7 +17,7 @@ namespace Catan.Core.UseCases
             var devCardType = devCard.Type;
             var devCardsLeftList = Session.GetDevCardsLeft();
 
-            var validation = RulesDevCards.CanBuyDevCard(player, devCard, devCardsLeftList);
+            var validation = RulesDevCards.CanBuyDevCard(player, devCard, devCardsLeftList, Session);
 
             if (!validation.Success)
             {

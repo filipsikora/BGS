@@ -1,6 +1,8 @@
-﻿using Catan.Core.Snapshots;
+﻿using Catan.Core.Engine;
 using Catan.Core.Queries.Interfaces;
 using Catan.Core.Rules;
+using Catan.Core.Runtime;
+using Catan.Core.Snapshots.ClientQueries;
 
 namespace Catan.Core.Queries.InMemory
 {
@@ -15,10 +17,11 @@ namespace Catan.Core.Queries.InMemory
 
         public TradeOfferedSnapshot GetTradeOfferData()
         {
-            var data = _session.TryGetPlayerTradeContext().context;
-            var canTrade = RulesTrade.CanAcceptTrade(_session.GetPlayerById(data.SellerId), _session.GetPlayerById(data.BuyerId), data.Offered, data.Desired, data).Success;
+            PlayerTradeContext? context = _session.TryGetPlayerTradeContext();
 
-            return new TradeOfferedSnapshot(data.SellerId, data.BuyerId, data.SellerName, data.BuyerName, data.Offered.ToDictionary(), data.Desired.ToDictionary(), canTrade);
+            var canTrade = RulesTrade.CanAcceptTrade(_session.GetPlayerById(context.SellerId), _session.GetPlayerById(context.BuyerId), context.Offered, context.Desired, context).Success;
+
+            return new TradeOfferedSnapshot(context.SellerId, context.BuyerId, context.SellerName, context.BuyerName, context.Offered.ToDictionary(), context.Desired.ToDictionary(), canTrade);
         }
     }
 }

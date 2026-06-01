@@ -1,4 +1,5 @@
 ﻿using Catan.Core.Results;
+using Catan.Core.Runtime;
 using Catan.Shared.Data;
 
 namespace Catan.Core.Conditions
@@ -15,9 +16,17 @@ namespace Catan.Core.Conditions
             return ResultCondition.Fail(ConditionFailureReason.NotCorrectPhase);
         }
 
-        internal static bool IsCorrectPhase(object firstRoundsBuilding, GameSession session)
+        public static ResultCondition IsEitherPhaseCorrect(List<EnumGamePhases> phases, GameSession session)
         {
-            throw new NotImplementedException();
+            foreach (var phase in phases)
+            {
+                if (session.CheckIfIsCorePhase(phase))
+                {
+                    return ResultCondition.Ok();
+                }
+            }
+
+            return ResultCondition.Fail(ConditionFailureReason.NotCorrectPhase);
         }
     }
 }

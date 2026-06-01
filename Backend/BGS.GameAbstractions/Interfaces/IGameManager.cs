@@ -2,7 +2,7 @@
 {
     public interface IGameManager
     {
-        (Guid, int) CreateGame(IGameFactory factory);
+        Guid CreateGame(IGameFactory factory, int playerNumber);
         IGameInstance GetGame(Guid gameId);
         bool TryGetGame(Guid gameId, out IGameInstance game);
         IEnumerable<Guid> GetAllGamesIds();

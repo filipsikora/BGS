@@ -1,22 +1,34 @@
 ﻿using BGS.GameAbstractions.Interfaces;
 using Catan.Application;
 using Catan.Application.Controllers;
-using Catan.Core;
 using Catan.Core.Engine;
 using Catan.Core.Queries.InMemory;
 using Catan.Core.Helpers;
+using Catan.Core.Runtime;
 
 namespace Catan.Backend.GameManagement
 {
     public class CatanGameFactory : IGameFactory
     {
-        public (IGameInstance, int) CreateGame()
+        public int MaxPlayers { get; private set; } = 4;
+        public int MinPlayers { get; private set; } = 2;
+
+        public IGameInstance CreateGame(int playerNumber)
         {
             var random = new RandomProvider();
             var map = new HexMap(random);
             var gameState = new GameState(random, map);
 
-            var firstPlayerId = gameState.InitializeNewGame(2, 1f);
+            gameState.InitializeNewGame(playerNumber, 1f);
+
+            var playerTokens = new Dictionary<Guid, int>();
+
+            for (int playerId = 1; playerId <= playerNumber; playerId++)
+            {
+                var playerToken = Guid.NewGuid();
+
+                playerTokens.Add(playerToken, playerId);
+            }
 
             var session = new GameSession(gameState);
 
@@ -32,7 +44,7 @@ namespace Catan.Backend.GameManagement
             var app = new GameApplication(facade);
             var registry = new CatanCommandRegistry();
 
-            return (new CatanGameInstance(app, registry), firstPlayerId);
+            return (new CatanGameInstance(app, registry, playerTokens, playerNumber));
         }
     }
 }

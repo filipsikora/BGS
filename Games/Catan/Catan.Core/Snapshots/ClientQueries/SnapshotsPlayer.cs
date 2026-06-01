@@ -1,8 +1,47 @@
 ﻿using Catan.Shared.Data;
 using System.Collections.Generic;
 
-namespace Catan.Core.Snapshots
+namespace Catan.Core.Snapshots.ClientQueries
 {
+    public sealed class FullPlayerSnapshot
+    {
+        public PlayerResourcesSnapshot Resources;
+        public FullPlayerDataSnapshot Data;
+
+        public FullPlayerSnapshot(PlayerResourcesSnapshot resources, FullPlayerDataSnapshot data)
+        {
+            Resources = resources;
+            Data = data;
+        }
+    }
+
+    public sealed class FullPlayerDataSnapshot
+    {
+        public string Name;
+        public int PlayerId;
+
+        public Dictionary<string, int> BuildingsLeft;
+
+        public int Points;
+        public int Knights;
+        public int VictoryPoints;
+        public int ExtraPoints;
+
+        public IReadOnlyList<DevelopmentCardSnapshot> DevCards;
+
+        public FullPlayerDataSnapshot(string name, int playerId, Dictionary<string, int> buildingsLeft, int points, int knights, int victoryPoints, int extraPoints, IReadOnlyList<DevelopmentCardSnapshot> devCards)
+        {
+            Name = name;
+            PlayerId = playerId;
+            BuildingsLeft = buildingsLeft;
+            Points = points;
+            Knights = knights;
+            VictoryPoints = victoryPoints;
+            ExtraPoints = extraPoints;
+            DevCards = devCards;
+        }
+    }
+
     public sealed class PlayerResourcesSnapshot
     {
         public Dictionary<EnumResourceType, int> PlayerResources;
@@ -36,9 +75,9 @@ namespace Catan.Core.Snapshots
 
     public sealed class CurrentPlayerIdSnapshot
     {
-        public int CurrentPlayerId;
+        public int? CurrentPlayerId;
 
-        public CurrentPlayerIdSnapshot(int currentPlayerId)
+        public CurrentPlayerIdSnapshot(int? currentPlayerId)
         {
             CurrentPlayerId = currentPlayerId;
         }

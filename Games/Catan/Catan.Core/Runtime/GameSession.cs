@@ -6,12 +6,24 @@ using Catan.Core.UseCases;
 using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Shared.Data;
+using Catan.Core.Snapshots.ClientQueries;
+using Catan.Core.Queries.GameStateSnapshotBuilders;
+using Catan.Core.Snapshots.Persistence;
 
-namespace Catan.Core
+namespace Catan.Core.Runtime
 {
     public class GameSession
     {
         private readonly GameState _game;
+
+        private readonly BoardStateReader _boardReader;
+        private readonly PlayersStateReader _playersReader;
+        private readonly ThiefStateReader _thiefReader;
+        private readonly TradeStateReader _tradeReader;
+        private readonly GameFlowStateReader _gameFlowReader;
+        private readonly DevCardsStateReader _devCardsReader;
+
+        private readonly GameStateSnapshotBuilder GameStateSnapshotBuilder;
 
         private readonly BankTradeLogic _bankTrade;
         private readonly BlockHexLogic _blockHex;
@@ -38,6 +50,15 @@ namespace Catan.Core
         {
             _game = game;
 
+            _boardReader = new BoardStateReader();
+            _playersReader = new PlayersStateReader();
+            _thiefReader = new ThiefStateReader();
+            _tradeReader = new TradeStateReader();
+            _gameFlowReader = new GameFlowStateReader();
+            _devCardsReader = new DevCardsStateReader();
+
+            GameStateSnapshotBuilder = new GameStateSnapshotBuilder(this);
+
             _bankTrade = new BankTradeLogic(this);
             _blockHex = new BlockHexLogic(this);
             _selectVictim = new SelectVictimLogic(this);
@@ -59,8 +80,6 @@ namespace Catan.Core
             _useYearOfPlenty = new UseYearOfPlentyLogic(this);
             _prepareTrade = new PrepareTradeOfferLogic(this);
         }
-
-        internal GameState Game => _game;
 
         // phase logic //
 
@@ -86,185 +105,13 @@ namespace Catan.Core
         public ResultYearOfPlenty UseYearOfPlenty(ResourceCostOrStock resources) => _useYearOfPlenty.Handle(resources);
 
 
-        // getters //
-
-        public EnumGamePhases GetCurrentCorePhase() => _game.CurrentPhase;
-        public int GetCurrentPlayerId() => _game.CurrentPlayer.ID;
-        public int GetCurrentPlayersRoadsLeft() => _game.CurrentPlayer.BuildingCount(EnumBuildings.Road);
-        public int GetCurrentPlayerResourceAmount(EnumResourceType resource) => _game.CurrentPlayer.Resources.Get(resource);
-
-        public EnumGamePhases GetNextPhaseFromAfterRoll() => GetAfterRoll() ? EnumGamePhases.NormalRound : EnumGamePhases.BeforeRoll;
-        public EnumGamePhases? GetNextPhaseAfterDiscarding() => _game.GetCardDiscardingProgress() == 0 ? EnumGamePhases.RobberPlacing : null;
-        public bool PlayerHasEnoughResources(int playerAmount, int neededAmount) => ConditionsTrade.PlayerHasEnoughResource(playerAmount, neededAmount).Success;
-
-        public bool GetAfterRoll() => _game.GetAfterRoll();
-
-        public int GetDesertHexId() => _game.Map.HexList.Find(h => h.FieldType == EnumFieldTypes.Desert).Id;
-
-
-        public bool GetCardDiscardingContextExistance()
-        {
-            var exists = _game.CardDiscardingProgress != null;
-
-            return exists;
-        }
-        
-        public bool GetPlayersLeftToDiscard() => _game.GetPlayersLeftToDiscard();
-
-        public int GetNextToDiscardId() => _game.CardDiscardingProgress.PlayersToDiscard.Peek();
-
-        public int GetVictimId() => _game.CardStealingProgress.VictimId;
-
-        public int GetLastPlacedVillagePositionId() => _game.LastPlacedVillagePosition.Id;
-
-        public bool GetRoadsLeftToBuild() => _game.RoadBuildingProgress == null ? false : true;
-
-        public bool CheckIfCardsSelected(ResourceCostOrStock resources) => resources.Total() > 0;
-
-        public bool CheckIfExactCardsAmountSelected(ResourceCostOrStock resources, int amount) => ConditionsResources.HasExactResourcesNumber(resources, amount).Success;
-
-        public bool CheckIfInitialRoundsRemaining() => _game.FirstRoundsIndices.Count > 0;
-        public bool CheckIfIsCorePhase(EnumGamePhases phase) => _game.CurrentPhase == phase;
-
-        public int GetBlockedHexId() => _game.GetBlockedHexId();
-
-        public int GetTurn() => _game.Turn;
-
-        public int GetLastRoll() => _game.LastRoll;
-
-        public bool GetVillagePlacedThisTurn() => _game.VillagePlacedThisTurn;
-        public bool GetRoadPlacedThisTurn() => _game.RoadPlacedThisTurn;
-
-        public EnumBuildings GetBuildOptionsForVertex(Vertex v) => v.HasTown ? EnumBuildings.None : v.HasVillage ? EnumBuildings.Town : EnumBuildings.Village;
-
-        public EnumBuildings GetBuildOptionsForEdge(Edge e) => e.IsOwned ? EnumBuildings.None : EnumBuildings.Road;
-
-        public bool TryGetVertexById(int vertexId) => _game.Map.TryGetVertexById(vertexId);
-        public bool TryGetEdgeById(int edgeId) => _game.Map.TryGetEdgeById(edgeId);
-        public bool TryGetHexById(int hexId) => _game.Map.TryGetHexById(hexId);
-
-        public int GetCurrentPlayerTradeRatio(EnumResourceType resource)
-        {
-            if (_game.CurrentPlayer.Ports.Count != 0)
-            {
-                Port rightPort = _game.Map.PortList.Find(port => port.Type == resource);
-                bool hasThreeToOnePort = _game.CurrentPlayer.Ports.Any(port => port.Type == null);
-
-                if (_game.CurrentPlayer.Ports.Contains(rightPort))
-                    return 2;
-
-                if (hasThreeToOnePort)
-                    return 3;
-            }
-
-            return 4;
-        }
-
-        public (bool village, bool road, bool town) GetVertexBuildOptions(int vertexId, int playerId)
-        {
-            var player = GetPlayerById(playerId);
-
-            return (RulesPlacement.CanPlaceVillage(vertexId, this).Success, false, RulesPlacement.CanPlaceTown(player, vertexId, this).Success);
-        }
-
-        public (bool village, bool road, bool town) GetEdgeBuildOptions(int edgeId)
-        {
-            return (false, RulesPlacement.CanPlaceRoad(edgeId, this).Success, false);
-        }
-
-        public List<int> GetAdjacentToHexPlayersIds(int hexId)
-        {
-            var hex = _game.Map.GetHexById(hexId);
-
-            List<int> adjacentPlayersIds = new();
-
-            foreach (var vertex in hex.AdjacentVertices)
-            {
-                Player? owner = vertex.Owner;
-
-                if (vertex.IsOwned && !adjacentPlayersIds.Contains(owner.ID))
-                {
-
-                    adjacentPlayersIds.Add(owner.ID);
-                }
-            }
-
-            return adjacentPlayersIds;
-        }
-
-        public List<int> GetPossibleVictimsIds()
-        {
-            var blockedHexId = _game.BlockedHexId;
-
-            if (blockedHexId == null)
-                return new List<int>();
-
-            var possibleVictimsIds = GetAdjacentToHexPlayersIds(blockedHexId.Value);
-            possibleVictimsIds.Remove(GetCurrentPlayerId());
-
-            foreach (var possibleVictimId in possibleVictimsIds.ToList())
-            {
-                var victim = GetPlayerById(possibleVictimId);
-
-                if (victim.Resources.Total() == 0)
-                {
-                    possibleVictimsIds.Remove(possibleVictimId);
-                }
-            }
-
-            return possibleVictimsIds;
-        }
-
-        public void GetPlayersToDiscard()
-        {
-            var playersToDiscardIds = _game.GetCardsDiscardingPlayers().Select(p => p.ID);
-
-            CreateCardDiscardingContext(playersToDiscardIds);
-        }
-
-        public (int, bool) GetNextIndex()
-        {
-            bool initialRoundsRemaining;
-            int nextIndex;
-
-            if (_game.FirstRoundsIndices.Count > 0)
-            {
-                _game.FirstRoundsIndices.Dequeue();
-
-                initialRoundsRemaining = _game.FirstRoundsIndices.Count > 0;
-                nextIndex = initialRoundsRemaining ? _game.FirstRoundsIndices.Peek() : 0;
-
-                return (nextIndex, initialRoundsRemaining);
-            }
-
-            initialRoundsRemaining = false;
-            nextIndex = (_game.CurrentPlayerIndex + 1) % _game.PlayerList.Count;
-
-            return (nextIndex, initialRoundsRemaining);
-        }
-
-        public bool CanPlayerDiscard(ResourceCostOrStock resourcesSelected, int discardingPlayerId)
-        {
-            var discardingPlayer = _game.GetPlayerById(discardingPlayerId);
-            var result = RulesCardDiscard.CanDiscard(discardingPlayer, resourcesSelected);
-
-            return result.Success;
-        }
-
-        // internal getters //
-
-        internal Player GetCurrentPlayer() => _game.CurrentPlayer;
-        internal Player GetPlayerById(int playerId) => _game.GetPlayerById(playerId);
-        internal Player GetPlayerByIndex(int index) => _game.PlayerList[index];
-
-        internal ResourceCostOrStock GetBank() => _game.Bank;
-
-        internal DevelopmentCard GetFirstDevCard() => _game.DevelopmentCardsDeckAvailable[0];
-        internal DevelopmentCard GetDevCardById(int cardId) => _game.GetDevCardById(cardId);
+        // GETTERS //
+        // board //
 
         internal HexTile GetHexById(int id) => _game.Map.GetHexById(id);
         internal Edge GetEdgeById(int id) => _game.Map.GetEdgeById(id);
         internal Vertex GetVertexById(int id) => _game.Map.GetVertexById(id);
+        internal Port GetPortByEdge(Edge edge) => _game.Map.PortList.Find(p => p.Edge == edge);
         internal IEnumerable<HexTile> GetAllHexTilesView()
         {
             foreach (var hex in _game.Map.HexList)
@@ -286,20 +133,52 @@ namespace Catan.Core
                 yield return port;
         }
 
+        public bool TryGetVertexById(int vertexId) => _game.Map.TryGetVertexById(vertexId);
+        public bool TryGetEdgeById(int edgeId) => _game.Map.TryGetEdgeById(edgeId);
+        public bool TryGetHexById(int hexId) => _game.Map.TryGetHexById(hexId);
+        public int GetDesertHexId() => _game.Map.HexList.Find(h => h.FieldType == EnumFieldTypes.Desert).Id;
+        public int? GetBlockedHexId() => _game.GetBlockedHexId();
+        public List<(int HexQ, int HexR, int CornerIndex)> GetVertexCorners(int vertexId) => _boardReader.GetVertexCorners(GetVertexById(vertexId));
+        public VertexSnapshot GetVertexData(int vertexId) => _boardReader.GetVertexData(GetVertexById(vertexId));
+        public EdgeSnapshot GetEdgeData(int edgeId) => _boardReader.GetEdgeData(GetEdgeById(edgeId));
+        public HexSnapshot GetHexData(int hexId) => _boardReader.GetHexData(GetHexById(hexId));
+        public PortSnapshot GetPortData(int edgeId) => _boardReader.GetPortData(GetEdgeById(edgeId), GetPortByEdge(GetEdgeById(edgeId)));
+        public List<int> GetAdjacentToHexPlayersIds(int hexId) => _boardReader.GetAdjacentToHexPlayersIds(GetHexById(hexId));
+
+        // players //
+
+        internal Player GetCurrentPlayer() => _game.CurrentPlayer ?? throw new InvalidOperationException("CurrentPlayer not initialized");
+        internal Player GetPlayerById(int playerId) => _game.GetPlayerById(playerId);
+        internal Player GetPlayerByIndex(int index) => _game.PlayerList[index];
+        internal List<Player> GetPlayersByIds(List<int> playersIds) => playersIds.Select(GetPlayerById).ToList();
         internal IEnumerable<Player> GetAllPlayersView()
         {
             foreach (var player in _game.PlayerList)
                 yield return player;
         }
 
-        internal ResourceCostOrStock GetOfferedResources() => _game.TradeDraft.Offered;
+        public int GetCurrentPlayerId() => GetCurrentPlayer().ID;
+        public int GetCurrentPlayersRoadsLeft() => _game.CurrentPlayer.BuildingCount(EnumBuildings.Road);
+        public int GetCurrentPlayerResourceAmount(EnumResourceType resource) => _game.CurrentPlayer.Resources.Get(resource);
+        public bool PlayerHasEnoughResources(int playerAmount, int neededAmount) => ConditionsTrade.PlayerHasEnoughResource(playerAmount, neededAmount).Success;
+        public List<PlayerNameSnapshot> GetAllPlayersNamesData() => _playersReader.GetAllPlayersNames(_game.PlayerList);
+        public List<PlayerNameSnapshot> GetSomePlayersNamesData(List<int> playersIds) => _playersReader.GetSomePlayersNames(playersIds.Select(GetPlayerById).ToList());
+        public List<PlayerNameSnapshot> GetNotCurrentPlayerNamesData() => _playersReader.GetNotCurrentPlayersNames(_game.PlayerList.Where(p => p.ID != GetCurrentPlayerId()));
+        public PlayerResourcesSnapshot GetPlayerssResourcesData(int playerId) => _playersReader.GetPlayersCards(GetPlayerById(playerId));
+        public PlayerDataSnapshot GetPlayerData(int playerId) => _playersReader.GetPlayersData(GetPlayerById(playerId));
+        public PlayerResourcesSnapshot GetVictimCardsData() => _playersReader.GetVictimsCards(GetPlayerById(GetVictimId()));
+        public FullPlayerSnapshot GetFullPlayerData(int playerId) => _playersReader.GetFullPlayerData(GetPlayerById(playerId), GetPlayerDevCardsByIdData(playerId));
 
-        internal (bool exists, PlayerTradeContext? context) TryGetPlayerTradeContext()
-        {
-            PlayerTradeContext? context = _game.LastPlayerTradeOffered;
 
-            return (context != null, context);
-        }
+        // game flow //
+
+        public bool GetAfterRoll() => _game.GetAfterRoll();
+        public int GetTurn() => _game.Turn;
+        public int GetLastRoll() => _game.LastRoll;
+        public int? GetKnightChampionId() => _game.KnightChampion != null ? _game.KnightChampion.ID : null;
+        public int? GetRoadChampionId() => _game.RoadChampion != null ? _game.RoadChampion.ID : null;
+
+        // thief //
 
         internal (bool exists, CardStealingContext context) TryGetCardStealingContext()
         {
@@ -307,17 +186,80 @@ namespace Catan.Core
 
             return (context != null, context);
         }
-
         internal (bool exists, CardDiscardContext context) TryGetCardDiscardingContext()
         {
             var context = _game.CardDiscardingProgress;
 
             return (context != null, context);
         }
+        internal CardDiscardContext? GetCardDiscardingContext() => _game.CardDiscardingProgress;
+        internal CardStealingContext? GetCardStealingContext() => _game.CardStealingProgress;
 
+        public bool GetPlayersLeftToDiscard() => _thiefReader.GetPlayersLeftToDiscard(_game.PlayerList);
+        public bool GetCardDiscardingContextExistance() => _game.CardDiscardingProgress != null;
+        public int GetNextToDiscardId() => _game.CardDiscardingProgress.PlayersToDiscard.Peek();
+        public void GetPlayersToDiscard() => CreateCardDiscardingContext(_thiefReader.GetCardsDiscardingPlayers(_game.PlayerList).Select(p => p.ID));
+        public bool CanPlayerDiscard(ResourceCostOrStock resourcesSelected, int discardingPlayerId) => _thiefReader.CanPlayerDiscard(resourcesSelected, GetPlayerById(discardingPlayerId));
+        public int GetVictimId() => _game.CardStealingProgress.VictimId;
+        public List<int> GetPossibleVictimsIds() => _thiefReader.GetPossibleVictimsIds(GetPlayersByIds(GetAdjacentToHexPlayersIds(_game.BlockedHexId.Value)), _game.CurrentPlayer);
+
+        // buildings //
+
+        internal RoadBuildingContext? GetRoadBuildingContext() => _game.RoadBuildingProgress;
+        public (bool village, bool road, bool town) GetVertexBuildOptions(int vertexId, int playerId)
+        {
+            var player = GetPlayerById(playerId);
+
+            return (RulesPlacement.CanPlaceVillage(vertexId, this).Success, false, RulesPlacement.CanPlaceTown(player, vertexId, this).Success);
+        }
+        public (bool village, bool road, bool town) GetEdgeBuildOptions(int edgeId)
+        {
+            return (false, RulesPlacement.CanPlaceRoad(edgeId, this).Success, false);
+        }
+        public bool GetRoadsLeftToBuild() => _game.RoadBuildingProgress == null ? false : true;
+        public int GetLastPlacedVillagePositionId() => _game.LastPlacedVillagePosition.Id;
+        public bool GetVillagePlacedThisTurn() => _game.VillagePlacedThisTurn;
+        public bool GetRoadPlacedThisTurn() => _game.RoadPlacedThisTurn;
+
+        // phases //
+
+        public EnumGamePhases GetCurrentCorePhase() => _game.CurrentPhase;
+        public bool CheckIfIsCorePhase(EnumGamePhases phase) => _game.CurrentPhase == phase;
+        public EnumGamePhases GetNextPhaseFromAfterRoll() => GetAfterRoll() ? EnumGamePhases.NormalRound : EnumGamePhases.BeforeRoll;
+        public EnumGamePhases? GetNextPhaseAfterDiscarding() => _game.GetCardDiscardingProgress() == 0 ? EnumGamePhases.RobberPlacing : null;
+        public bool CheckIfInitialRoundsRemaining() => _game.FirstRoundsIndices.Count > 0;
+
+        // trade //
+
+        internal ResourceCostOrStock GetOfferedResources() => _game.TradeDraft.Offered;
+        internal PlayerTradeContext? TryGetPlayerTradeContext() => _game.LastPlayerTradeOffered;
+        internal TradeDraftContext? TryGetTradeDraftContext() => _game.TradeDraft;
+
+        public int GetCurrentPlayerTradeRatio(EnumResourceType resource) => _tradeReader.GetCurrentPlayerTradeRatio(resource, _game.CurrentPlayer, _game.Map.PortList.Find(port => port.Type == resource));
+
+        // resources //
+
+        internal ResourceCostOrStock GetBank() => _game.Bank;
+
+        public ResourcesAvailabilitySnapshot GetResourcesAvailabilityData() => _gameFlowReader.GetResourcesAvailabilityData(GetBank());
+        public bool CheckIfCardsSelected(ResourceCostOrStock resources) => resources.Total() > 0;
+        public bool CheckIfExactCardsAmountSelected(ResourceCostOrStock resources, int amount) => ConditionsResources.HasExactResourcesNumber(resources, amount).Success;
+        public (int, bool) GetNextIndex() => _gameFlowReader.GetNextIndex(_game.FirstRoundsIndices, _game.CurrentPlayerIndex, _game.PlayerList.Count);
+
+        // dev cards //
+
+        internal DevelopmentCard GetFirstDevCard() => _game.DevelopmentCardsDeckAvailable[0];
+        internal DevelopmentCard GetDevCardById(int cardId) => _game.GetDevCardById(cardId);
         internal List<DevelopmentCard> GetDevCardsLeft() => _game.DevelopmentCardsDeckAvailable;
-        internal Port GetPortByEdge(Edge edge) => _game.Map.PortList.Find(p => p.Edge == edge);
 
+        public List<DevelopmentCardSnapshot> GetDevCardsInBankData() => _gameFlowReader.GetDevCardsInBankData(_game.DevelopmentCardsDeckAvailable);
+        public IReadOnlyList<DevelopmentCardSnapshot> GetCurrentPlayerDevCardsData() => _devCardsReader.GetCurrentPlayerDevCardsData(_game.CurrentPlayer.DevelopmentCardsByID.Select(id => GetDevCardById(id)).ToList(), GetAfterRoll());
+        public IReadOnlyList<DevelopmentCardSnapshot> GetPlayerDevCardsByIdData(int playerId) => _devCardsReader.GetPlayerDevCardsByIdData(GetPlayerById(playerId).DevelopmentCardsByID.Select(id => GetDevCardById(id)).ToList(), GetAfterRoll());
+
+        // GameStateSnapshot //
+
+        public GameStateSnapshot GetGameStateData() => GameStateSnapshotBuilder.GetGameStateData();
+        public GameStatePerPlayerSnapshot GetGameStatePerPlayerData(int playerId) => GameStateSnapshotBuilder.GetGameStatePerPlayerData(playerId);
 
         // internal setters //
 

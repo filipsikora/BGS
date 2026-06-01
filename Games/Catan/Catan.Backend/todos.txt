@@ -93,3 +93,45 @@ ISSUE: same issue as in 12, but for year of plenty
 SOLUTION: maybe use phase context? not sure about it, will get back to it and refactor all phase context in simultanous
 
 STATE: can wait --------------------------------------------------------
+
+15
+ISSUE: enumbuildings is in core
+
+SOLUTION: check why is it so and possibly move it along with other data to shared
+
+STATE: to do after multiplayer refactor ---------------------------------
+
+16
+ISSUE: snapshots and dtos are a mess
+
+SOLUTION: sit down on them and make sense out of them
+
+STATE: pff i mean they work and i might just fix it in the next game
+
+17
+ISSUE: catan.backend.gamefactory knows catan.core
+
+SOLUTION: make it gameinstancefactory and call catangamefactory from appliaction
+
+STATE: to do at some point -------------------------------------
+
+18
+ISSUE: gamestate has logic
+
+SOLUTION: introduce logicholders on gamestate level owned by gamesession and move logic there and expose it via gamesession
+
+STATE: most of this moving is done, will need to check if i want to introduce write level extraction too --------------------------------
+
+19
+ISSUE: blockedHexId can be null
+
+SOLUTION: check if it is null at the very beginning of the game, i dont think so and also i dont think it really matters for the methods i am using right now, but check nonetheless
+
+STATE: possibly a small thing, i think i can skip it and if the code breaks there it will need to be fixed
+
+20
+ISSUE: snapshotbuilder is on gameSession level
+
+SOLUTION: move it up? facade or independent service? not sure
+
+STATE: need to check it --------------------------------------

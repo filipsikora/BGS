@@ -1,5 +1,6 @@
-﻿using Catan.Core.Snapshots;
-using Catan.Core.Queries.Interfaces;
+﻿using Catan.Core.Queries.Interfaces;
+using Catan.Core.Runtime;
+using Catan.Core.Snapshots.ClientQueries;
 
 namespace Catan.Core.Queries.InMemory
 {
@@ -12,49 +13,13 @@ namespace Catan.Core.Queries.InMemory
             _session = session;
         }
 
-        public EdgeSnapshot GetEdgeData(int edgeId)
-        {
-            var edge = _session.GetEdgeById(edgeId);
-            
-            return new EdgeSnapshot(edgeId, edge.VertexA.Id, edge.VertexB.Id);
-        }
+        public EdgeSnapshot GetEdgeData(int edgeId) => _session.GetEdgeData(edgeId);
 
-        public VertexSnapshot GetVertexData(int vertexId)
-        {
-            var vertex = _session.GetVertexById(vertexId);
-            var corners = new List<(int HexQ, int HexR, int CornerIndex)>();
+        public VertexSnapshot GetVertexData(int vertexId) => _session.GetVertexData(vertexId);
 
-            foreach (var hex in vertex.AdjacentHexTiles)
-            {
-                var cornerIndex = hex.AdjacentVertices.IndexOf(vertex);
+        public HexSnapshot GetHexData(int hexId) => _session.GetHexData(hexId);
 
-                if (cornerIndex >= 0)
-                {
-                    corners.Add((hex.Q, hex.R, cornerIndex));
-                }
-            }
-
-            return new VertexSnapshot(vertexId, corners);
-        }
-
-        public HexSnapshot GetHexData(int hexId)
-        {
-            var hex = _session.GetHexById(hexId);
-            var hexNumber = hex.FieldNumber;
-            var hexType = hex.FieldType;
-            var hexQ = hex.Q;
-            var hexR = hex.R;
-
-            return new HexSnapshot(hexId, hexNumber, hexType, hexQ, hexR);
-        }
-
-        public PortSnapshot GetPortData(int edgeId)
-        {
-            var edge = _session.GetEdgeById(edgeId);
-            var port = _session.GetPortByEdge(edge);
-
-            return new PortSnapshot(edge.Id, port.Type);
-        }
+        public PortSnapshot GetPortData(int edgeId) => _session.GetPortData(edgeId);
 
         public BoardSnapshot GetBoardData()
         {

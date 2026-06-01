@@ -1,9 +1,9 @@
-﻿using Catan.Core;
-using Catan.Core.Models;
+﻿using Catan.Core.Models;
 using Catan.Core.Queries.Interfaces;
 using Catan.Core.Results;
-using Catan.Core.Rules;
-using Catan.Core.Snapshots;
+using Catan.Core.Runtime;
+using Catan.Core.Snapshots.ClientQueries;
+using Catan.Core.Snapshots.Persistence;
 using Catan.Shared.Data;
 
 namespace Catan.Application.Controllers
@@ -109,5 +109,11 @@ namespace Catan.Application.Controllers
 
         public IReadOnlyList<PlayerNameSnapshot> GetNotCurrentPlayersNames() => _playersQuery.GetNotCurrentPlayersNames();
         public TradeOfferedSnapshot GetTradeOfferData() => _tradeQuery.GetTradeOfferData();
+        public FullPlayerSnapshot GetFullPlayerData(int playerId) => _playersQuery.GetFullPlayerData(playerId);
+
+        // gamestatesnapshot //
+
+        public GameStateSnapshot GetGameStateData() => _session.GetGameStateData();
+        public GameStatePerPlayerSnapshot GetGameStatePerPlayerData(int playerId) => _session.GetGameStatePerPlayerData(playerId);
     }
 }

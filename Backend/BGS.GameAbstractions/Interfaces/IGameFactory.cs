@@ -2,6 +2,10 @@
 {
     public interface IGameFactory
     {
-        (IGameInstance, int) CreateGame();
+        IGameInstance CreateGame(int playerNumber);
+
+        int MinPlayers { get; }
+        int MaxPlayers { get; }
+
     }
 }
