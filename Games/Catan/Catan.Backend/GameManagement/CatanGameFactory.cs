@@ -19,6 +19,8 @@ namespace Catan.Backend.GameManagement
             var map = new HexMap(random);
             var gameState = new GameState(random, map);
 
+            gameState.InitializeNewGame(playerNumber, 1f);
+
             var playerTokens = new Dictionary<Guid, int>();
 
             for (int playerId = 1; playerId <= playerNumber; playerId++)

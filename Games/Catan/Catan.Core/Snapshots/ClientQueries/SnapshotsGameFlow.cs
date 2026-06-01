@@ -6,14 +6,14 @@ namespace Catan.Core.Snapshots.ClientQueries
     {
         public int TurnNumber;
         public int RolledNumber;
-        public int CurrentPlayerId;
+        public int? CurrentPlayerId;
 
         public int? KnightChampionId;
         public int? RoadChampionId;
 
         public EnumGamePhases CurrentPhase;
 
-        public FullGameFlowSnapshot(int turnNumber, int rolledNumber, int currentPlayerId, int? knightChampionId, int? roadChampionId, EnumGamePhases currentPhase)
+        public FullGameFlowSnapshot(int turnNumber, int rolledNumber, int? currentPlayerId, int? knightChampionId, int? roadChampionId, EnumGamePhases currentPhase)
         {
             TurnNumber = turnNumber;
             RolledNumber = rolledNumber;

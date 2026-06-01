@@ -6,6 +6,7 @@ using Catan.Shared.Dtos;
 using BGS.Shared.Dtos;
 using Microsoft.AspNetCore.Http;
 using BGS.Shared.Data;
+using Catan.Backend.Helpers;
 
 namespace Catan.Backend.GameManagement
 {
@@ -73,6 +74,14 @@ namespace Catan.Backend.GameManagement
                     _ => throw new Exception($"Unknown query: {query}")
                 };
             }
+        }
+
+        public string GetGameStateDataString()
+        {
+            var snapshot = _gameApplication.GetGameStateData();
+            var json = GameStateSerializer.SerializeGameState(snapshot);
+
+            return json;
         }
 
         private BoardDto HandleBoardQuery()

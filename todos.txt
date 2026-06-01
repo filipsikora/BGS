@@ -35,3 +35,10 @@ ISSUE: queries are weak
 SOLUTION: implement a query interface and query objects
 
 STATE: once the game is running and before step 3 ----------------
+
+6.
+ISSUE: saving db on create is in controller, i'd like to move it to manager, but manager is a singleton not scoped. there is a workaround for that
+
+SOLUTION: implemetn an interface to fix it 
+
+STATE: would be cool to do it once the whole db issue is done and fixed.

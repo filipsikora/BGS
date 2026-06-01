@@ -7,6 +7,7 @@ namespace BGS.GameAbstractions.Interfaces
     {
         CommandResponseDto Execute(CommandRequestDto request);
         object Query(string queryName, object? parameters = null);
+        string GetGameStateDataString();
 
         Guid GameId { get; }
         EnumGameInstanceState State { get; }

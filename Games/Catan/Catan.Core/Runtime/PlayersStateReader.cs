@@ -92,7 +92,7 @@ namespace Catan.Core.Runtime
 
             return new FullPlayerSnapshot(
                 GetPlayersCards(player),
-                new FullPlayerDataSnapshot(player.Name, playerBuildingsLeft, player.Points, player.KnightsUsed, player.VictoryPointsCardsUsed, player.ExtraPoints, playerDevCards)
+                new FullPlayerDataSnapshot(player.Name, player.ID, playerBuildingsLeft, player.Points, player.KnightsUsed, player.VictoryPointsCardsUsed, player.ExtraPoints, playerDevCards)
                 );
         }
     }

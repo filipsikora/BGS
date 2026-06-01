@@ -19,7 +19,7 @@ namespace Catan.Core.Queries.GameStateSnapshotBuilders
             
             foreach (var player in _session.GetAllPlayersView())
             {
-                playerDataList.Append(GetFullPlayerData(player));
+                playerDataList.Add(GetFullPlayerData(player));
             }
 
             return playerDataList;

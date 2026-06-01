@@ -365,9 +365,9 @@ namespace Catan.Core.Engine
             return LastRoll;
         }
 
-        public int GetBlockedHexId()
+        public int? GetBlockedHexId()
         {
-            return Map.HexList.Find(h => h.isBlocked).Id;
+            return Map.HexList.Find(h => h.isBlocked)?.Id;
         }
 
         // setters //

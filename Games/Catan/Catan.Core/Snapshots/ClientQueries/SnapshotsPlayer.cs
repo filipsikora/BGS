@@ -18,6 +18,7 @@ namespace Catan.Core.Snapshots.ClientQueries
     public sealed class FullPlayerDataSnapshot
     {
         public string Name;
+        public int PlayerId;
 
         public Dictionary<string, int> BuildingsLeft;
 
@@ -28,9 +29,10 @@ namespace Catan.Core.Snapshots.ClientQueries
 
         public IReadOnlyList<DevelopmentCardSnapshot> DevCards;
 
-        public FullPlayerDataSnapshot(string name, Dictionary<string, int> buildingsLeft, int points, int knights, int victoryPoints, int extraPoints, IReadOnlyList<DevelopmentCardSnapshot> devCards)
+        public FullPlayerDataSnapshot(string name, int playerId, Dictionary<string, int> buildingsLeft, int points, int knights, int victoryPoints, int extraPoints, IReadOnlyList<DevelopmentCardSnapshot> devCards)
         {
             Name = name;
+            PlayerId = playerId;
             BuildingsLeft = buildingsLeft;
             Points = points;
             Knights = knights;
@@ -73,9 +75,9 @@ namespace Catan.Core.Snapshots.ClientQueries
 
     public sealed class CurrentPlayerIdSnapshot
     {
-        public int CurrentPlayerId;
+        public int? CurrentPlayerId;
 
-        public CurrentPlayerIdSnapshot(int currentPlayerId)
+        public CurrentPlayerIdSnapshot(int? currentPlayerId)
         {
             CurrentPlayerId = currentPlayerId;
         }

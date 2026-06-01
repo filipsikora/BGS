@@ -105,9 +105,9 @@ namespace Catan.Core.Snapshots.ClientQueries
         public List<VertexSnapshot> Vertices;
         public List<EdgeSnapshot> Edges;
         public List<PortSnapshot> Ports;
-        public int BlockedHexId;
+        public int? BlockedHexId;
 
-        public BoardSnapshot(List<HexSnapshot> hexes, List<VertexSnapshot> vertices, List<EdgeSnapshot> edges, List<PortSnapshot> ports, int blockedHexId)
+        public BoardSnapshot(List<HexSnapshot> hexes, List<VertexSnapshot> vertices, List<EdgeSnapshot> edges, List<PortSnapshot> ports, int? blockedHexId)
         {
             Hexes = hexes;
             Vertices = vertices;

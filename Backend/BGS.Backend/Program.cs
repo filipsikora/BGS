@@ -1,5 +1,6 @@
 using BGS.Backend;
 using BGS.Backend.Helpers;
+using BGS.Backend.Interfaces;
 using BGS.GameAbstractions.Interfaces;
 using BGS.Persistence;
 using BGS.Persistence.Context;
@@ -10,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<IGameFactory, CatanGameFactory>();
 builder.Services.AddSingleton<IGameManager, GameManager>();
-builder.Services.AddSingleton<GameFactoryMapper>();
+builder.Services.AddSingleton<IGameFactoryMapper, GameFactoryMapper>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

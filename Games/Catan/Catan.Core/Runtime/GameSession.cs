@@ -137,7 +137,7 @@ namespace Catan.Core.Runtime
         public bool TryGetEdgeById(int edgeId) => _game.Map.TryGetEdgeById(edgeId);
         public bool TryGetHexById(int hexId) => _game.Map.TryGetHexById(hexId);
         public int GetDesertHexId() => _game.Map.HexList.Find(h => h.FieldType == EnumFieldTypes.Desert).Id;
-        public int GetBlockedHexId() => _game.GetBlockedHexId();
+        public int? GetBlockedHexId() => _game.GetBlockedHexId();
         public List<(int HexQ, int HexR, int CornerIndex)> GetVertexCorners(int vertexId) => _boardReader.GetVertexCorners(GetVertexById(vertexId));
         public VertexSnapshot GetVertexData(int vertexId) => _boardReader.GetVertexData(GetVertexById(vertexId));
         public EdgeSnapshot GetEdgeData(int edgeId) => _boardReader.GetEdgeData(GetEdgeById(edgeId));
@@ -147,7 +147,7 @@ namespace Catan.Core.Runtime
 
         // players //
 
-        internal Player GetCurrentPlayer() => _game.CurrentPlayer;
+        internal Player GetCurrentPlayer() => _game.CurrentPlayer ?? throw new InvalidOperationException("CurrentPlayer not initialized");
         internal Player GetPlayerById(int playerId) => _game.GetPlayerById(playerId);
         internal Player GetPlayerByIndex(int index) => _game.PlayerList[index];
         internal List<Player> GetPlayersByIds(List<int> playersIds) => playersIds.Select(GetPlayerById).ToList();
@@ -157,7 +157,7 @@ namespace Catan.Core.Runtime
                 yield return player;
         }
 
-        public int GetCurrentPlayerId() => _game.CurrentPlayer.ID;
+        public int GetCurrentPlayerId() => GetCurrentPlayer().ID;
         public int GetCurrentPlayersRoadsLeft() => _game.CurrentPlayer.BuildingCount(EnumBuildings.Road);
         public int GetCurrentPlayerResourceAmount(EnumResourceType resource) => _game.CurrentPlayer.Resources.Get(resource);
         public bool PlayerHasEnoughResources(int playerAmount, int neededAmount) => ConditionsTrade.PlayerHasEnoughResource(playerAmount, neededAmount).Success;
