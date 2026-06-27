@@ -28,5 +28,7 @@ namespace Catan.Core.Queries.GameStateSnapshotBuilders
         public FullPlayerSnapshot GetFullPlayerDataFromId(int playerId) => _session.GetFullPlayerData(playerId);
 
         private FullPlayerSnapshot GetFullPlayerData(Player player) => _session.GetFullPlayerData(player.ID);
+
+        public OtherPlayersSnapshot GetOtherPlayersData(int playerId) => _session.GetOtherPlayersData(playerId);
     }
 }

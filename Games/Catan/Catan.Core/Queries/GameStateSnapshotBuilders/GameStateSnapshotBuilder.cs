@@ -30,12 +30,13 @@ namespace Catan.Core.Queries.GameStateSnapshotBuilders
 
         public GameStatePerPlayerSnapshot GetGameStatePerPlayerData(int playerId)
         {
-            return new GameStatePerPlayerSnapshot(GetFullBoardData(), GetFullGameFlowData(), GetFullPlayerDataPerId(playerId));
+            return new GameStatePerPlayerSnapshot(GetFullBoardData(), GetFullGameFlowData(), GetFullPlayerDataPerId(playerId), GetOtherPlayersData(playerId));
         }
 
         private FullBoardSnapshot GetFullBoardData() => BoardBuilder.GetFullBoardData();
         private FullGameFlowSnapshot GetFullGameFlowData() => GameFlowBuilder.GetFullGameFloweData();
         private List<FullPlayerSnapshot> GetAllFullPlayerData() => PlayerBuilder.GetAllFullPlayerData();
+        private OtherPlayersSnapshot GetOtherPlayersData(int playerId) => PlayerBuilder.GetOtherPlayersData(playerId);
         private FullPlayerSnapshot GetFullPlayerDataPerId(int playerId) => PlayerBuilder.GetFullPlayerDataFromId(playerId);
         private FullBankSnapshot GetFullBankData() => GameFlowBuilder.GetFullBankData();
         private FullPhaseContextSnapshot GetFullPhaseData() => ContextBuilder.GetFullPhaseContextData();

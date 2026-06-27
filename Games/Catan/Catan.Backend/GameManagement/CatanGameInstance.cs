@@ -7,6 +7,7 @@ using BGS.Shared.Dtos;
 using Microsoft.AspNetCore.Http;
 using BGS.Shared.Data;
 using Catan.Backend.Helpers;
+using BGS.GameAbstractions.Models;
 
 namespace Catan.Backend.GameManagement
 {
@@ -17,22 +18,23 @@ namespace Catan.Backend.GameManagement
 
         private readonly object _lock = new();
 
-        private readonly List<int> _playersIds = new();
-
         public Guid GameId { get; private set; }
         public EnumGameInstanceState State { get; private set; } = EnumGameInstanceState.Lobby;
-        public int CurrentPlayers => _playersIds.Count;
+        public int CurrentPlayers => PlayerTokens.Count;
         public int DesiredPlayerNumber { get; private set; }
+
+        private readonly Queue<int> _availableIds;
         public bool CanJoin => State == EnumGameInstanceState.Lobby && CurrentPlayers < DesiredPlayerNumber;
 
-        public Dictionary<Guid, int> PlayerTokens { get; private set; }
+        public Dictionary<Guid, int> PlayerTokens { get; } = new Dictionary<Guid, int>();
 
-        public CatanGameInstance(GameApplication gameApplication, CatanCommandRegistry registry, Dictionary<Guid, int> playerTokens, int playerNumber)
+        public CatanGameInstance(GameApplication gameApplication, CatanCommandRegistry registry, int playerNumber)
         {
             _gameApplication = gameApplication;
             _registry = registry;
             DesiredPlayerNumber = playerNumber;
-            PlayerTokens = playerTokens;
+
+            _availableIds = new Queue<int>(_gameApplication.GetIdsList());
         }
 
         public GameApplication Application => _gameApplication; // just for testing
@@ -63,16 +65,41 @@ namespace Catan.Backend.GameManagement
                 {
                     EnumQueryName.Board => HandleBoardQuery(),
                     EnumQueryName.PlayerData => HandlePlayerDataQuery(ParseInt(dict, "playerId")),
-                    EnumQueryName.PlayerCards => HandlePlayerCardsQuery(ParseInt(dict, "playerId")),
                     EnumQueryName.ResourcesAvailability => HandleResourcesAvailabilityQuery(),
                     EnumQueryName.VictimCards => HandleVictimCardsQuery(),
                     EnumQueryName.CurrentPlayerDevCards => HandleCurrentPlayerDevCardsQuery(),
                     EnumQueryName.NotCurrentPlayerNames => HandlerNotCurrentPlayerNamesQuery(),
                     EnumQueryName.TradeOfferData => HandleTradeOfferDataQuery(),
                     EnumQueryName.SomePlayersNames => HandleSomePlayersNamesQuery(ParseListInt(dict, "playerIds")),
-                    EnumQueryName.FullPlayer => HandleFullPlayerQuery(ParseInt(dict, "playerId")),
                     _ => throw new Exception($"Unknown query: {query}")
                 };
+            }
+        }
+
+        public JoinResult JoinGame(Guid? playerToken)
+        {
+            lock (_lock)
+            {
+                if (playerToken == null)
+                {
+                    if (PlayerTokens.Count == DesiredPlayerNumber)
+                        return new JoinResult(EnumJoinStatus.GameFull, "Game is full", null, null);
+
+                    if (State != EnumGameInstanceState.Lobby)
+                        return new JoinResult(EnumJoinStatus.GameStarted, "Game already started", null, null);
+
+                    else
+                        return JoinNewPlayer(GameId);
+                }
+
+                else
+                {
+                    if (!PlayerTokens.ContainsKey(playerToken.Value))
+                        return new JoinResult(EnumJoinStatus.TokenNotRecognized, "You are not a part of this match", null, null);
+
+                    else
+                        return RejoinGame(GameId, playerToken.Value);
+                }
             }
         }
 
@@ -82,6 +109,27 @@ namespace Catan.Backend.GameManagement
             var json = GameStateSerializer.SerializeGameState(snapshot);
 
             return json;
+        }
+
+        private JoinResult JoinNewPlayer(Guid gameId)
+        {
+            var playerId = _availableIds.Dequeue();
+            var playerToken = Guid.NewGuid();
+            var initialStateSnapshot = _gameApplication.GetGameStatePerPlayerSnapshot(playerId);
+            var initialStateDto = GameStatePerPlayerMappers.MapGameStatePerPlayerToDto(initialStateSnapshot, gameId, playerToken);
+
+            PlayerTokens.Add(playerToken, playerId);
+
+            return new JoinResult(EnumJoinStatus.Success, null, playerToken, initialStateDto);
+        }
+
+        private JoinResult RejoinGame(Guid gameId, Guid playerToken)
+        {
+            var playerId = PlayerTokens[playerToken];
+            var initialStateSnapshot = _gameApplication.GetGameStatePerPlayerSnapshot(playerId);
+            var initialStateDto = GameStatePerPlayerMappers.MapGameStatePerPlayerToDto(initialStateSnapshot, gameId, playerToken);
+
+            return new JoinResult(EnumJoinStatus.Success, null, playerToken, initialStateDto);
         }
 
         private BoardDto HandleBoardQuery()
@@ -98,18 +146,7 @@ namespace Catan.Backend.GameManagement
                 throw new Exception("PlayerId is required");
 
             var snapshot = _gameApplication.Facade.GetPlayersData(playerId);
-            var dto = QueryMappers.MapPlayerDataToDto(snapshot);
-
-            return dto;
-        }
-
-        private PlayerCardsDto HandlePlayerCardsQuery(object? param)
-        {
-            if (param is not int playerId)
-                throw new Exception("PlayerId is required");
-
-            var snapshot = _gameApplication.Facade.GetPlayersCards(playerId);
-            var dto = QueryMappers.MapPlayerCardsToDto(snapshot);
+            var dto = PlayerMappers.MapPlayerDataToDto(snapshot);
 
             return dto;
         }
@@ -125,7 +162,7 @@ namespace Catan.Backend.GameManagement
         private PlayerCardsDto HandleVictimCardsQuery()
         {
             var snapshot = _gameApplication.Facade.GetVictimsCards();
-            var dto = QueryMappers.MapPlayerCardsToDto(snapshot);
+            var dto = PlayerMappers.MapPlayerCardsToDto(snapshot);
 
             return dto;
         }
@@ -158,15 +195,6 @@ namespace Catan.Backend.GameManagement
         {
             var snapshot = _gameApplication.Facade.GetSomePlayersNames(potentialVictimsIds);
             var dto = QueryMappers.MapSomePlayersNamesToDto(snapshot);
-
-            return dto;
-        }
-
-        private FullPlayerDto HandleFullPlayerQuery(int playerId) // not used now i think, can be made into long polling later //
-        {
-            var data = _gameApplication.Facade.GetFullPlayerData(playerId);
-            var resources = _gameApplication.Facade.GetPlayersCards(playerId);
-            var dto = QueryMappers.MapFullPlayerToDto(data, resources);
 
             return dto;
         }

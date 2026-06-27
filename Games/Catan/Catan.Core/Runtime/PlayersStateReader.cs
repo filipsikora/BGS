@@ -95,5 +95,17 @@ namespace Catan.Core.Runtime
                 new FullPlayerDataSnapshot(player.Name, player.ID, playerBuildingsLeft, player.Points, player.KnightsUsed, player.VictoryPointsCardsUsed, player.ExtraPoints, playerDevCards)
                 );
         }
+
+        public BasicPlayerSnapshot GetBasicPlayerData(Player player)
+        {
+            return new BasicPlayerSnapshot(
+                player.ID, player.Name, player.Resources.ResourceDictionary.Count, player.DevelopmentCardsByID.Count, player.VictoryPointsCardsUsed, player.KnightsUsed
+                );
+        }
+
+        public OtherPlayersSnapshot GetOtherPlayersData(IEnumerable<Player> otherPlayers)
+        {
+            return new OtherPlayersSnapshot(otherPlayers.Select(GetBasicPlayerData).ToList());
+        }
     }
 }

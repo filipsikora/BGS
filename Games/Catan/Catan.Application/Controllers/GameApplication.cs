@@ -4,6 +4,7 @@ using Catan.Application.Interfaces;
 using Catan.Application.Phases;
 using Catan.Core.Snapshots.Persistence;
 using Catan.Shared.Data;
+using Microsoft.AspNetCore.Mvc.Diagnostics;
 
 namespace Catan.Application
 {
@@ -64,5 +65,7 @@ namespace Catan.Application
         }
 
         public GameStateSnapshot GetGameStateData() => Facade.GetGameStateData();
+        public GameStatePerPlayerSnapshot GetGameStatePerPlayerSnapshot(int playerId) => Facade.GetGameStatePerPlayerData(playerId);
+        public IEnumerable<int> GetIdsList() => Facade.GetIdsList();
     }
 }

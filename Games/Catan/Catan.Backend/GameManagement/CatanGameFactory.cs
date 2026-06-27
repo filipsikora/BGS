@@ -21,15 +21,6 @@ namespace Catan.Backend.GameManagement
 
             gameState.InitializeNewGame(playerNumber, 1f);
 
-            var playerTokens = new Dictionary<Guid, int>();
-
-            for (int playerId = 1; playerId <= playerNumber; playerId++)
-            {
-                var playerToken = Guid.NewGuid();
-
-                playerTokens.Add(playerToken, playerId);
-            }
-
             var session = new GameSession(gameState);
 
             var boardQuery = new InMemoryBoardQueryServices(session);
@@ -44,7 +35,7 @@ namespace Catan.Backend.GameManagement
             var app = new GameApplication(facade);
             var registry = new CatanCommandRegistry();
 
-            return (new CatanGameInstance(app, registry, playerTokens, playerNumber));
+            return (new CatanGameInstance(app, registry, playerNumber));
         }
     }
 }

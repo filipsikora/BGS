@@ -43,6 +43,36 @@ namespace BGS.Backend.Controllers
             return Ok(new CreateGameResponseDto { GameId = gameId });
         }
 
+        [HttpPost("join")]
+        public async Task<IActionResult> JoinGame([FromBody] JoinGameRequestDto request)
+        {
+            if (request == null)
+                return BadRequest("Request body is missing");
+
+            if (!_gameManager.TryGetGame(request.GameId, out var game))
+                return NotFound();
+
+            var joinResult = game.JoinGame(request.PlayerToken);
+
+            switch (joinResult.JoinStatus)
+            {
+                case EnumJoinStatus.Success:
+                    return Ok(joinResult.InitialState);
+
+                case EnumJoinStatus.GameFull:
+                    return BadRequest(joinResult.Message);
+
+                case EnumJoinStatus.GameStarted:
+                    return BadRequest(joinResult.Message);
+
+                case EnumJoinStatus.TokenNotRecognized:
+                    return BadRequest(joinResult.Message);
+
+                default:
+                    return StatusCode(500);
+            }
+        }
+
         [HttpPost("{gameId}/command")]
         public IActionResult Execute(Guid gameId, [FromBody] CommandRequestDto request)
         {

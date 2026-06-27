@@ -19,6 +19,22 @@ namespace Catan.Backend.Mappers
             };
         }
 
+        public static FullVertexDto MapFullVertexToDto(FullVertexSnapshot snapshot)
+        {
+            return new FullVertexDto
+            {
+                Corners = snapshot.Corners.Select(c => new CornerDto
+                {
+                    HexQ = c.HexQ,
+                    HexR = c.HexR,
+                    CornerIndex = c.CornerIndex
+                }).ToList(),
+                VertexId = snapshot.VertexId,
+                Building = snapshot.Building,
+                OwnerId = snapshot.OwnerId
+            };
+        }
+
         public static EdgeDto MapEdgeToDto(EdgeSnapshot snapshot)
         {
             return new EdgeDto
@@ -26,6 +42,17 @@ namespace Catan.Backend.Mappers
                 EdgeId = snapshot.EdgeId,
                 VertexAId = snapshot.VertexAId,
                 VertexBId = snapshot.VertexBId
+            };
+        }
+
+        public static FullEdgeDto MapFullEdgeToDto(FullEdgeSnapshot snapshot)
+        {
+            return new FullEdgeDto
+            {
+                EdgeId = snapshot.EdgeId,
+                VertexAId = snapshot.VertexAId,
+                VertexBId = snapshot.VertexBId,
+                OwnerId = snapshot.OwnerId
             };
         }
 
@@ -38,6 +65,18 @@ namespace Catan.Backend.Mappers
                 FieldType = snapshot.FieldType.ToString(),
                 Q = snapshot.Q,
                 R = snapshot.R
+            };
+        }
+
+        public static FullBoardDto MapFullBoardToDto(FullBoardSnapshot snapshot)
+        {
+            return new FullBoardDto
+            {
+                Vertices = snapshot.Vertices.Select(MapFullVertexToDto).ToList(),
+                Edges = snapshot.Edges.Select(MapFullEdgeToDto).ToList(),
+                Hexes = snapshot.Hexes.Select(MapHexToDto).ToList(),
+                Ports = snapshot.Ports.Select(MapPortToDto).ToList(),
+                BlockedHexId = snapshot.BlockedHexId
             };
         }
 

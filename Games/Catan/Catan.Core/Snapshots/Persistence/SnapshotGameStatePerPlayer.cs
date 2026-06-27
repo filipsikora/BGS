@@ -7,14 +7,16 @@ namespace Catan.Core.Snapshots.Persistence
         public FullBoardSnapshot Board;
         public FullGameFlowSnapshot GameFlow;
 
-        public PlayerResourcesSnapshot Resources;
+        public OtherPlayersSnapshot OtherPlayers;
+
         public FullPlayerSnapshot Player;
 
-        public GameStatePerPlayerSnapshot(FullBoardSnapshot board, FullGameFlowSnapshot gameFlow, FullPlayerSnapshot player)
+        public GameStatePerPlayerSnapshot(FullBoardSnapshot board, FullGameFlowSnapshot gameFlow, FullPlayerSnapshot player, OtherPlayersSnapshot otherPlayers)
         {
             Board = board;
             GameFlow = gameFlow;
             Player = player;
+            OtherPlayers = otherPlayers;
         }
     }
 }

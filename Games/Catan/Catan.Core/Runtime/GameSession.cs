@@ -168,6 +168,7 @@ namespace Catan.Core.Runtime
         public PlayerDataSnapshot GetPlayerData(int playerId) => _playersReader.GetPlayersData(GetPlayerById(playerId));
         public PlayerResourcesSnapshot GetVictimCardsData() => _playersReader.GetVictimsCards(GetPlayerById(GetVictimId()));
         public FullPlayerSnapshot GetFullPlayerData(int playerId) => _playersReader.GetFullPlayerData(GetPlayerById(playerId), GetPlayerDevCardsByIdData(playerId));
+        public OtherPlayersSnapshot GetOtherPlayersData(int playerId) => _playersReader.GetOtherPlayersData(_game.PlayerList.Where(p => p != GetPlayerById(playerId)));
 
 
         // game flow //
@@ -177,6 +178,7 @@ namespace Catan.Core.Runtime
         public int GetLastRoll() => _game.LastRoll;
         public int? GetKnightChampionId() => _game.KnightChampion != null ? _game.KnightChampion.ID : null;
         public int? GetRoadChampionId() => _game.RoadChampion != null ? _game.RoadChampion.ID : null;
+        public IEnumerable<int> GetIdsList() => _game.PlayerList.Select(p => p.ID);
 
         // thief //
 

@@ -70,6 +70,8 @@ namespace Catan.Application.Controllers
         public (bool village, bool road, bool town) GetVertexBuildOptions(int vertexId, int playerId) => _session.GetVertexBuildOptions(vertexId, playerId);
         public (bool village, bool road, bool town) GetEdgeBuildOptions(int edgeId) => _session.GetEdgeBuildOptions(edgeId);
 
+        public IEnumerable<int> GetIdsList() => _session.GetIdsList();
+
 
 
 

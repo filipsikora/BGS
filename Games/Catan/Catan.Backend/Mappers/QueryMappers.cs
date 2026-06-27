@@ -6,56 +6,6 @@ namespace Catan.Backend.Mappers
 {
     public static class QueryMappers
     {
-        public static PlayerDataDto MapPlayerDataToDto(PlayerDataSnapshot snapshot)
-        {
-            return new PlayerDataDto
-            {
-                Name = snapshot.Name,
-                BuildingsLeft = snapshot.BuildingsLeft,
-                Points = snapshot.Points,
-                Knights = snapshot.Knights,
-                VictoryPoints = snapshot.VictoryPoints,
-                ExtraPoints = snapshot.ExtraPoints
-            };
-        }
-
-        public static FullPlayerDto MapFullPlayerToDto(FullPlayerSnapshot dataSnapshot, PlayerResourcesSnapshot resourcesSnapshot)
-        {
-            var devCardsDto = dataSnapshot.Data.DevCards.Select(devCard => new DevelopmentCardDto
-            {
-                Id = devCard.Id,
-                IsNew = devCard.IsNew,
-                IsPlayable = devCard.IsPlayable,
-                Type = devCard.Type.ToString()
-            }).ToList();
-
-            return new FullPlayerDto
-            {
-                Data = new FullPlayerDataDto
-                {
-                    Name = dataSnapshot.Data.Name,
-                    BuildingsLeft = dataSnapshot.Data.BuildingsLeft,
-                    Points = dataSnapshot.Data.Points,
-                    Knights = dataSnapshot.Data.Knights,
-                    VictoryPoints = dataSnapshot.Data.VictoryPoints,
-                    ExtraPoints = dataSnapshot.Data.ExtraPoints,
-                    DevCards = devCardsDto
-                },
-
-                Resources = MapPlayerCardsToDto(resourcesSnapshot)
-            };
-        }
-
-        public static PlayerCardsDto MapPlayerCardsToDto(PlayerResourcesSnapshot snapshot)
-        {
-            return new PlayerCardsDto
-            {
-                PlayerResources = snapshot.PlayerResources.ToDictionary(
-                    kvp => kvp.Key.ToString(),
-                    kvp => kvp.Value)
-            };
-        }
-
         public static ResourcesAvailabilityDto MapResourcesAvailabilityToDto(ResourcesAvailabilitySnapshot snapshot)
         {
             return new ResourcesAvailabilityDto

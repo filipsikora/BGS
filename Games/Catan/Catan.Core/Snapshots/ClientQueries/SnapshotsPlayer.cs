@@ -94,4 +94,36 @@ namespace Catan.Core.Snapshots.ClientQueries
             Name = name;
         }
     }
+
+    public sealed class BasicPlayerSnapshot
+    {
+        public int Id;
+        public string Name;
+
+        public int ResourceCardsNumber;
+        public int DevCardsNumber;
+
+        public int VictoryCardsPlayed;
+        public int KnightCardsPlayed;
+
+        public BasicPlayerSnapshot(int id, string name, int resourceCardsNumber, int devCardsNumber, int victoryCardsPlayed, int knightCardsPlayed)
+        {
+            Id = id;
+            Name = name;
+            ResourceCardsNumber = resourceCardsNumber;
+            DevCardsNumber = devCardsNumber;
+            VictoryCardsPlayed = victoryCardsPlayed;
+            KnightCardsPlayed = knightCardsPlayed;
+        }
+    }
+
+    public sealed class OtherPlayersSnapshot
+    {
+        public List<BasicPlayerSnapshot> OtherPlayers;
+
+        public OtherPlayersSnapshot(List<BasicPlayerSnapshot> otherPlayers)
+        {
+            OtherPlayers = otherPlayers;
+        }
+    }
 }
