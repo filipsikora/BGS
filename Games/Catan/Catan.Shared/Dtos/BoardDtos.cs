@@ -27,7 +27,7 @@ namespace Catan.Shared.Dtos
     {
         public int HexId { get; set; }
         public int? HexNumber { get; set; }
-        public string? FieldType { get; set; }
+        public EnumFieldTypes? FieldType { get; set; }
         public int Q { get; set; }
         public int R { get; set; }
     }
@@ -35,7 +35,7 @@ namespace Catan.Shared.Dtos
     public class PortDto
     {
         public int EdgeId { get; set; }
-        public string? Type { get; set; }
+        public EnumResourceType? Type { get; set; }
     }
 
     public class BoardDto

@@ -298,6 +298,8 @@ namespace Catan.Core.Runtime
         internal void SetRoadBuiltThisTurn(bool built) => _game.RoadPlacedThisTurn = built;
         public void SetCorePhase(EnumGamePhases newPhase) => _game.CurrentPhase = newPhase; // public for testing
 
+        public void SetPlayerName(string playerName, int playerId) => _game.SetPlayerName(playerName, playerId);
+
         // wrappers //
 
         internal void WinCheck() => _game.WinCheck();

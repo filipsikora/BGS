@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using BGS.Shared.Data;
 using Catan.Backend.Helpers;
 using BGS.GameAbstractions.Models;
+using Newtonsoft.Json.Linq;
 
 namespace Catan.Backend.GameManagement
 {
@@ -19,12 +20,12 @@ namespace Catan.Backend.GameManagement
         private readonly object _lock = new();
 
         public Guid GameId { get; private set; }
-        public EnumGameInstanceState State { get; private set; } = EnumGameInstanceState.Lobby;
+        public EnumGameInstanceState State { get; private set; }
         public int CurrentPlayers => PlayerTokens.Count;
         public int DesiredPlayerNumber { get; private set; }
 
         private readonly Queue<int> _availableIds;
-        public bool CanJoin => State == EnumGameInstanceState.Lobby && CurrentPlayers < DesiredPlayerNumber;
+        public EnumGames GameType { get; }
 
         public Dictionary<Guid, int> PlayerTokens { get; } = new Dictionary<Guid, int>();
 
@@ -33,6 +34,8 @@ namespace Catan.Backend.GameManagement
             _gameApplication = gameApplication;
             _registry = registry;
             DesiredPlayerNumber = playerNumber;
+            GameType = EnumGames.Catan;
+            State = EnumGameInstanceState.Created;
 
             _availableIds = new Queue<int>(_gameApplication.GetIdsList());
         }
@@ -76,7 +79,7 @@ namespace Catan.Backend.GameManagement
             }
         }
 
-        public JoinResult JoinGame(Guid? playerToken)
+        public JoinResult JoinGame(Guid? playerToken, string playerName)
         {
             lock (_lock)
             {
@@ -85,11 +88,11 @@ namespace Catan.Backend.GameManagement
                     if (PlayerTokens.Count == DesiredPlayerNumber)
                         return new JoinResult(EnumJoinStatus.GameFull, "Game is full", null, null);
 
-                    if (State != EnumGameInstanceState.Lobby)
+                    if (State != EnumGameInstanceState.Created && State != EnumGameInstanceState.PlayersJoining)
                         return new JoinResult(EnumJoinStatus.GameStarted, "Game already started", null, null);
 
                     else
-                        return JoinNewPlayer(GameId);
+                        return JoinNewPlayer(GameId, playerName);
                 }
 
                 else
@@ -111,16 +114,19 @@ namespace Catan.Backend.GameManagement
             return json;
         }
 
-        private JoinResult JoinNewPlayer(Guid gameId)
+        private JoinResult JoinNewPlayer(Guid gameId, string playerName)
         {
+            State = EnumGameInstanceState.PlayersJoining;
             var playerId = _availableIds.Dequeue();
             var playerToken = Guid.NewGuid();
+            _gameApplication.SetPlayerName(playerName, playerId);
             var initialStateSnapshot = _gameApplication.GetGameStatePerPlayerSnapshot(playerId);
             var initialStateDto = GameStatePerPlayerMappers.MapGameStatePerPlayerToDto(initialStateSnapshot, gameId, playerToken);
+            var initialStateJson = JToken.FromObject(initialStateDto);
 
             PlayerTokens.Add(playerToken, playerId);
 
-            return new JoinResult(EnumJoinStatus.Success, null, playerToken, initialStateDto);
+            return new JoinResult(EnumJoinStatus.Success, null, playerToken, initialStateJson);
         }
 
         private JoinResult RejoinGame(Guid gameId, Guid playerToken)
@@ -128,8 +134,9 @@ namespace Catan.Backend.GameManagement
             var playerId = PlayerTokens[playerToken];
             var initialStateSnapshot = _gameApplication.GetGameStatePerPlayerSnapshot(playerId);
             var initialStateDto = GameStatePerPlayerMappers.MapGameStatePerPlayerToDto(initialStateSnapshot, gameId, playerToken);
+            var initialStateJson = JToken.FromObject(initialStateDto);
 
-            return new JoinResult(EnumJoinStatus.Success, null, playerToken, initialStateDto);
+            return new JoinResult(EnumJoinStatus.Success, null, playerToken, initialStateJson);
         }
 
         private BoardDto HandleBoardQuery()

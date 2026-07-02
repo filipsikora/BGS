@@ -8,7 +8,7 @@ namespace BGS.GameAbstractions.Interfaces
     {
         CommandResponseDto Execute(CommandRequestDto request);
         object Query(string queryName, object? parameters = null);
-        JoinResult JoinGame(Guid? playerToken);
+        JoinResult JoinGame(Guid? playerToken, string playerName);
         string GetGameStateDataString();
 
         Guid GameId { get; }
@@ -16,5 +16,6 @@ namespace BGS.GameAbstractions.Interfaces
         Dictionary<Guid, int> PlayerTokens { get; }
         int CurrentPlayers { get; }
         int DesiredPlayerNumber { get; }
+        public EnumGames GameType { get; }
     }
 }

@@ -377,6 +377,12 @@ namespace Catan.Core.Engine
             AfterRoll = afterRoll;
         }
 
+        public void SetPlayerName(string playerName, int playerId)
+        {
+            var player = PlayerList.Find(p => p.ID == playerId);
+            player.Name = playerName;
+        }
+
         // mutators //
 
         public int DiceRolledMutation()

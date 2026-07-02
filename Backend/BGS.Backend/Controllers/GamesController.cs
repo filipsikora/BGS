@@ -4,6 +4,8 @@ using BGS.Shared.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using BGS.Shared.Data;
 using BGS.Backend.Interfaces;
+using Catan.Shared.Dtos;
+using Catan.Backend.Mappers;
 
 namespace BGS.Backend.Controllers
 {
@@ -38,7 +40,7 @@ namespace BGS.Backend.Controllers
 
             var gameStateString = game.GetGameStateDataString();
 
-            await _gameRepository.SaveGameAsync(gameId, gameStateString, request.GameType, "Created");
+            await _gameRepository.SaveGameAsync(gameId, gameStateString, request.GameType.ToString(), game.State.ToString());
 
             return Ok(new CreateGameResponseDto { GameId = gameId });
         }
@@ -52,12 +54,20 @@ namespace BGS.Backend.Controllers
             if (!_gameManager.TryGetGame(request.GameId, out var game))
                 return NotFound();
 
-            var joinResult = game.JoinGame(request.PlayerToken);
+            var joinResult = game.JoinGame(request.PlayerToken, request.PlayerName);
 
             switch (joinResult.JoinStatus)
             {
                 case EnumJoinStatus.Success:
-                    return Ok(joinResult.InitialState);
+                    var gameStateString = game.GetGameStateDataString();
+                    await _gameRepository.SaveGameAsync(game.GameId, gameStateString, game.GameType.ToString(), game.State.ToString());
+
+                    return Ok(new JoinGameResponseDto
+                    {
+                        GameId = game.GameId,
+                        PlayerToken = joinResult.PlayerToken!.Value,
+                        Payload = joinResult.Payload!
+                    });
 
                 case EnumJoinStatus.GameFull:
                     return BadRequest(joinResult.Message);

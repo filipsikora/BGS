@@ -34,6 +34,7 @@ namespace Catan.Application.Controllers
         // setters //
 
         public void SetCorePhase(EnumGamePhases phase) => _session.SetCorePhase(phase);
+        public void SetPlayerName(string playerName, int playerId) => _session.SetPlayerName(playerName, playerId);
 
         // getters//
         public EnumGamePhases GetNextPhaseFromAfterRoll() => _session.GetNextPhaseFromAfterRoll();

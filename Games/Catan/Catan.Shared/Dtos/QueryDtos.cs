@@ -28,7 +28,7 @@ namespace Catan.Shared.Dtos
     public sealed class DevelopmentCardDto
     {
         public int Id { get; set; }
-        public string Type { get; set; }
+        public EnumDevelopmentCardTypes Type { get; set; }
         public bool IsNew { get; set; }
         public bool IsPlayable { get; set; }
     }

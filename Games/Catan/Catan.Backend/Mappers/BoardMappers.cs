@@ -62,7 +62,7 @@ namespace Catan.Backend.Mappers
             {
                 HexId = snapshot.HexId,
                 HexNumber = snapshot.HexNumber,
-                FieldType = snapshot.FieldType.ToString(),
+                FieldType = snapshot.FieldType,
                 Q = snapshot.Q,
                 R = snapshot.R
             };
@@ -85,7 +85,7 @@ namespace Catan.Backend.Mappers
             return new PortDto
             {
                 EdgeId = snapshot.EdgeId,
-                Type = snapshot.Type == null ? null : snapshot.Type.ToString()
+                Type = snapshot.Type == null ? null : snapshot.Type
             };
         }
 
@@ -105,7 +105,7 @@ namespace Catan.Backend.Mappers
         {
             return new DevelopmentCardDto
             {
-                Type = snapshot.Type.ToString(),
+                Type = snapshot.Type,
                 Id = snapshot.Id,
                 IsNew = snapshot.IsNew,
                 IsPlayable = snapshot.IsPlayable

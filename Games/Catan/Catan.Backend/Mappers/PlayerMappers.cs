@@ -43,7 +43,7 @@ namespace Catan.Backend.Mappers
                     Id = devCard.Id,
                     IsNew = devCard.IsNew,
                     IsPlayable = devCard.IsPlayable,
-                    Type = devCard.Type.ToString()
+                    Type = devCard.Type
                 }).ToList()
             };
         }
