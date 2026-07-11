@@ -6,5 +6,6 @@
         IGameInstance GetGame(Guid gameId);
         bool TryGetGame(Guid gameId, out IGameInstance game);
         IEnumerable<Guid> GetAllGamesIds();
+        public int GetPlayerIdFromToken(IGameInstance game, Guid playerToken);
     }
 }

@@ -14,7 +14,9 @@ namespace Catan.Backend.Mappers
                 KnightChampionId = snapshot.KnightChampionId,
                 RoadChampionId = snapshot.RoadChampionId,
                 RolledNumber = snapshot.RolledNumber,
-                TurnNumber = snapshot.TurnNumber
+                TurnNumber = snapshot.TurnNumber,
+                Resources = snapshot.Resources,
+                PlayersToMove = snapshot.PlayersToMove
             };
         }
     }

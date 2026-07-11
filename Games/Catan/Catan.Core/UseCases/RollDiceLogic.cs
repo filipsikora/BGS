@@ -17,6 +17,7 @@ namespace Catan.Core.UseCases
             var resultDistributionList = Session.ServePlayersMutation();
             var resultRoll = Session.DiceRolledMutation();
             var nextPhase = EnumGamePhases.NormalRound;
+            ResultRollDice result;
 
             if (resultRoll == 7)
             {
@@ -28,12 +29,12 @@ namespace Catan.Core.UseCases
 
                 else
                 {
-                    Session.GetPlayersToDiscard();
                     nextPhase = EnumGamePhases.CardDiscarding;
                 }
             }
 
-            var result = ResultRollDice.Ok(resultRoll, resultDistributionList, nextPhase, rolledSevenButNoVictims);
+            result = ResultRollDice.Ok(resultRoll, resultDistributionList, nextPhase, rolledSevenButNoVictims);
+
             result.AddDomainEvent(new RolledNumberChangedEvent(resultRoll));
 
             return ApplyPhase(result);

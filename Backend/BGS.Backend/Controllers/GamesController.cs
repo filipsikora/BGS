@@ -4,8 +4,7 @@ using BGS.Shared.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using BGS.Shared.Data;
 using BGS.Backend.Interfaces;
-using Catan.Shared.Dtos;
-using Catan.Backend.Mappers;
+using BGS.Backend.Networking;
 
 namespace BGS.Backend.Controllers
 {
@@ -16,12 +15,14 @@ namespace BGS.Backend.Controllers
         private readonly IGameManager _gameManager;
         private readonly IGameFactoryMapper _factoryMapper;
         private readonly IGameRepository _gameRepository;
+        private readonly ISocketManager _socketManager;
 
-        public GamesController(IGameManager gameManager, IGameFactoryMapper factoryMapper, IGameRepository gameRepository)
+        public GamesController(IGameManager gameManager, IGameFactoryMapper factoryMapper, IGameRepository gameRepository, ISocketManager socketManager)
         {
             _gameManager = gameManager;
             _factoryMapper = factoryMapper;
             _gameRepository = gameRepository;
+            _socketManager = socketManager;
         }
 
         [HttpPost("create")]
@@ -83,8 +84,27 @@ namespace BGS.Backend.Controllers
             }
         }
 
-        [HttpPost("{gameId}/command")]
-        public IActionResult Execute(Guid gameId, [FromBody] CommandRequestDto request)
+        [HttpGet("{gameId}/{playerToken}/socket")]
+        public async Task<IActionResult> RegisterSocket(Guid gameId, Guid playerToken)
+        {
+            if (!HttpContext.WebSockets.IsWebSocketRequest)
+                return BadRequest();
+
+            if (!_gameManager.TryGetGame(gameId, out var game))
+                return NotFound();
+
+            if (!game.PlayerTokens.ContainsKey(playerToken))
+                return Unauthorized();
+
+            var socket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+
+            await _socketManager.HandleConnection(playerToken, socket);
+
+            return new EmptyResult();
+        }
+
+        [HttpPost("{gameId}/{playerToken}/command")]
+        public async Task<IActionResult> Execute(Guid gameId, Guid playerToken, [FromBody] CommandRequestDto request)
         {
             if (!_gameManager.TryGetGame(gameId, out var game))
                 return NotFound();
@@ -92,10 +112,17 @@ namespace BGS.Backend.Controllers
             if (request == null)
                 return BadRequest("Request body is missing");
 
+            var playerId = _gameManager.GetPlayerIdFromToken(game, playerToken);
+
             try 
             {
-                var result = game.Execute(request);
-                return Ok(result);
+                var result = game.Execute(request, playerId);
+
+                await _gameRepository.SaveGameAsync(gameId, game.GetGameStateDataString(), game.GameType.ToString(), game.State.ToString());
+
+                await _socketManager.Broadcast(result.GameUpdates);
+
+                return Ok(result.CommandResponse);
             }
 
             catch (BadRequestException ex)

@@ -20,7 +20,9 @@ namespace Catan.Core.Queries.GameStateSnapshotBuilders
                 _session.GetCurrentPlayerId(),
                 _session.GetKnightChampionId(),
                 _session.GetRoadChampionId(),
-                _session.GetCurrentCorePhase()
+                _session.GetCurrentCorePhase(),
+                _session.GetBank().ResourceDictionary,
+                _session.GetPlayersToMove()
                 );
         }
 

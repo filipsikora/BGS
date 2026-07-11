@@ -7,10 +7,12 @@ namespace Catan.Shared.Dtos
         public int TurnNumber;
         public int RolledNumber;
         public int? CurrentPlayerId;
+        public List<int> PlayersToMove;
 
         public int? KnightChampionId;
         public int? RoadChampionId;
 
         public EnumGamePhases CurrentPhase;
+        public Dictionary<EnumResourceType, int> Resources;
     }
 }

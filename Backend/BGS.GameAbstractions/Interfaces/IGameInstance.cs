@@ -6,7 +6,7 @@ namespace BGS.GameAbstractions.Interfaces
 {
     public interface IGameInstance
     {
-        CommandResponseDto Execute(CommandRequestDto request);
+        CommandExecutionResultDto Execute(CommandRequestDto request, int playerId);
         object Query(string queryName, object? parameters = null);
         JoinResult JoinGame(Guid? playerToken, string playerName);
         string GetGameStateDataString();

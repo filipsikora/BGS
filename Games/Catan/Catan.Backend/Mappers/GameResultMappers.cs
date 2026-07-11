@@ -24,8 +24,6 @@ namespace Catan.Backend.Mappers
             return new CommandResponseDto
             {
                 Success = result.Success,
-                NextPhase = result.NextPhase != null ? result.NextPhase.ToString() : null,
-
                 UiMessages = result.GetUIMessagesList().Select(MapUiMessageToWrapperDto).ToList(),
             };
         }

@@ -32,6 +32,7 @@
         InitialVillageBuilt,
         InitialRoadBuilt,
         InitialRoundNotFinished,
-        NotCorrectPhase
+        NotCorrectPhase,
+        NotCurrentPlayer
     }
 }

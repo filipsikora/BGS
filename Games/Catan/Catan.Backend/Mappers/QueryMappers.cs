@@ -11,7 +11,7 @@ namespace Catan.Backend.Mappers
             return new ResourcesAvailabilityDto
             {
                 ResourcesAvailability = snapshot.ResourcesAvailability.ToDictionary(
-                    kvp => kvp.Key.ToString(),
+                    kvp => kvp.Key,
                     kvp => kvp.Value)
             };
         }
@@ -23,7 +23,7 @@ namespace Catan.Backend.Mappers
                 Id = devCard.Id,
                 IsNew = devCard.IsNew,
                 IsPlayable = devCard.IsPlayable,
-                Type = devCard.Type.ToString()
+                Type = devCard.Type
             }).ToList();
         }
 

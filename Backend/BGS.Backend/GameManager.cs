@@ -36,5 +36,10 @@ namespace BGS.Backend
         {
             return _games.Keys;
         }
+
+        public int GetPlayerIdFromToken(IGameInstance game, Guid playerToken)
+        { 
+            return game.PlayerTokens[playerToken];
+        }
     }
 }

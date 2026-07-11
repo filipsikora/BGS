@@ -9,9 +9,9 @@ namespace Catan.Core.Snapshots.ClientQueries
         public List<FullEdgeSnapshot> Edges;
         public List<HexSnapshot> Hexes;
         public List<PortSnapshot> Ports;
-        public int? BlockedHexId;
+        public int BlockedHexId;
 
-        public FullBoardSnapshot(List<FullVertexSnapshot> vertices, List<FullEdgeSnapshot> edges, List<HexSnapshot> hexes, List<PortSnapshot> ports, int? blockedHexId)
+        public FullBoardSnapshot(List<FullVertexSnapshot> vertices, List<FullEdgeSnapshot> edges, List<HexSnapshot> hexes, List<PortSnapshot> ports, int blockedHexId)
         {
             Vertices = vertices;
             Edges = edges;

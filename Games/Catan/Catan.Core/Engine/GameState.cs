@@ -63,6 +63,7 @@ namespace Catan.Core.Engine
         public CardStealingContext? CardStealingProgress { get; private set; }
         public TradeDraftContext? TradeDraft { get; private set; }
         public RoadBuildingContext? RoadBuildingProgress { get; private set; }
+        public List<int> PlayersToMove = new List<int>();
 
         public Dictionary<EnumFieldTypes, int> FieldTypesAmount { get; set; } = new Dictionary<EnumFieldTypes, int>
             {
@@ -436,9 +437,9 @@ namespace Catan.Core.Engine
             return card;
         }
 
-        public void BankTradeMutation(EnumResourceType offered, EnumResourceType desired, int ratio)
+        public void BankTradeMutation(EnumResourceType offered, EnumResourceType desired, int ratio, int playerId)
         {
-            var player = GetCurrentPlayer();
+            var player = GetPlayerById(playerId);
 
             player.Resources.SubtractExactAmount(offered, ratio);
             player.Resources.AddExactAmount(desired, 1);
@@ -464,12 +465,14 @@ namespace Catan.Core.Engine
             TradeDraft = null;
         }
 
-        public void CreateCardDiscardingContext(IEnumerable<int> playersIds)
+        public IEnumerable<int>? CreateCardDiscardingContext(IEnumerable<int> playersIds)
         {
             if (CardDiscardingProgress != null)
-                return;
+                return null;
 
             CardDiscardingProgress = new CardDiscardContext(playersIds);
+
+            return playersIds;
         }
 
         public void CreateTradeDraftContext(ResourceCostOrStock offered)

@@ -35,15 +35,16 @@ namespace Catan.Application.Controllers
 
         public void SetCorePhase(EnumGamePhases phase) => _session.SetCorePhase(phase);
         public void SetPlayerName(string playerName, int playerId) => _session.SetPlayerName(playerName, playerId);
+        public void SetPlayersToMove(List<int> playersToMove) => _session.SetPlayersToMove(playersToMove);
 
         // getters//
         public EnumGamePhases GetNextPhaseFromAfterRoll() => _session.GetNextPhaseFromAfterRoll();
         public EnumGamePhases? GetNextPhaseAfterDiscarding() => _session.GetNextPhaseAfterDiscarding();
 
-        public int GetCurrentPlayerTradeRatio(EnumResourceType resource) => _session.GetCurrentPlayerTradeRatio(resource);
+        public int GetPlayerTradeRatioById(EnumResourceType resource, int playerId) => _session.GetPlayerTradeRatioById(resource, playerId);
         public bool PlayerHasEnoughResources(int playerAmount, int neededAmount) => _session.PlayerHasEnoughResources(playerAmount, neededAmount);
         public int GetCurrentPlayersRoadsLeft() => _session.GetCurrentPlayersRoadsLeft();
-        public int GetCurrentPlayerResourceAmount(EnumResourceType resource) => _session.GetCurrentPlayerResourceAmount(resource);
+        public int GetPlayerResourceAmountById(EnumResourceType resource, int playerId) => _session.GetPlayerResourceAmountById(resource, playerId);
         public int GetCurrentPlayerId() => _session.GetCurrentPlayerId();
 
         public List<int> GetAdjacentToHexPlayersIds(int hexId) => _session.GetAdjacentToHexPlayersIds(hexId);
@@ -73,13 +74,14 @@ namespace Catan.Application.Controllers
 
         public IEnumerable<int> GetIdsList() => _session.GetIdsList();
 
-
+        public List<int> GetPlayersToMove() => _session.GetPlayersToMove();
+        
 
 
 
         // use cases//
 
-        public ResultBankTrade UseBankTrade(EnumResourceType offered, EnumResourceType desired) => _session.UseBankTrade(offered, desired);
+        public ResultBankTrade UseBankTrade(EnumResourceType offered, EnumResourceType desired, int playerId) => _session.UseBankTrade(offered, desired, playerId);
         public ResultBlockHex UseBlockHex(int hexId) => _session.UseBlockHex(hexId);
         public ResultCondition UseSelectVictim(int victimId) => _session.UseSelectVictim(victimId);
         public ResultRollDice UseRollDice() => _session.UseRollDice();

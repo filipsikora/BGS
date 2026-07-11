@@ -7,13 +7,13 @@ namespace Catan.Core.Runtime
     {
         public TradeStateReader() { }
 
-        public int GetCurrentPlayerTradeRatio(EnumResourceType resource, Player currentPlayer, Port rightPort)
+        public int GetPlayerTradeRatioById(EnumResourceType resource, Player player, Port rightPort)
         {
-            if (currentPlayer.Ports.Count != 0)
+            if (player.Ports.Count != 0)
             {
-                bool hasThreeToOnePort = currentPlayer.Ports.Any(port => port.Type == null);
+                bool hasThreeToOnePort = player.Ports.Any(port => port.Type == null);
 
-                if (currentPlayer.Ports.Contains(rightPort))
+                if (player.Ports.Contains(rightPort))
                     return 2;
 
                 if (hasThreeToOnePort)

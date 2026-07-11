@@ -1,13 +1,13 @@
 ﻿using BGS.GameAbstractions.Interfaces;
+using BGS.GameAbstractions.Models;
+using BGS.Shared.Data;
+using BGS.Shared.Dtos;
 using Catan.Application;
+using Catan.Backend.Helpers;
 using Catan.Backend.Mappers;
 using Catan.Shared.Data;
 using Catan.Shared.Dtos;
-using BGS.Shared.Dtos;
 using Microsoft.AspNetCore.Http;
-using BGS.Shared.Data;
-using Catan.Backend.Helpers;
-using BGS.GameAbstractions.Models;
 using Newtonsoft.Json.Linq;
 
 namespace Catan.Backend.GameManagement
@@ -16,6 +16,8 @@ namespace Catan.Backend.GameManagement
     {
         private readonly GameApplication _gameApplication;
         private readonly CatanCommandRegistry _registry;
+
+        private readonly DomainEventsDispatcher _eventDispatcher;
 
         private readonly object _lock = new();
 
@@ -38,12 +40,13 @@ namespace Catan.Backend.GameManagement
             State = EnumGameInstanceState.Created;
 
             _availableIds = new Queue<int>(_gameApplication.GetIdsList());
+            _eventDispatcher = new DomainEventsDispatcher();
         }
 
         public GameApplication Application => _gameApplication; // just for testing
 
 
-        public CommandResponseDto Execute(CommandRequestDto request)
+        public CommandExecutionResultDto Execute(CommandRequestDto request, int playerId)
         {
             lock (_lock)
             {
@@ -51,15 +54,22 @@ namespace Catan.Backend.GameManagement
                     throw new Exception("Invalid request type");
 
                 var command = _registry.Create(dto);
-                var result = _gameApplication.Execute(command);
+                var gameResult = _gameApplication.Execute(command, playerId);
+                var commandResponseDto = GameResultMappers.MapGameResultToDto(gameResult);
+                var updatesList = new List<GameUpdateDto>();
 
-                return GameResultMappers.MapGameResultToDto(result);
+                foreach (var domainEvent in gameResult.DomainEvents)
+                {
+                    updatesList.AddRange(_eventDispatcher.Dispatch(domainEvent, this));
+                }
+
+                return new CommandExecutionResultDto(updatesList, commandResponseDto);
             }
         }
 
         public object Query(string queryName, object? data)
         {
-            lock (_lock)
+            lock (_lock) 
             {
                 var dict = data as IQueryCollection;
                 var query = QueryMappers.MapStringToEnum(queryName);

@@ -1,5 +1,4 @@
 ﻿using Catan.Core.Conditions;
-using Catan.Core.Data;
 using Catan.Core.Engine;
 using Catan.Core.Models;
 using Catan.Core.UseCases;
@@ -83,7 +82,7 @@ namespace Catan.Core.Runtime
 
         // phase logic //
 
-        public ResultBankTrade UseBankTrade(EnumResourceType offered, EnumResourceType desired) => _bankTrade.Handle(offered, desired);
+        public ResultBankTrade UseBankTrade(EnumResourceType offered, EnumResourceType desired, int playerId) => _bankTrade.Handle(offered, desired, playerId);
         public ResultBlockHex UseBlockHex(int hexId) => _blockHex.Handle(hexId);
         public ResultCondition UseSelectVictim(int victimId) => _selectVictim.Handle(victimId);
         public ResultBuildFreeRoad UseBuildFreeRoad(int edgeId) => _buildFreeRoad.Handle(edgeId);
@@ -159,7 +158,7 @@ namespace Catan.Core.Runtime
 
         public int GetCurrentPlayerId() => GetCurrentPlayer().ID;
         public int GetCurrentPlayersRoadsLeft() => _game.CurrentPlayer.BuildingCount(EnumBuildings.Road);
-        public int GetCurrentPlayerResourceAmount(EnumResourceType resource) => _game.CurrentPlayer.Resources.Get(resource);
+        public int GetPlayerResourceAmountById(EnumResourceType resource, int playerId) => _game.GetPlayerById(playerId).Resources.Get(resource);
         public bool PlayerHasEnoughResources(int playerAmount, int neededAmount) => ConditionsTrade.PlayerHasEnoughResource(playerAmount, neededAmount).Success;
         public List<PlayerNameSnapshot> GetAllPlayersNamesData() => _playersReader.GetAllPlayersNames(_game.PlayerList);
         public List<PlayerNameSnapshot> GetSomePlayersNamesData(List<int> playersIds) => _playersReader.GetSomePlayersNames(playersIds.Select(GetPlayerById).ToList());
@@ -179,6 +178,7 @@ namespace Catan.Core.Runtime
         public int? GetKnightChampionId() => _game.KnightChampion != null ? _game.KnightChampion.ID : null;
         public int? GetRoadChampionId() => _game.RoadChampion != null ? _game.RoadChampion.ID : null;
         public IEnumerable<int> GetIdsList() => _game.PlayerList.Select(p => p.ID);
+        public List<int> GetPlayersToMove() => _game.PlayersToMove;
 
         // thief //
 
@@ -200,7 +200,7 @@ namespace Catan.Core.Runtime
         public bool GetPlayersLeftToDiscard() => _thiefReader.GetPlayersLeftToDiscard(_game.PlayerList);
         public bool GetCardDiscardingContextExistance() => _game.CardDiscardingProgress != null;
         public int GetNextToDiscardId() => _game.CardDiscardingProgress.PlayersToDiscard.Peek();
-        public void GetPlayersToDiscard() => CreateCardDiscardingContext(_thiefReader.GetCardsDiscardingPlayers(_game.PlayerList).Select(p => p.ID));
+        public IEnumerable<int>? GetPlayersToDiscard() => CreateCardDiscardingContext(_thiefReader.GetCardsDiscardingPlayers(_game.PlayerList).Select(p => p.ID));
         public bool CanPlayerDiscard(ResourceCostOrStock resourcesSelected, int discardingPlayerId) => _thiefReader.CanPlayerDiscard(resourcesSelected, GetPlayerById(discardingPlayerId));
         public int GetVictimId() => _game.CardStealingProgress.VictimId;
         public List<int> GetPossibleVictimsIds() => _thiefReader.GetPossibleVictimsIds(GetPlayersByIds(GetAdjacentToHexPlayersIds(_game.BlockedHexId.Value)), _game.CurrentPlayer);
@@ -237,7 +237,8 @@ namespace Catan.Core.Runtime
         internal PlayerTradeContext? TryGetPlayerTradeContext() => _game.LastPlayerTradeOffered;
         internal TradeDraftContext? TryGetTradeDraftContext() => _game.TradeDraft;
 
-        public int GetCurrentPlayerTradeRatio(EnumResourceType resource) => _tradeReader.GetCurrentPlayerTradeRatio(resource, _game.CurrentPlayer, _game.Map.PortList.Find(port => port.Type == resource));
+        public int GetPlayerTradeRatioById(EnumResourceType resource, int playerId) => _tradeReader.GetPlayerTradeRatioById(resource, _game.GetPlayerById(playerId), 
+            _game.Map.PortList.Find(port => port.Type == resource));
 
         // resources //
 
@@ -265,7 +266,7 @@ namespace Catan.Core.Runtime
 
         // internal setters //
 
-        internal void BankTradeMutation(EnumResourceType offered, EnumResourceType desired, int ratio) => _game.BankTradeMutation(offered, desired, ratio);
+        internal void BankTradeMutation(EnumResourceType offered, EnumResourceType desired, int ratio, int playerId) => _game.BankTradeMutation(offered, desired, ratio, playerId);
         internal void BlockHexMutation(HexTile hex) => _game.BlockHexMutation(hex);
         internal Dictionary<int, int> UseMonopolyMutation(EnumResourceType resource) => _game.UseMonopolyMutation(resource);
         internal void UseYearOfPlentyMutation(ResourceCostOrStock resource) => _game.UseYearOfPlentyMutation(resource);
@@ -289,7 +290,7 @@ namespace Catan.Core.Runtime
         internal void CreateCardsStealingContext(int victimId) => _game.CreateCardsStealingContext(victimId);
         internal void CreatePlayerTradeOfferedContext(int sellerId, int buyerId, string sellerName, string buyerName, ResourceCostOrStock offered, ResourceCostOrStock desired) =>
             _game.CreatePlayerTradeOfferedContext(sellerId, buyerId, sellerName, buyerName, offered, desired);
-        internal void CreateCardDiscardingContext(IEnumerable<int> playersToDiscard) => _game.CreateCardDiscardingContext(playersToDiscard);
+        internal IEnumerable<int>? CreateCardDiscardingContext(IEnumerable<int> playersToDiscard) => _game.CreateCardDiscardingContext(playersToDiscard);
         internal void CreateTradeDraftContext(ResourceCostOrStock offered) => _game.CreateTradeDraftContext(offered);
         internal void CreateRoadBuildingContext(int roadsLeftToBuild) => _game.CreateRoadBuildingContext(roadsLeftToBuild);
         internal void RoadBuildingContextMutation() => _game.RoadBuildingContextMutation();
@@ -299,6 +300,7 @@ namespace Catan.Core.Runtime
         public void SetCorePhase(EnumGamePhases newPhase) => _game.CurrentPhase = newPhase; // public for testing
 
         public void SetPlayerName(string playerName, int playerId) => _game.SetPlayerName(playerName, playerId);
+        public void SetPlayersToMove(List<int> playersToMove) => _game.PlayersToMove = playersToMove;
 
         // wrappers //
 

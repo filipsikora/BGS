@@ -1,7 +1,5 @@
 ﻿using Catan.Application.Controllers;
-using Catan.Application.Interfaces;
 using Catan.Application.UIMessages;
-using Catan.Core.Results;
 using Catan.Application.Commands;
 using Catan.Shared.Data;
 
@@ -11,12 +9,12 @@ namespace Catan.Application.Phases
     {
         public BeforeRollPhase(Facade facade) : base(facade) { }
         
-        public override GameResult Handle(object command)
+        public override GameResult Handle(object command, int playerId)
         {
             switch (command)
             {
                 case RollDiceCommand c:
-                    return HandleRollDice(c);
+                    return HandleRollDice(c, playerId);
 
                 case ShowDevelopmentCardsCommand c:
                     return GameResult.Ok(EnumGamePhases.DevelopmentCards);
@@ -24,48 +22,23 @@ namespace Catan.Application.Phases
                 case VertexClickedCommand:
                 case EdgeClickedCommand:
                 case HexClickedCommand:
-                    return HandleInvalidClick();
+                    return HandleInvalidClick(playerId);
 
                 default:
                     return GameResult.Fail();
             }
         }
 
-        private GameResult HandleRollDice(RollDiceCommand signal)
+        private GameResult HandleRollDice(RollDiceCommand signal, int playerId)
         {
             var result = Facade.UseRollDice();
 
-            var logList = GetLogList(result);
-
-            return GameResult.Ok(result.NextPhase.Value).AddUIMessagesList(logList).AddUIMessage(new DiceRollChangedMessage(result.Roll)).AddDomainEventsList(result.DomainEvents);
+            return GameResult.Ok(result.NextPhase.Value).AddDomainEventsList(result.DomainEvents);
         }
 
-        private GameResult HandleInvalidClick()
+        private GameResult HandleInvalidClick(int playerId)
         {
-            var playerId = Facade.GetCurrentPlayerId();
-
             return GameResult.Ok().AddUIMessage(new ActionRejectedMessage(playerId, ConditionFailureReason.NotRolledYet));
-        }
-
-        private List<IUIMessages> GetLogList(ResultRollDice result)
-        {
-            List<IUIMessages> logList = new();
-
-            var byPlayer = result.Distributions.GroupBy(d => new { d.PlayerId, d.PlayerName });
-
-            foreach (var playerGroup in byPlayer)
-            {
-                var resources = playerGroup.GroupBy(d => d.Type).Select(g => $"{g.Sum(x => x.Granted)} {g.Key.ToString().ToLower()}").ToList();
-
-                if (resources.Count == 0)
-                    continue;
-
-                var text = $"{playerGroup.Key.PlayerName}: {string.Join(", ", resources)}";
-
-                logList.Add(new LogMessageMessage(EnumLogTypes.Info, text));
-            }
-
-            return logList;
         }
     }
 }

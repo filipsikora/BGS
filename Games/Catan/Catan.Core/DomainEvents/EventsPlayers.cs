@@ -1,4 +1,5 @@
 ﻿using Catan.Core.Interfaces;
+using Catan.Core.Models;
 
 namespace Catan.Core.DomainEvents
 {
