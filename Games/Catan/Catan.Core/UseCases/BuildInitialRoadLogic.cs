@@ -2,6 +2,7 @@
 using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Core.Runtime;
+using Catan.Shared.Data;
 
 namespace Catan.Core.UseCases
 {
@@ -9,9 +10,9 @@ namespace Catan.Core.UseCases
     {
         public BuildInitialRoadLogic(GameSession session) : base(session) { }
 
-        public ResultBuildInitialRoad Handle(int edgeId, int vertexId)
+        public ResultBuildInitialRoad Handle(int edgeId, int vertexId, int playerId)
         {
-            var player = Session.GetCurrentPlayer();
+            var player = Session.GetPlayerById(playerId);
 
             var validation = RulesBuilding.CanBuildInitialRoad(player, edgeId, vertexId, Session);
 
@@ -22,10 +23,10 @@ namespace Catan.Core.UseCases
 
             var edge = Session.GetEdgeById(edgeId);
 
-            Session.RoadBuiltMutation(edge);
+            Session.RoadBuiltMutation(edge, player);
 
             var result = ResultBuildInitialRoad.Ok(player.ID, edgeId, null);
-            result.AddDomainEvent(new RoadPlacedEvent(edgeId, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
+            result.AddDomainEvent(new RoadPlacedEvent(edgeId, result.PlayerId, player.BuildingsLeftCount(EnumBuildings.Road), player.Resources.ToDictionary()));
 
             return ApplyPhase(result);
         }

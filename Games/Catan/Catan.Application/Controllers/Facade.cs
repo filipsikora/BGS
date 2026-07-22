@@ -36,6 +36,7 @@ namespace Catan.Application.Controllers
         public void SetCorePhase(EnumGamePhases phase) => _session.SetCorePhase(phase);
         public void SetPlayerName(string playerName, int playerId) => _session.SetPlayerName(playerName, playerId);
         public void SetPlayersToMove(List<int> playersToMove) => _session.SetPlayersToMove(playersToMove);
+        public void RemovePlayerFromToMove(int playerId) => _session.RemovePlayerFromToMove(playerId);
 
         // getters//
         public EnumGamePhases GetNextPhaseFromAfterRoll() => _session.GetNextPhaseFromAfterRoll();
@@ -43,15 +44,12 @@ namespace Catan.Application.Controllers
 
         public int GetPlayerTradeRatioById(EnumResourceType resource, int playerId) => _session.GetPlayerTradeRatioById(resource, playerId);
         public bool PlayerHasEnoughResources(int playerAmount, int neededAmount) => _session.PlayerHasEnoughResources(playerAmount, neededAmount);
-        public int GetCurrentPlayersRoadsLeft() => _session.GetCurrentPlayersRoadsLeft();
         public int GetPlayerResourceAmountById(EnumResourceType resource, int playerId) => _session.GetPlayerResourceAmountById(resource, playerId);
         public int GetCurrentPlayerId() => _session.GetCurrentPlayerId();
 
         public List<int> GetAdjacentToHexPlayersIds(int hexId) => _session.GetAdjacentToHexPlayersIds(hexId);
 
         public List<int> GetPossibleVictimsIds() => _session.GetPossibleVictimsIds();
-
-        public int GetNextToDiscardId() => _session.GetNextToDiscardId();
 
         public bool CanPlayerDiscard(ResourceCostOrStock resourcesSelected, int discardingPlayerId) => _session.CanPlayerDiscard(resourcesSelected, discardingPlayerId);
 
@@ -75,7 +73,11 @@ namespace Catan.Application.Controllers
         public IEnumerable<int> GetIdsList() => _session.GetIdsList();
 
         public List<int> GetPlayersToMove() => _session.GetPlayersToMove();
-        
+        public List<int> GetPlayersToDiscard() => _session.GetPlayersToDiscard();
+        public Dictionary<EnumResourceType,int> GetPlayerCardsById(int playerId) => _session.GetPlayerCardsById(playerId).ToDictionary();
+        public Dictionary<EnumResourceType, int> GetBank() => _session.GetBank().ToDictionary();
+        public int GetBuyerId() => _session.GetBuyerId();
+
 
 
 
@@ -86,19 +88,19 @@ namespace Catan.Application.Controllers
         public ResultCondition UseSelectVictim(int victimId) => _session.UseSelectVictim(victimId);
         public ResultRollDice UseRollDice() => _session.UseRollDice();
         public ResultCondition UseDiscard(int discardingPlayerId, ResourceCostOrStock resourcesSelected) => _session.UseDiscard(discardingPlayerId, resourcesSelected);
-        public ResultStealResource UseSteal(int victimId, EnumResourceType resource) => _session.UseSteal(victimId, resource);
-        public ResultPlayDevCard UseDevCard(int cardId) => _session.UseDevCard(cardId);
-        public ResultBuildInitialRoad UseBuildInitialRoad(int edgeId, int vertexId) => _session.UseBuildInitialRoad(edgeId, vertexId);
-        public ResultBuildInitialVillage UseBuildInitialVillage(int vertexId) => _session.UseBuildInitialVillage(vertexId);
-        public ResultBuildRoad UseBuildRoad(int edgeId) => _session.UseBuildRoad(edgeId);
-        public ResultBuildVillage UseBuildVillage(int vertexId) => _session.UseBuildVillage(vertexId);
-        public ResultBuildFreeRoad UseBuildFreeRoad(int edgeId) => _session.UseBuildFreeRoad(edgeId);
-        public ResultFinishTurn UseFinishTurn() => _session.UseFinishTurn();
-        public ResultMonopolyCard UseMonopolyCard(EnumResourceType resource) => _session.UseMonopolyCard(resource);
-        public ResultBuyDevCard UseBuyDevCard() => _session.UseBuyDevCard();
-        public ResultUpgradeVillage UseUpgradeVillage(int vertexId) => _session.UseUpgradeVillage(vertexId);
-        public ResultCondition UsePrepareTrade(ResourceCostOrStock offered) => _session.UsePrepareTrade(offered);
-        public ResultPlayerTrade UseOfferTrade(int buyerId, ResourceCostOrStock desired) => _session.UseOfferTrade(buyerId, desired);
+        public ResultStealResource UseSteal(int victimId, EnumResourceType resource, int thiefId) => _session.UseSteal(victimId, resource, thiefId);
+        public ResultPlayDevCard UseDevCard(int cardId, int playerId) => _session.UseDevCard(cardId, playerId);
+        public ResultBuildInitialRoad UseBuildInitialRoad(int edgeId, int vertexId, int playerId) => _session.UseBuildInitialRoad(edgeId, vertexId, playerId);
+        public ResultBuildInitialVillage UseBuildInitialVillage(int vertexId, int playerId) => _session.UseBuildInitialVillage(vertexId, playerId);
+        public ResultBuildRoad UseBuildRoad(int edgeId, int playerId) => _session.UseBuildRoad(edgeId, playerId);
+        public ResultBuildVillage UseBuildVillage(int vertexId, int playerId) => _session.UseBuildVillage(vertexId, playerId);
+        public ResultBuildFreeRoad UseBuildFreeRoad(int edgeId, int playerId) => _session.UseBuildFreeRoad(edgeId, playerId);
+        public ResultFinishTurn UseFinishTurn(int playerId) => _session.UseFinishTurn(playerId);
+        public ResultMonopolyCard UseMonopolyCard(EnumResourceType resource, int playerId) => _session.UseMonopolyCard(resource, playerId);
+        public ResultBuyDevCard UseBuyDevCard(int playerId) => _session.UseBuyDevCard(playerId);
+        public ResultUpgradeVillage UseUpgradeVillage(int vertexId, int playerId) => _session.UseUpgradeVillage(vertexId, playerId);
+        public ResultCondition UsePrepareTrade(ResourceCostOrStock offered, int playerId) => _session.UsePrepareTrade(offered, playerId);
+        public ResultPlayerTrade UseOfferTrade(int buyerId, ResourceCostOrStock desired, int sellerId) => _session.UseOfferTrade(buyerId, desired, sellerId);
         public ResultPlayerTrade UseReactToTrade() => _session.UseReactToTrade();
         public ResultYearOfPlenty UseYearOfPlenty(ResourceCostOrStock resources) => _session.UseYearOfPlenty(resources);
 

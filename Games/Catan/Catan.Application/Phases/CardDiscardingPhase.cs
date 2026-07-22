@@ -1,8 +1,6 @@
 ﻿using Catan.Application.Controllers;
 using Catan.Application.Interfaces;
 using Catan.Application.UIMessages;
-using Catan.Core.Models;
-using Catan.Core.Results;
 using Catan.Application.Commands;
 using Catan.Core.DomainEvents;
 
@@ -10,74 +8,44 @@ namespace Catan.Application.Phases
 {
     public class CardDiscardingPhase : BasePhase
     {
-        private ResourceCostOrStock _resourcesSelected = new();
-        private int _currentDiscardingPlayerId;
-
         public CardDiscardingPhase(Facade facade) : base(facade) { }
 
-        public override IUIMessages Enter()
+        public override void Enter()
         {
-            _currentDiscardingPlayerId = Facade.GetNextToDiscardId();
-            _resourcesSelected = new ResourceCostOrStock();
-
-            return new PlayerSelectedToDiscardMessage(_currentDiscardingPlayerId);
+            var playersToMove = Facade.GetPlayersToDiscard();
+            Facade.SetPlayersToMove(playersToMove);
         }
 
-        public override GameResult Handle(object command)
+        public override GameResult Handle(object command, int playerId)
         {
             switch (command)
             {
-                case ResourceCardSelectedCommand c:
-                    return HandleResourceSelectionChanged(c);
-
-                case DiscardingAcceptedCommand c:
-                    return HandleDiscardingAccepted(c);
+                case CardsSelectedCommand c:
+                    return HandleCardsDiscarded(c, playerId);
 
                 default:
                     return GameResult.Fail();
             }
         }
 
-        private GameResult HandleResourceSelectionChanged(ResourceCardSelectedCommand signal)
+        private GameResult HandleCardsDiscarded(CardsSelectedCommand signal, int playerId)
         {
-            if (!signal.IsSelected)
-            {
-                _resourcesSelected.AddExactAmount(signal.Type, 1);
-            }
-
-            else
-            {
-                _resourcesSelected.SubtractExactAmount(signal.Type, 1);
-            }
-
-            var canDiscard = Facade.CanPlayerDiscard(_resourcesSelected, _currentDiscardingPlayerId);
-
-            return GameResult.Ok().AddUIMessage(new SelectionChangedMessage(canDiscard));
-        }
-
-        private GameResult HandleDiscardingAccepted(DiscardingAcceptedCommand signal)
-        {
-            var result = Facade.UseDiscard(_currentDiscardingPlayerId, _resourcesSelected);
+            var resources = signal.Resources;
+            var result = Facade.UseDiscard(playerId, resources);
 
             if (!result.Success)
             {
-                return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(_currentDiscardingPlayerId, result.Reason));
+                return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(playerId, result.Reason));
             }
 
-            return ProceedToNextPlayer(result);
-        }
+            Facade.RemovePlayerFromToMove(playerId);
 
-        private GameResult ProceedToNextPlayer(ResultCondition result)
-        {
-            if (result.NextPhase != null)
-            {
-                return GameResult.Ok(result.NextPhase).AddDomainEvent(new PlayerStateChangedEvent(Facade.GetCurrentPlayerId()));
-            }
+            result.AddDomainEvent(new CardsDiscardedEvent(playerId, resources.ToDictionary(), Facade.GetPlayerCardsById(playerId), Facade.GetBank()));
 
-            _currentDiscardingPlayerId = Facade.GetNextToDiscardId();
-            _resourcesSelected = new ResourceCostOrStock();
+            if (result.NextPhase == null)
+                result.AddDomainEvent(new PlayersToMoveChangedEvent(Facade.GetPlayersToMove()));
 
-            return GameResult.Ok().AddUIMessage(new PlayerSelectedToDiscardMessage(_currentDiscardingPlayerId));
+            return GameResult.Ok(result.NextPhase);
         }
     }
 }

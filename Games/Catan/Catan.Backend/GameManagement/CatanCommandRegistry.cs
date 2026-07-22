@@ -1,11 +1,12 @@
-﻿using Catan.Backend.Helpers;
-using Catan.Backend.Models;
+﻿using BGS.Shared.Dtos;
 using Catan.Application.Commands;
 using Catan.Application.Interfaces;
+using Catan.Backend.Helpers;
+using Catan.Backend.Models;
 using Catan.Shared.Data;
 using Catan.Shared.Interfaces;
-using BGS.Shared.Dtos;
 using Newtonsoft.Json.Linq;
+using static Catan.Backend.Models.CardsSelectedDto;
 
 namespace Catan.Backend.GameManagement
 {
@@ -164,9 +165,9 @@ namespace Catan.Backend.GameManagement
 
             _commandDictionary[EnumCommandType.DiscardingAcceptedCommand] = json =>
             {
-                Deserialize<EmptyDto>(json);
+                var dto = Deserialize<CardsSelectedDto>(json);
 
-                return new DiscardingAcceptedCommand();
+                return new CardsSelectedCommand(dto.Resources);
             };
 
             _commandDictionary[EnumCommandType.StolenCardSelectedCommand] = json =>
@@ -247,7 +248,7 @@ namespace Catan.Backend.GameManagement
             {
                 var dto = Deserialize<TradePartnerChosenDto>(json);
 
-                return new TradePartnerChosenCommand(dto.PlayerId.Value);
+                return new TradePartnerChosenCommand(dto.PlayerId.Value, dto.Resources);
             };
         }
 

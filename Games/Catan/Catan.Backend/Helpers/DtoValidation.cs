@@ -1,4 +1,5 @@
 ﻿using Catan.Backend.Models;
+using Catan.Shared.Data;
 using Newtonsoft.Json.Linq;
 
 namespace Catan.Backend.Helpers
@@ -6,6 +7,12 @@ namespace Catan.Backend.Helpers
     public static class DtoValidation
     {
         public static void RequireValueNotNull<T>(T? value, string fieldName) where T : struct
+        {
+            if (value == null)
+                throw new BadRequestException($"{fieldName} is required");
+        }
+        
+        public static void RequireValueNotNull<T>(T? value, string fieldName) where T : class
         {
             if (value == null)
                 throw new BadRequestException($"{fieldName} is required");
@@ -18,6 +25,12 @@ namespace Catan.Backend.Helpers
 
             if (value <= 0)
                 throw new BadRequestException($"{fieldName} has to be over 0");
+        }
+
+        public static void RequirePositiveResourceCount(Dictionary<EnumResourceType, int>? resources, string fieldName)
+        {
+            if (resources.Values.Sum() <= 0)
+                throw new BadRequestException($"No resources selected in {fieldName}");
         }
 
         public static void EnsureNoExtraFields<T>(JObject json)

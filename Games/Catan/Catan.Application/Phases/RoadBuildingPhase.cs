@@ -8,7 +8,7 @@ namespace Catan.Application.Phases
     {
         public RoadBuildingPhase(Facade facade) : base(facade) { }
 
-        public override GameResult Handle(object command)
+        public override GameResult Handle(object command, int playerId)
         {
             switch (command)
             {
@@ -16,7 +16,7 @@ namespace Catan.Application.Phases
                     return HandleEdgeClicked(c);
 
                 case BuildRoadCommand c:
-                    return HandleRoadRequested(c);
+                    return HandleRoadRequested(c, playerId);
 
                 default:
                     return GameResult.Fail();
@@ -30,10 +30,9 @@ namespace Catan.Application.Phases
             return GameResult.Ok().AddUIMessage(new EdgeHighlightedMessage(signal.EdgeId)).AddUIMessage(new BuildOptionsSentMessage(village, road, town));
         }
 
-        private GameResult HandleRoadRequested(BuildRoadCommand signal)
+        private GameResult HandleRoadRequested(BuildRoadCommand signal, int playerId)
         {
-            var playerId = Facade.GetCurrentPlayerId();
-            var result = Facade.UseBuildFreeRoad(signal.EdgeId);
+            var result = Facade.UseBuildFreeRoad(signal.EdgeId, playerId);
 
             if (!result.Success)
             {

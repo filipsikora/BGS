@@ -1,6 +1,5 @@
 ﻿#nullable enable
 using Catan.Application.Controllers;
-using Catan.Application.Interfaces;
 using Catan.Application.UIMessages;
 using Catan.Shared.Data;
 
@@ -17,11 +16,9 @@ namespace Catan.Application.Phases
 
         public abstract GameResult Handle(object command, int playerId);
 
-        public virtual IUIMessages? Enter()
+        public virtual void Enter()
         {
             Facade.SetPlayersToMove([Facade.GetCurrentPlayerId()]);
-
-            return null;
         }
 
         public virtual GameResult ValidatePlayer(int playerId)

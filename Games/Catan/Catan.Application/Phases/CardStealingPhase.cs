@@ -8,22 +8,22 @@ namespace Catan.Application.Phases
     {
         public CardStealingPhase(Facade facade) : base(facade) { }
 
-        public override GameResult Handle(object command) 
+        public override GameResult Handle(object command, int playerId) 
         {
             switch (command)
             {
                 case StolenCardSelectedCommand c:
-                    return HandleSteal(c);
+                    return HandleSteal(c, playerId);
 
                 default:
                     return GameResult.Fail();
             }
         }
 
-        private GameResult HandleSteal(StolenCardSelectedCommand signal)
+        private GameResult HandleSteal(StolenCardSelectedCommand signal, int playerId)
         {
             var victimId = Facade.GetVictimId();
-            var result = Facade.UseSteal(victimId, signal.Type);
+            var result = Facade.UseSteal(victimId, signal.Type, playerId);
 
             if (!result.Success) 
             {

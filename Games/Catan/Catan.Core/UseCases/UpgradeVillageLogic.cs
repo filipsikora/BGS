@@ -9,9 +9,9 @@ namespace Catan.Core.UseCases
     {
         public UpgradeVillageLogic(GameSession session) : base(session) { }
 
-        public  ResultUpgradeVillage Handle(int vertexId)
+        public  ResultUpgradeVillage Handle(int vertexId, int playerId)
         {
-            var player = Session.GetCurrentPlayer();
+            var player = Session.GetPlayerById(playerId);
             var validation = RulesBuilding.CanUpgradeVillage(player, vertexId, Session);
 
             if (!validation.Success)
@@ -21,7 +21,7 @@ namespace Catan.Core.UseCases
 
             var vertex = Session.GetVertexById(vertexId);
 
-            Session.TownPaidAndBuiltMutation(vertex);
+            Session.TownPaidAndBuiltMutation(vertex, playerId);
 
             var result = ResultUpgradeVillage.Ok(player.ID, vertexId, null);
             result.AddDomainEvent(new TownPlacedEvent(vertexId, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));

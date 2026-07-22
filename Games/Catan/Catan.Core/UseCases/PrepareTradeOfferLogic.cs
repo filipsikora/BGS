@@ -10,9 +10,9 @@ namespace Catan.Core.UseCases
     {
         public PrepareTradeOfferLogic(GameSession session) : base(session) { }
 
-        public ResultCondition Handle(ResourceCostOrStock offered)
+        public ResultCondition Handle(ResourceCostOrStock offered, int playerId)
         {
-            var player = Session.GetCurrentPlayer();
+            var player = Session.GetPlayerById(playerId);
             var result = RulesTrade.CanDraftTrade(player, offered);
 
             if (!result.Success)

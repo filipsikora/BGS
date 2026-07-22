@@ -1,50 +1,28 @@
 ﻿using Catan.Application.Controllers;
 using Catan.Application.UIMessages;
 using Catan.Application.Commands;
-using Catan.Shared.Data;
 
 namespace Catan.Application.Phases
 {
     public class MonopolyCardPhase : BasePhase
     {
-        private EnumResourceType? _type;
-
         public MonopolyCardPhase(Facade facade) : base(facade) { }
 
-        public override GameResult Handle(object command)
+        public override GameResult Handle(object command, int playerId)
         {
             switch (command)
             {
                 case StolenCardSelectedCommand c:
-                    return HandleResourceSelected(c);
-
-                case CardSelectionAcceptedCommand c:
-                    return HandleResourceAccepted(c);
+                    return HandleResourceAccepted(c, playerId);
 
                 default:
                     return GameResult.Fail();
             }
         }
 
-        private GameResult HandleResourceSelected(StolenCardSelectedCommand signal)
+        private GameResult HandleResourceAccepted(StolenCardSelectedCommand signal, int playerId)
         {
-            if (_type == signal.Type)
-            {
-                _type = null;
-            }
-            else
-            {
-                _type = signal.Type;
-            }
-
-            bool hasSelected = _type != null;
-
-            return GameResult.Ok().AddUIMessage(new ResourceSelectedMessage(hasSelected, signal.Type));
-        }
-
-        private GameResult HandleResourceAccepted(CardSelectionAcceptedCommand signal)
-        {
-            var result = Facade.UseMonopolyCard(_type.Value);
+            var result = Facade.UseMonopolyCard(signal.Type, playerId);
 
             if (!result.Success)
             {

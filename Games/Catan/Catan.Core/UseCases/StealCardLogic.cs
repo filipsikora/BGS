@@ -10,9 +10,9 @@ namespace Catan.Core.UseCases
     {
         public StealCardLogic(GameSession session) : base(session) { }
 
-        public  ResultStealResource Handle(int victimId, EnumResourceType resource)
+        public  ResultStealResource Handle(int victimId, EnumResourceType resource, int playerId)
         {
-            var thief = Session.GetCurrentPlayer();
+            var thief = Session.GetPlayerById(playerId);
             var victim = Session.GetPlayerById(victimId);
 
             var (exists, context) = Session.TryGetCardStealingContext();
@@ -27,14 +27,14 @@ namespace Catan.Core.UseCases
                 return ResultStealResource.Fail(thief.ID, victimId, validation.Reason);
             }
 
-            Session.CardStolenMutation(victim, resource);
+            Session.CardStolenMutation(victim, resource, thief);
 
             var afterRoll = Session.GetAfterRoll();
 
             var nextPhase = afterRoll ? EnumGamePhases.NormalRound : EnumGamePhases.BeforeRoll;
             
             var result = ResultStealResource.Ok(thief.ID, victimId, resource, nextPhase);
-            result.AddDomainEvent(new PlayerStateChangedEvent(result.ThiefId));
+            result.AddDomainEvent(new CardStolenEvent(resource, thief.ID, victim.ID, Session.GetPlayerCardsById(thief.ID).ToDictionary(), Session.GetPlayerCardsById(victim.ID).ToDictionary());
 
             return ApplyPhase(result);
         }

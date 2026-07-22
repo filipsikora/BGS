@@ -42,16 +42,6 @@ namespace Catan.Core.Engine
         }
     }
 
-    public sealed class CardDiscardContext
-    {
-        public Queue<int> PlayersToDiscard { get; }
-
-        public CardDiscardContext(IEnumerable<int> playerIds)
-        {
-            PlayersToDiscard = new Queue<int>(playerIds);
-        }
-    }
-
     public sealed class CardStealingContext
     {
         public int VictimId { get; }

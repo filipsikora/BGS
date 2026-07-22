@@ -10,9 +10,9 @@ namespace Catan.Core.UseCases
     {
         public FinishTurnLogic(GameSession session) : base(session) { }
 
-        public ResultFinishTurn Handle()
+        public ResultFinishTurn Handle(int playerId)
         {
-            var player = Session.GetCurrentPlayer();
+            var player = Session.GetPlayerById(playerId);
             var initialRound = Session.CheckIfIsCorePhase(EnumGamePhases.FirstRoundsBuilding);
 
             var validation = RulesTurn.CanFinishInitialTurn(Session, initialRound);
@@ -20,21 +20,25 @@ namespace Catan.Core.UseCases
 
             if (initialRound && !validation.Success)
             {
-                return ResultFinishTurn.Fail(ConditionFailureReason.InitialRoundNotFinished, Session.GetCurrentPlayerId(), true, Session.GetTurn());
+                return ResultFinishTurn.Fail(ConditionFailureReason.InitialRoundNotFinished, playerId, true, Session.GetTurn());
             }
 
-            Session.MarkDevCardsAsOldMutation();
+            Session.MarkDevCardsAsOldMutation(playerId);
             
             (int nextIndex, bool initialRoundsRemaining) = Session.GetNextIndex();
 
             Session.AdvanceToNextPlayerMutation(nextIndex);
-            Session.WinCheck();
 
             var nextTurnNumber = Session.GetTurn();
             var nextPhase = initialRoundsRemaining ? EnumGamePhases.FirstRoundsBuilding : EnumGamePhases.BeforeRoll;
-
             var result = ResultFinishTurn.Ok(player.ID, initialRoundsRemaining, nextTurnNumber, nextPhase);
-            result.AddDomainEvent(new PlayerStateChangedEvent(Session.GetPlayerByIndex(nextIndex).ID)).AddDomainEvent(new TurnNumberChangedEvent(nextTurnNumber));
+
+            if (Session.WinCheck(playerId))
+            {
+                var gameScore = Session.GameWon(playerId);
+
+                result.AddDomainEvent(new GameWonEvent(gameScore.WinnderId, gameScore.PlayerScoresToIds));
+            }
 
             return ApplyPhase(result);
         }

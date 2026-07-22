@@ -9,12 +9,12 @@ namespace Catan.Application.Phases
     {
         public DevelopmentCardsPhase(Facade facade) : base(facade) { }
 
-        public override GameResult Handle(object command)
+        public override GameResult Handle(object command, int playerId)
         {
             switch (command)
             {
                 case DevelopmentCardClickedPlayedCommand c:
-                    return HandlePlayDevCard(c);
+                    return HandlePlayDevCard(c, playerId);
 
                 case DevelopmentCardsCanceledCommand c:
                     return GameResult.Ok(Facade.GetNextPhaseFromAfterRoll());
@@ -24,18 +24,17 @@ namespace Catan.Application.Phases
             }
         }
 
-        private GameResult HandlePlayDevCard(DevelopmentCardClickedPlayedCommand signal)
+        private GameResult HandlePlayDevCard(DevelopmentCardClickedPlayedCommand signal, int playerId)
         {
-            var result = Facade.UseDevCard(signal.DevelopmentCardId);
-            var playerId = Facade.GetCurrentPlayerId();
+            var result = Facade.UseDevCard(signal.DevelopmentCardId, playerId);
 
             if (!result.Success)
             {
                 if (result.Reason == ConditionFailureReason.NoBuildingsAvailable)
-                    return GameResult.Fail().AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, "No roads available"));
+                    return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(playerId, result.Reason));
 
                 if (result.Reason == ConditionFailureReason.NotEnoughResourcesInBank)
-                    return GameResult.Fail().AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, "No resources in bank"));
+                    return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(playerId, result.Reason));
 
                 return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(playerId, result.Reason));
             }

@@ -10,9 +10,9 @@ namespace Catan.Core.UseCases
     {
         public BuildFreeRoadLogic(GameSession session) : base(session) { }
 
-        public ResultBuildFreeRoad Handle(int edgeId)
+        public ResultBuildFreeRoad Handle(int edgeId, int playerId)
         {
-            var player = Session.GetCurrentPlayer();
+            var player = Session.GetPlayerById(playerId);
             var validation = RulesBuilding.CanBuildFreeRoad(player, edgeId, Session);
 
             if (!validation.Success)
@@ -22,13 +22,17 @@ namespace Catan.Core.UseCases
 
             var edge = Session.GetEdgeById(edgeId);
 
-            Session.RoadBuiltMutation(edge);
+            var roadChampionUpdateResult = Session.RoadBuiltMutation(edge, player);
             Session.RoadBuildingContextMutation();
 
             EnumGamePhases? nextPhase = Session.GetRoadsLeftToBuild() ? null : EnumGamePhases.NormalRound;
 
             var result = ResultBuildFreeRoad.Ok(player.ID, edgeId, nextPhase);
-            result.AddDomainEvent(new RoadPlacedEvent(edgeId, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
+
+            if (roadChampionUpdateResult.Changed)
+                result.AddDomainEvent(new RoadChampionChangedEvent(roadChampionUpdateResult.OldChampionId, roadChampionUpdateResult.NewChampionId));
+
+            result.AddDomainEvent(new RoadPlacedEvent(edgeId, result.PlayerId, player.BuildingsLeftCount(EnumBuildings.Road), player.Resources.ToDictionary()));
 
             return ApplyPhase(result);
         }

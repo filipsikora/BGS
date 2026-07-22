@@ -2,7 +2,6 @@
 using Catan.Application.Controllers;
 using Catan.Shared.Data;
 using Catan.Application.UIMessages;
-using Catan.Core.DomainEvents;
 
 namespace Catan.Application.Phases
 {
@@ -10,7 +9,13 @@ namespace Catan.Application.Phases
     {
         public TradeRequestPhase(Facade facade) : base(facade) { }
 
-        public override GameResult Handle(object command)
+        public override void Enter()
+        {
+            var buyerId = Facade.GetBuyerId();
+            Facade.SetPlayersToMove([buyerId]);
+        }
+
+        public override GameResult Handle(object command, int playerId)
         {
             switch (command)
             {
@@ -34,7 +39,7 @@ namespace Catan.Application.Phases
                 return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(result.BuyerId, result.Reason));
             }
 
-            return GameResult.Ok(result.NextPhase).AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, "Trade accepted")).AddDomainEventsList(result.DomainEvents);
+            return GameResult.Ok(result.NextPhase).AddDomainEventsList(result.DomainEvents);
         }
     }
 }

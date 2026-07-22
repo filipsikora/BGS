@@ -8,6 +8,7 @@ using Catan.Shared.Data;
 using Catan.Core.Snapshots.ClientQueries;
 using Catan.Core.Queries.GameStateSnapshotBuilders;
 using Catan.Core.Snapshots.Persistence;
+using Catan.Core.Runtime.MutationResults;
 
 namespace Catan.Core.Runtime
 {
@@ -85,21 +86,21 @@ namespace Catan.Core.Runtime
         public ResultBankTrade UseBankTrade(EnumResourceType offered, EnumResourceType desired, int playerId) => _bankTrade.Handle(offered, desired, playerId);
         public ResultBlockHex UseBlockHex(int hexId) => _blockHex.Handle(hexId);
         public ResultCondition UseSelectVictim(int victimId) => _selectVictim.Handle(victimId);
-        public ResultBuildFreeRoad UseBuildFreeRoad(int edgeId) => _buildFreeRoad.Handle(edgeId);
-        public ResultBuildInitialRoad UseBuildInitialRoad(int edgeId, int vertexId) => _buildInitialRoad.Handle(edgeId, vertexId);
-        public ResultBuildInitialVillage UseBuildInitialVillage(int vertexId) => _buildInitialVillage.Handle(vertexId);
-        public ResultBuildRoad UseBuildRoad(int edgeId) => _buildRoad.Handle(edgeId);
-        public ResultBuildVillage UseBuildVillage(int vertexId) => _buildVillage.Handle(vertexId);
-        public ResultUpgradeVillage UseUpgradeVillage(int vertexId) => _upgradeVillage.Handle(vertexId);
+        public ResultBuildFreeRoad UseBuildFreeRoad(int edgeId, int playerId) => _buildFreeRoad.Handle(edgeId, playerId);
+        public ResultBuildInitialRoad UseBuildInitialRoad(int edgeId, int vertexId, int playerId) => _buildInitialRoad.Handle(edgeId, vertexId, playerId);
+        public ResultBuildInitialVillage UseBuildInitialVillage(int vertexId, int playerId) => _buildInitialVillage.Handle(vertexId, playerId);
+        public ResultBuildRoad UseBuildRoad(int edgeId, int playerId) => _buildRoad.Handle(edgeId, playerId);
+        public ResultBuildVillage UseBuildVillage(int vertexId, int playerId) => _buildVillage.Handle(vertexId, playerId);
+        public ResultUpgradeVillage UseUpgradeVillage(int vertexId, int playerId) => _upgradeVillage.Handle(vertexId, playerId);
         public ResultRollDice UseRollDice() => _rollDice.Handle();
         public ResultCondition UseDiscard(int discardingPlayerId, ResourceCostOrStock resourcesSelected) => _discardCards.Handle(discardingPlayerId, resourcesSelected);
-        public ResultStealResource UseSteal(int victimId, EnumResourceType resource) => _stealCard.Handle(victimId, resource);
-        public ResultPlayDevCard UseDevCard(int cardId) => _playDevCard.Handle(cardId);
-        public ResultFinishTurn UseFinishTurn() => _finishTurn.Handle();
-        public ResultMonopolyCard UseMonopolyCard(EnumResourceType resource) => _useMonopoly.Handle(resource);
-        public ResultBuyDevCard UseBuyDevCard() => _buyDevCard.Handle();
-        public ResultCondition UsePrepareTrade(ResourceCostOrStock offered) => _prepareTrade.Handle(offered);
-        public ResultPlayerTrade UseOfferTrade(int buyerId, ResourceCostOrStock desired) => _offerTrade.Handle(buyerId, desired);
+        public ResultStealResource UseSteal(int victimId, EnumResourceType resource, int thiefId) => _stealCard.Handle(victimId, resource, thiefId);
+        public ResultPlayDevCard UseDevCard(int cardId, int playerId) => _playDevCard.Handle(cardId, playerId);
+        public ResultFinishTurn UseFinishTurn(int playerId) => _finishTurn.Handle(playerId);
+        public ResultMonopolyCard UseMonopolyCard(EnumResourceType resource, int playerId) => _useMonopoly.Handle(resource, playerId);
+        public ResultBuyDevCard UseBuyDevCard(int playerId) => _buyDevCard.Handle(playerId);
+        public ResultCondition UsePrepareTrade(ResourceCostOrStock offered, int playerId) => _prepareTrade.Handle(offered, playerId);
+        public ResultPlayerTrade UseOfferTrade(int buyerId, ResourceCostOrStock desired, int sellerId) => _offerTrade.Handle(buyerId, desired, sellerId);
         public ResultPlayerTrade UseReactToTrade() => _reactToTrade.Handle();
         public ResultYearOfPlenty UseYearOfPlenty(ResourceCostOrStock resources) => _useYearOfPlenty.Handle(resources);
 
@@ -157,7 +158,7 @@ namespace Catan.Core.Runtime
         }
 
         public int GetCurrentPlayerId() => GetCurrentPlayer().ID;
-        public int GetCurrentPlayersRoadsLeft() => _game.CurrentPlayer.BuildingCount(EnumBuildings.Road);
+        public int GetPlayersRoadsLeftById(int playerId) => _game.GetPlayerById(playerId).BuildingCount(EnumBuildings.Road);
         public int GetPlayerResourceAmountById(EnumResourceType resource, int playerId) => _game.GetPlayerById(playerId).Resources.Get(resource);
         public bool PlayerHasEnoughResources(int playerAmount, int neededAmount) => ConditionsTrade.PlayerHasEnoughResource(playerAmount, neededAmount).Success;
         public List<PlayerNameSnapshot> GetAllPlayersNamesData() => _playersReader.GetAllPlayersNames(_game.PlayerList);
@@ -180,6 +181,7 @@ namespace Catan.Core.Runtime
         public IEnumerable<int> GetIdsList() => _game.PlayerList.Select(p => p.ID);
         public List<int> GetPlayersToMove() => _game.PlayersToMove;
 
+
         // thief //
 
         internal (bool exists, CardStealingContext context) TryGetCardStealingContext()
@@ -188,22 +190,15 @@ namespace Catan.Core.Runtime
 
             return (context != null, context);
         }
-        internal (bool exists, CardDiscardContext context) TryGetCardDiscardingContext()
-        {
-            var context = _game.CardDiscardingProgress;
-
-            return (context != null, context);
-        }
-        internal CardDiscardContext? GetCardDiscardingContext() => _game.CardDiscardingProgress;
         internal CardStealingContext? GetCardStealingContext() => _game.CardStealingProgress;
 
         public bool GetPlayersLeftToDiscard() => _thiefReader.GetPlayersLeftToDiscard(_game.PlayerList);
-        public bool GetCardDiscardingContextExistance() => _game.CardDiscardingProgress != null;
-        public int GetNextToDiscardId() => _game.CardDiscardingProgress.PlayersToDiscard.Peek();
-        public IEnumerable<int>? GetPlayersToDiscard() => CreateCardDiscardingContext(_thiefReader.GetCardsDiscardingPlayers(_game.PlayerList).Select(p => p.ID));
         public bool CanPlayerDiscard(ResourceCostOrStock resourcesSelected, int discardingPlayerId) => _thiefReader.CanPlayerDiscard(resourcesSelected, GetPlayerById(discardingPlayerId));
+        public List<int> GetPlayersToDiscard() => _thiefReader.GetCardsDiscardingPlayers(_game.PlayerList);
+
         public int GetVictimId() => _game.CardStealingProgress.VictimId;
         public List<int> GetPossibleVictimsIds() => _thiefReader.GetPossibleVictimsIds(GetPlayersByIds(GetAdjacentToHexPlayersIds(_game.BlockedHexId.Value)), _game.CurrentPlayer);
+        public int GetBuyerId() => _game.LastPlayerTradeOffered.BuyerId;
 
         // buildings //
 
@@ -242,12 +237,13 @@ namespace Catan.Core.Runtime
 
         // resources //
 
-        internal ResourceCostOrStock GetBank() => _game.Bank;
+        public ResourceCostOrStock GetBank() => _game.Bank;
 
         public ResourcesAvailabilitySnapshot GetResourcesAvailabilityData() => _gameFlowReader.GetResourcesAvailabilityData(GetBank());
         public bool CheckIfCardsSelected(ResourceCostOrStock resources) => resources.Total() > 0;
         public bool CheckIfExactCardsAmountSelected(ResourceCostOrStock resources, int amount) => ConditionsResources.HasExactResourcesNumber(resources, amount).Success;
         public (int, bool) GetNextIndex() => _gameFlowReader.GetNextIndex(_game.FirstRoundsIndices, _game.CurrentPlayerIndex, _game.PlayerList.Count);
+        public ResourceCostOrStock GetPlayerCardsById(int playerId) => _game.GetPlayerById(playerId).Resources;
 
         // dev cards //
 
@@ -268,29 +264,27 @@ namespace Catan.Core.Runtime
 
         internal void BankTradeMutation(EnumResourceType offered, EnumResourceType desired, int ratio, int playerId) => _game.BankTradeMutation(offered, desired, ratio, playerId);
         internal void BlockHexMutation(HexTile hex) => _game.BlockHexMutation(hex);
-        internal Dictionary<int, int> UseMonopolyMutation(EnumResourceType resource) => _game.UseMonopolyMutation(resource);
+        internal Dictionary<int, int> UseMonopolyMutation(EnumResourceType resource, Player player) => _game.UseMonopolyMutation(resource, player);
         internal void UseYearOfPlentyMutation(ResourceCostOrStock resource) => _game.UseYearOfPlentyMutation(resource);
-        internal void RoadBuiltMutation(Edge edge) => _game.RoadBuiltMutation(edge);
-        internal void VillageBuiltMutation(Vertex vertex, bool secondVillage) => _game.VillageBuiltMutation(vertex, secondVillage);
-        internal void TownPaidAndBuiltMutation(Vertex vertex) => _game.TownPaidAndBuiltMutation(vertex);
-        internal void RoadPaidAndBuiltMutation(Edge edge) => _game.RoadPaidAndBuiltMutation(edge);
-        internal void VillagePaidAndBuiltMutation(Vertex vertex) => _game.VillagePaidAndBuiltMutation(vertex);
+        internal RoadChampionUpdateResult RoadBuiltMutation(Edge edge, Player player) => _game.RoadBuiltMutation(edge, player);
+        internal void VillageBuiltMutation(Vertex vertex, bool secondVillage, Player player) => _game.VillageBuiltMutation(vertex, secondVillage, player);
+        internal void TownPaidAndBuiltMutation(Vertex vertex, int playerId) => _game.TownPaidAndBuiltMutation(vertex, playerId);
+        internal RoadChampionUpdateResult RoadPaidAndBuiltMutation(Edge edge, int playerId) => _game.RoadPaidAndBuiltMutation(edge, playerId);
+        internal RoadChampionUpdateResult VillagePaidAndBuiltMutation(Vertex vertex, int playerId) => _game.VillagePaidAndBuiltMutation(vertex, playerId);
         internal void BuyDevCardMutation(DevelopmentCard card) => _game.BuyDevCardMutation(card);
         internal void CardsDiscardedMutation(Player player, ResourceCostOrStock selected) => _game.CardsDiscardedMutation(player, selected);
-        internal void CardsDiscardedContextMutation() => _game.CardsDiscardedContextMutation();
-        internal void MarkDevCardsAsOldMutation() => _game.MarkDevCardsAsOldMutation();
+        internal void MarkDevCardsAsOldMutation(int playerId) => _game.MarkDevCardsAsOldMutation(playerId);
         internal void AdvanceToNextPlayerMutation(int nextIndex) => _game.AdvanceToNextPlayerMutation(nextIndex);
-        internal DevelopmentCard DevCardPlayedMutation(DevelopmentCard card) => _game.DevCardPlayedMutation(card);
+        internal KnightChampionUpdateResult DevCardPlayedMutation(DevelopmentCard card, Player player) => _game.DevCardPlayedMutation(card, player);
         internal void PlayerTradeDoneMutation(Player seller, Player buyer, ResourceCostOrStock offered, ResourceCostOrStock desired) =>
     _game.PlayerTradeDoneMutation(seller, buyer, offered, desired);
         internal List<ResultDistributeResources> ServePlayersMutation() => _game.ServePlayersMutation();
         internal int DiceRolledMutation() => _game.DiceRolledMutation();
-        internal void CardStolenMutation(Player victim, EnumResourceType resource) => _game.CardStolenMutation(victim, resource);
+        internal void CardStolenMutation(Player victim, EnumResourceType resource, Player thief) => _game.CardStolenMutation(victim, resource, thief);
 
         internal void CreateCardsStealingContext(int victimId) => _game.CreateCardsStealingContext(victimId);
         internal void CreatePlayerTradeOfferedContext(int sellerId, int buyerId, string sellerName, string buyerName, ResourceCostOrStock offered, ResourceCostOrStock desired) =>
             _game.CreatePlayerTradeOfferedContext(sellerId, buyerId, sellerName, buyerName, offered, desired);
-        internal IEnumerable<int>? CreateCardDiscardingContext(IEnumerable<int> playersToDiscard) => _game.CreateCardDiscardingContext(playersToDiscard);
         internal void CreateTradeDraftContext(ResourceCostOrStock offered) => _game.CreateTradeDraftContext(offered);
         internal void CreateRoadBuildingContext(int roadsLeftToBuild) => _game.CreateRoadBuildingContext(roadsLeftToBuild);
         internal void RoadBuildingContextMutation() => _game.RoadBuildingContextMutation();
@@ -301,10 +295,12 @@ namespace Catan.Core.Runtime
 
         public void SetPlayerName(string playerName, int playerId) => _game.SetPlayerName(playerName, playerId);
         public void SetPlayersToMove(List<int> playersToMove) => _game.PlayersToMove = playersToMove;
+        public void RemovePlayerFromToMove(int playerId) => _game.PlayersToMove.Remove(playerId);
 
         // wrappers //
 
-        internal void WinCheck() => _game.WinCheck();
+        internal bool WinCheck(int playerId) => _game.WinCheck(playerId);
+        internal ResultEndGame GameWon(int playerId) => _game.GameWon(playerId);
         internal void RollDice() => _game.RollDice();
     }
 }

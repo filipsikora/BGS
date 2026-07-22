@@ -28,7 +28,7 @@ namespace Catan.Application.Helpers
                 VillagePlacedEvent e => new VillagePlacedMessage(e.VertexId, e.OwnerId),
                 RoadPlacedEvent e => new RoadPlacedMessage(e.EdgeId, e.OwnerId),
                 TownPlacedEvent e => new TownPlacedMessage(e.VertexId, e.OwnerId),
-                DevelopmentCardBoughtEvent e => new DevelopmentCardBoughtMessage(e.CardId),
+                DevCardBoughtEvent e => new DevelopmentCardBoughtMessage(e.CardId),
                 RobberPlacedEvent e => new RobberPlacedMessage(e.HexId),
                 PlayerStateChangedEvent e => new PlayerStateChangedMessage(e.PlayerId),
                 TurnNumberChangedEvent e => new TurnNumberChangedMessage(e.NewTurnNumber),

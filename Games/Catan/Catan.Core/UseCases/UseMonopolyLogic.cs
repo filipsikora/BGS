@@ -10,9 +10,9 @@ namespace Catan.Core.UseCases
     {
         public UseMonopolyLogic(GameSession session) : base(session) { }
 
-        public ResultMonopolyCard Handle(EnumResourceType resource)
+        public ResultMonopolyCard Handle(EnumResourceType resource, int playerId)
         {
-            var player = Session.GetCurrentPlayer();
+            var player = Session.GetPlayerById(playerId);
 
             var validation = ConditionsResources.ResourceExists(resource);
 
@@ -21,10 +21,16 @@ namespace Catan.Core.UseCases
                 return ResultMonopolyCard.Fail(validation.Reason, player.ID, resource);
             }
 
-            var victimsIdsAndAmounts = Session.UseMonopolyMutation(resource);
+            var victimsIdsAndAmounts = Session.UseMonopolyMutation(resource, player);
 
             var result = ResultMonopolyCard.Ok(player.ID, victimsIdsAndAmounts, resource, EnumGamePhases.NormalRound);
-            result.AddDomainEvent(new PlayerStateChangedEvent(result.ThiefId));
+
+            foreach (var idToAmount in victimsIdsAndAmounts)
+            {
+                var id = idToAmount.Key;
+
+                result.AddDomainEvent(new CardsStolenEvent(resource, idToAmount.Value, player.ID, id, player.Resources.ToDictionary(), Session.GetPlayerById(id).Resources.ToDictionary()));
+            }
 
             return ApplyPhase(result);
         }

@@ -1,4 +1,6 @@
-﻿namespace Catan.Core.Data
+﻿using Catan.Shared.Data;
+
+namespace Catan.Core.Data
 {
     public static class BuildingDataRegistry
     {

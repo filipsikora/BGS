@@ -42,6 +42,13 @@ namespace Catan.Core.Models
             return Buildings.Count(b => BuildingsMapper.ToBuildingType(b.GetType()) == type);
         }
 
+        public int BuildingsLeftCount(EnumBuildings type)
+        {
+            int max = BuildingDataRegistry.MaxPerPlayer[type];
+
+            return max - BuildingCount(type);
+        }
+
         public int CountPoints()
         {
             int villagesPoints = BuildingCount(EnumBuildings.Village);

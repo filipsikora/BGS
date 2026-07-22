@@ -1,5 +1,6 @@
-﻿using Catan.Shared.Data;
-using Catan.Application.Interfaces;
+﻿using Catan.Application.Interfaces;
+using Catan.Core.Models;
+using Catan.Shared.Data;
 
 namespace Catan.Application.Commands
 {
@@ -12,5 +13,10 @@ namespace Catan.Application.Commands
             IsSelected = isSelected;
             Type = type;
         }
+    }
+
+    public class CardsSelectedCommand(Dictionary<EnumResourceType, int> resources) : ICommand
+    {
+        public ResourceCostOrStock Resources = ResourceCostOrStock.FromDictionary(resources);
     }
 }

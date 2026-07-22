@@ -146,5 +146,17 @@ namespace Catan.Core.Models
 
             return toDictionary;
         }
+
+        public static ResourceCostOrStock FromDictionary(Dictionary<EnumResourceType, int> resources)
+        {
+            var fromDictionary = new ResourceCostOrStock();
+
+            foreach (var (key, value) in resources)
+            {
+                fromDictionary.AddExactAmount(key, value);
+            }
+
+            return fromDictionary;
+        }
     }
 }

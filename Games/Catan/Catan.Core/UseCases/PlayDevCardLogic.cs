@@ -1,4 +1,5 @@
 ﻿using Catan.Core.DomainEvents;
+using Catan.Core.Interfaces;
 using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Core.Runtime;
@@ -10,13 +11,15 @@ namespace Catan.Core.UseCases
     {
         public PlayDevCardLogic(GameSession session) : base(session) { }
 
-        public ResultPlayDevCard Handle(int cardId)
+        public ResultPlayDevCard Handle(int cardId, int playerId)
         {
-            var player = Session.GetCurrentPlayer();
+            var player = Session.GetPlayerById(playerId);
             var card = Session.GetDevCardById(cardId);
             var afterRoll = Session.GetAfterRoll();
             var validation = RulesDevCards.CanPlayDevCard(player, card, afterRoll);
             var nextPhase = EnumGamePhases.NormalRound;
+            bool victoryCardPlayed = false;
+            bool knightCardPlayed = false;
 
             if (!validation.Success)
             {
@@ -27,6 +30,7 @@ namespace Catan.Core.UseCases
             {
                 case EnumDevelopmentCardTypes.Knight:
                     nextPhase = EnumGamePhases.RobberPlacing;
+                    knightCardPlayed = true;
                     break;
 
                 case EnumDevelopmentCardTypes.Monopoly:
@@ -40,7 +44,7 @@ namespace Catan.Core.UseCases
                         return ResultPlayDevCard.Fail(validation.Reason, player.ID);
 
 
-                    var roadsAvailable = Math.Min(Session.GetCurrentPlayersRoadsLeft(), 2);
+                    var roadsAvailable = Math.Min(Session.GetPlayersRoadsLeftById(playerId), 2);
 
                     Session.CreateRoadBuildingContext(roadsAvailable);
 
@@ -48,6 +52,7 @@ namespace Catan.Core.UseCases
                     break;
 
                 case EnumDevelopmentCardTypes.VictoryPoint:
+                    victoryCardPlayed = true;
                     break;
 
                 case EnumDevelopmentCardTypes.YearOfPlenty:
@@ -55,16 +60,28 @@ namespace Catan.Core.UseCases
 
                     if (!validation.Success)
                         return ResultPlayDevCard.Fail(validation.Reason, player.ID);
-
+                     
 
                     nextPhase = EnumGamePhases.YearOfPlentyCard;
                     break;
             }
 
-            Session.DevCardPlayedMutation(card);
+            var knightChampionshipUpdateResult = Session.DevCardPlayedMutation(card, player);
 
             var result = ResultPlayDevCard.Ok(player.ID, card.ID, card.Type, nextPhase);
-            result.AddDomainEvent(new PlayerStateChangedEvent(player.ID));
+
+            result.AddDomainEvent(new DevCardUsedEvent(player.ID, card.ID, card.Type, player.DevelopmentCardsByID.Count));
+
+            if (victoryCardPlayed)
+                result.AddDomainEvent(new VictoryCardUsedEvent(playerId, player.ExtraPoints, player.VictoryPointsCardsUsed));
+
+            if (knightCardPlayed)
+                result.AddDomainEvent(new KnightCardUsedEvent(playerId, player.KnightsUsed));
+
+            if (knightChampionshipUpdateResult.Changed)
+                result.AddDomainEvent(new KnightChampionChangedEvent(knightChampionshipUpdateResult.OldChampion?.ID, knightChampionshipUpdateResult.NewChampion?.ID,
+                    knightChampionshipUpdateResult.OldChampion?.ExtraPoints, knightChampionshipUpdateResult.NewChampion?.ExtraPoints, knightChampionshipUpdateResult.OldChampion?.Points,
+                    knightChampionshipUpdateResult.NewChampion?.Points));
 
             return ApplyPhase(result);
         }

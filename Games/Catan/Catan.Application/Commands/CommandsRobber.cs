@@ -12,8 +12,6 @@ namespace Catan.Application.Commands
         }
     }
 
-    public class DiscardingAcceptedCommand : ICommand { }
-
     public class StolenCardSelectedCommand : ICommand
     {
         public EnumResourceType Type { get; }

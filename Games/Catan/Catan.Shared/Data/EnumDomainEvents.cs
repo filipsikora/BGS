@@ -3,7 +3,22 @@
     public enum EnumDomainEvents
     {
         BankTradeDoneEvent,
-        DiceRolledEvent,
-        PhaseChangedEvent
+        RolledNumberChangedEvent,
+        PlayerResourcesReceivedEvent,
+        PhaseChangedEvent,
+        CardsDiscardedEvent,
+        PlayersToMoveChangedEvent,
+        CardStolenEvent,
+        DevCardPlayedEvent,
+        VillagePlacedEvent,
+        RoadPlacedEvent,
+        TownPlacedEvent,
+        GameWonEvent,
+        CardsStolenEvent,
+        RoadChampionChangedEvent,
+        KnightChampionChangedEvent,
+        DevCardBoughtEvent,
+        VictoryCardUsedEvent,
+        KnightCardUsedEvent
     }
 }

@@ -9,17 +9,12 @@ namespace Catan.Core.Runtime
 
         public bool GetPlayersLeftToDiscard(List<Player> playerList)
         {
-            var playersToDiscard = new Queue<Player>(playerList.Where(p => p.Resources.Total() > 7));
-            var playersLeftToDiscard = playersToDiscard.Count > 0;
-
-            return playersLeftToDiscard;
+            return playerList.Any(p => p.Resources.Total() > 7);
         }
 
-        public Queue<Player> GetCardsDiscardingPlayers(List<Player> playerList)
+        public List<int> GetCardsDiscardingPlayers(List<Player> playerList)
         {
-            var playersToDiscard = new Queue<Player>(playerList.Where(p => p.Resources.Total() > 7));
-
-            return playersToDiscard;
+            return playerList.Where(p => p.Resources.Total() > 7).Select(p => p.ID).ToList();
         }
 
         public bool CanPlayerDiscard(ResourceCostOrStock resourcesSelected, Player discardingPlayer)

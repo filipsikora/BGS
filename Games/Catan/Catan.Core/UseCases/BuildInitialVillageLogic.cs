@@ -2,6 +2,7 @@
 using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Core.Runtime;
+using Catan.Shared.Data;
 
 namespace Catan.Core.UseCases
 {
@@ -9,9 +10,9 @@ namespace Catan.Core.UseCases
     {
         public BuildInitialVillageLogic(GameSession session) : base(session) { }
 
-        public ResultBuildInitialVillage Handle(int vertexId)
+        public ResultBuildInitialVillage Handle(int vertexId, int playerId)
         {
-            var player = Session.GetCurrentPlayer();
+            var player = Session.GetPlayerById(playerId);
 
             var validation = RulesBuilding.CanBuildInitialVillage(player, vertexId, Session);
 
@@ -23,10 +24,10 @@ namespace Catan.Core.UseCases
             var secondVillage = player.Points == 1;
             var vertex = Session.GetVertexById(vertexId);
 
-            Session.VillageBuiltMutation(vertex, secondVillage);
+            Session.VillageBuiltMutation(vertex, secondVillage, player);
 
             var result = ResultBuildInitialVillage.Ok(player.ID, vertexId, null);
-            result.AddDomainEvent(new VillagePlacedEvent(vertexId, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
+            result.AddDomainEvent(new VillagePlacedEvent(vertexId, result.PlayerId, player.Points, player.BuildingsLeftCount(EnumBuildings.Village), player.Resources.ToDictionary()));
 
             return ApplyPhase(result);
         }

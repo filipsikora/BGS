@@ -10,9 +10,9 @@ namespace Catan.Core.UseCases
     {
         public OfferTradeLogic(GameSession session) : base(session) { }
 
-        public ResultPlayerTrade Handle(int buyerId, ResourceCostOrStock desired)
+        public ResultPlayerTrade Handle(int buyerId, ResourceCostOrStock desired, int sellerId)
         {
-            var seller = Session.GetCurrentPlayer();
+            var seller = Session.GetPlayerById(sellerId);
             var buyer = Session.GetPlayerById(buyerId);
             var offered = Session.GetOfferedResources();
 

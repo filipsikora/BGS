@@ -26,7 +26,7 @@ namespace Catan.Core.UseCases
             Session.BankTradeMutation(offered, desired, ratio, playerId);
 
             var result = ResultBankTrade.Ok(player.ID, offered, desired, ratio, EnumGamePhases.NormalRound);
-            result.AddDomainEvent(new BankTradeDoneEvent(player.ID, offered, desired, ratio));
+            result.AddDomainEvent(new BankTradeDoneEvent(player.ID, offered, desired, ratio, Session.GetBank().ToDictionary(), player.Resources.ToDictionary()));
 
             return ApplyPhase(result);
         }

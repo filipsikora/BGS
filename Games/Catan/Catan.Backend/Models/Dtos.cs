@@ -6,7 +6,7 @@ namespace Catan.Backend.Models
 {
     public class BankTradeOfferedResourceSelectedDto : IValidatableDto
     {
-        public  EnumResourceType? Type { get; set; }
+        public EnumResourceType? Type { get; set; }
 
         public void Validate() => DtoValidation.RequireValueNotNull(Type, nameof(Type));
     }
@@ -15,7 +15,7 @@ namespace Catan.Backend.Models
     {
         public EnumResourceType? Type { get; set; }
 
-        public void Validate() {} // this command is always valid (accepts nullable)
+        public void Validate() { } // this command is always valid (accepts nullable)
     }
 
     public class VertexClickedDto : IValidatableDto
@@ -72,33 +72,49 @@ namespace Catan.Backend.Models
         public void Validate() => DtoValidation.RequireValueNotNull(Type, nameof(Type));
     }
 
-    public class TradePartnerChosenDto : IValidatableDto
+    public class CardsSelectedDto : IValidatableDto
     {
-        public int? PlayerId { get; set; }
+        public Dictionary<EnumResourceType, int>? Resources { get; set; }
 
-        public void Validate() => DtoValidation.RequirePositiveInt(PlayerId, nameof(PlayerId));
-    }
+        public void Validate()
+        {
+            DtoValidation.RequireValueNotNull(Resources, nameof(Resources));
+            DtoValidation.RequirePositiveResourceCount(Resources, nameof(Resources));
+        }
 
-    public class VillageBuiltDto : IValidatableDto
-    {
-        public int? VertexId { get; set; }
-        public void Validate() => DtoValidation.RequirePositiveInt(VertexId, nameof(VertexId));
-    }
+        public class TradePartnerChosenDto : IValidatableDto
+        {
+            public int? PlayerId { get; set; }
+            public Dictionary<EnumResourceType, int>? Resources { get; set; }
 
-    public class RoadBuiltDto : IValidatableDto
-    {
-        public int? EdgeId { get; set; }
-        public void Validate() => DtoValidation.RequirePositiveInt(EdgeId, nameof(EdgeId));
-    }
+            public void Validate()
+            {
+                DtoValidation.RequirePositiveInt(PlayerId, nameof(PlayerId));
+                DtoValidation.RequirePositiveResourceCount(Resources, nameof(Resources));
+            }
 
-    public class TownBuildDto : IValidatableDto
-    {
-        public int? VertexId { get; set; }
-        public void Validate() => DtoValidation.RequirePositiveInt(VertexId, nameof(VertexId));
-    }
+        }
 
-    public class EmptyDto : IValidatableDto
-    {
-        public void Validate() { }
+        public class VillageBuiltDto : IValidatableDto
+        {
+            public int? VertexId { get; set; }
+            public void Validate() => DtoValidation.RequirePositiveInt(VertexId, nameof(VertexId));
+        }
+
+        public class RoadBuiltDto : IValidatableDto
+        {
+            public int? EdgeId { get; set; }
+            public void Validate() => DtoValidation.RequirePositiveInt(EdgeId, nameof(EdgeId));
+        }
+
+        public class TownBuildDto : IValidatableDto
+        {
+            public int? VertexId { get; set; }
+            public void Validate() => DtoValidation.RequirePositiveInt(VertexId, nameof(VertexId));
+        }
+
+        public class EmptyDto : IValidatableDto
+        {
+            public void Validate() { }
+        }
     }
-}

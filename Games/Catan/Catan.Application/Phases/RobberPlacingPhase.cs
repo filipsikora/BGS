@@ -1,5 +1,4 @@
 ﻿using Catan.Application.Controllers;
-using Catan.Application.Interfaces;
 using Catan.Application.UIMessages;
 using Catan.Application.Commands;
 using Catan.Shared.Data;
@@ -12,27 +11,22 @@ namespace Catan.Application.Phases
 
         public RobberPlacingPhase(Facade facade) : base(facade) { }
 
-        public override IUIMessages Enter()
-        {
-            return new LogMessageMessage(EnumLogTypes.Info, "Choose a hex to block");
-        }
-
-        public override GameResult Handle(object command)
+        public override GameResult Handle(object command, int playerId)
         {
             switch (command)
             {
                 case HexClickedCommand c:
-                    return HandleHexClicked(c);
+                    return HandleHexClicked(c, playerId);
 
                 case VictimChosenCommand c:
-                    return VictimChosen(c);
+                    return VictimChosen(c, playerId);
 
                 default:
                     return GameResult.Fail();
             }
         }
 
-        private GameResult HandleHexClicked(HexClickedCommand signal)
+        private GameResult HandleHexClicked(HexClickedCommand signal, int playerId)
         {
             if (!_clickableHexes)
                 return GameResult.Fail();
@@ -64,13 +58,13 @@ namespace Catan.Application.Phases
             }
         }
 
-        private GameResult VictimChosen(VictimChosenCommand signal)
+        private GameResult VictimChosen(VictimChosenCommand signal, int playerId)
         {
             var result = Facade.UseSelectVictim(signal.VictimId);
             
             if (!result.Success)
             {
-                return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(Facade.GetCurrentPlayerId(), result.Reason));
+                return GameResult.Fail().AddUIMessage(new ActionRejectedMessage(playerId, result.Reason));
             }
 
             return GameResult.Ok(result.NextPhase);

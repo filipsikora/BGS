@@ -29,7 +29,6 @@ namespace Catan.Core.UseCases
             Session.PlayerTradeDoneMutation(seller, buyer, context.Offered, context.Desired);
 
             var result = ResultPlayerTrade.Ok(context.SellerId, context.BuyerId, context.Offered, context.Desired, EnumGamePhases.NormalRound);
-            result.AddDomainEvent(new PlayerStateChangedEvent(result.SellerId));
 
             return ApplyPhase(result);
         }

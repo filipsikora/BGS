@@ -21,7 +21,6 @@ namespace Catan.Core.UseCases
             }
 
             Session.CardsDiscardedMutation(player, selectedCards);
-            Session.CardsDiscardedContextMutation();
 
             EnumGamePhases? nextPhase = Session.GetCardDiscardingContextExistance() ? null : EnumGamePhases.RobberPlacing;
 

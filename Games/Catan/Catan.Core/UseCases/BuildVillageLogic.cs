@@ -2,6 +2,7 @@
 using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Core.Runtime;
+using Catan.Shared.Data;
 
 namespace Catan.Core.UseCases
 {
@@ -9,9 +10,9 @@ namespace Catan.Core.UseCases
     {
         public BuildVillageLogic(GameSession session) : base(session) { }
 
-        public ResultBuildVillage Handle(int vertexId)
+        public ResultBuildVillage Handle(int vertexId, int playerId)
         {
-            var player = Session.GetCurrentPlayer();
+            var player = Session.GetPlayerById(playerId);
 
             var validation = RulesBuilding.CanBuildVillage(player, vertexId, Session);
 
@@ -22,10 +23,14 @@ namespace Catan.Core.UseCases
 
             var vertex = Session.GetVertexById(vertexId);
 
-            Session.VillagePaidAndBuiltMutation(vertex);
+            var roadChampionResult = Session.VillagePaidAndBuiltMutation(vertex, playerId);
 
             var result = ResultBuildVillage.Ok(player.ID, vertexId, null);
-            result.AddDomainEvent(new VillagePlacedEvent(vertexId, result.PlayerId)).AddDomainEvent(new PlayerStateChangedEvent(result.PlayerId));
+
+            if (roadChampionResult.Changed)
+                result.AddDomainEvent(new RoadChampionChangedEvent(roadChampionResult.OldChampionId, roadChampionResult.NewChampionId));
+
+            result.AddDomainEvent(new VillagePlacedEvent(vertexId, playerId, player.Points, player.BuildingsLeftCount(EnumBuildings.Village), player.Resources.ToDictionary()));
 
             return ApplyPhase(result);
         }
