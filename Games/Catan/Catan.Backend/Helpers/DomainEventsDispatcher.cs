@@ -25,12 +25,14 @@ namespace Catan.Backend.Helpers
                 DevCardUsedEvent e => BroadcastToAll(e, game, type),
                 VillagePlacedEvent e => DispatchVillagePlacedEvent(e, game, type),
                 RoadPlacedEvent e => DispatchRoadPlacedEvent(e, game, type),
+                TownPlacedEvent e => DispatchTownPlacedEvent(e, game, type),
                 GameWonEvent e => BroadcastToAll(e, game, type),
                 CardsStolenEvent e => DispatchCardsStolenEvent(e, game, type),
                 RoadChampionChangedEvent e => BroadcastToAll(e, game, type),
                 DevCardBoughtEvent e => DispatchDevCardBoughtEvent(e, game, type),
                 VictoryCardUsedEvent e => BroadcastToAll(e, game, type),
                 KnightCardUsedEvent e => BroadcastToAll(e, game, type),
+                TradeDoneEvent e => DispatchTradeDoneEvent(e, game, type),
                 _ => throw new NotSupportedException($"Unknown domain event: {type}")
             };
         }            
@@ -108,12 +110,13 @@ namespace Catan.Backend.Helpers
             {
                 if (entry.Value == domainEvent.OwnerId)
                     updatesList.Add(new GameUpdateDto(type, entry.Key, JToken.FromObject(new
-                        VillagePlacedEventPrivateDto(domainEvent.VertexId, domainEvent.OwnerId, domainEvent.Points, domainEvent.VillagesLeft, domainEvent.Resources))));
+                        VillagePlacedEventPrivateDto(domainEvent.VertexId, domainEvent.OwnerId, domainEvent.Points, domainEvent.VillagesLeft, domainEvent.Resources, domainEvent.Bank.ToDictionary()))));
 
                 else
                 {
                     updatesList.Add(new GameUpdateDto(type, entry.Key, JToken.FromObject(new
-                        VillagePlacedEventPublicDto(domainEvent.VertexId, domainEvent.OwnerId, domainEvent.Points, domainEvent.VillagesLeft, domainEvent.Resources.Values.Sum()))));
+                        VillagePlacedEventPublicDto(domainEvent.VertexId, domainEvent.OwnerId, domainEvent.Points, domainEvent.VillagesLeft, domainEvent.Resources.Values.Sum(), 
+                        domainEvent.Bank.ToDictionary()))));
                 }
             }
 
@@ -128,12 +131,34 @@ namespace Catan.Backend.Helpers
             {
                 if (entry.Value == domainEvent.OwnerId)
                     updatesList.Add(new GameUpdateDto(type, entry.Key, JToken.FromObject(new
-                        RoadPlacedEventPrivateDto(domainEvent.EdgeId, domainEvent.OwnerId, domainEvent.RoadsLeft, domainEvent.Resources))));
+                        RoadPlacedEventPrivateDto(domainEvent.EdgeId, domainEvent.OwnerId, domainEvent.RoadsLeft, domainEvent.Resources, domainEvent.Bank.ToDictionary()))));
 
                 else
                 {
                     updatesList.Add(new GameUpdateDto(type, entry.Key, JToken.FromObject(new
-                        RoadPlacedEventPublicDto(domainEvent.EdgeId, domainEvent.OwnerId, domainEvent.RoadsLeft, domainEvent.Resources.Values.Sum()))));
+                        RoadPlacedEventPublicDto(domainEvent.EdgeId, domainEvent.OwnerId, domainEvent.RoadsLeft, domainEvent.Resources.Values.Sum(), domainEvent.Bank.ToDictionary()))));
+                }
+            }
+
+            return updatesList;
+        }
+
+        private List<GameUpdateDto> DispatchTownPlacedEvent(TownPlacedEvent domainEvent, CatanGameInstance game, string type)
+        {
+            var updatesList = new List<GameUpdateDto>();
+
+            foreach (var entry in game.PlayerTokens)
+            {
+                if (entry.Value == domainEvent.OwnerId)
+                    updatesList.Add(new GameUpdateDto(type, entry.Key, JToken.FromObject(new
+                        TownPlacedEventPrivateDto(domainEvent.VertexId, domainEvent.OwnerId, domainEvent.Points, domainEvent.TownsLeft, domainEvent.VillagesLeft, domainEvent.Resources, 
+                        domainEvent.Bank.ToDictionary()))));
+
+                else
+                {
+                    updatesList.Add(new GameUpdateDto(type, entry.Key, JToken.FromObject(new
+                        TownPlacedEventPublicDto(domainEvent.VertexId, domainEvent.OwnerId, domainEvent.Points, domainEvent.TownsLeft, domainEvent.VillagesLeft, domainEvent.Resources.Values.Sum(), 
+                        domainEvent.Bank.ToDictionary()))));
                 }
             }
 
@@ -185,6 +210,35 @@ namespace Catan.Backend.Helpers
                 {
                     updatesList.Add(new GameUpdateDto(type, entry.Key, JToken.FromObject(new
                         DevCardBoughtEventPublicDto(domainEvent.PlayerId, domainEvent.DevCardNumber, domainEvent.Resources.Values.Sum()))));
+                }
+            }
+
+            return updatesList;
+        }
+
+        private List<GameUpdateDto> DispatchTradeDoneEvent(TradeDoneEvent domainEvent, CatanGameInstance game, string type)
+        {
+            var updatesList = new List<GameUpdateDto>();
+
+            foreach (var entry in game.PlayerTokens)
+            {
+                if (entry.Value == domainEvent.SellerId)
+                {
+                    updatesList.Add(new GameUpdateDto(type, entry.Key, JToken.FromObject(new
+                        TradeDoneEventSellerDto(domainEvent.SellerId, domainEvent.BuyerId, domainEvent.SellerResources, domainEvent.BuyerResources.Values.Sum(), domainEvent.Offered, domainEvent.Desired))));
+                }
+
+                else if (entry.Value == domainEvent.BuyerId)
+                {
+                    updatesList.Add(new GameUpdateDto(type, entry.Key, JToken.FromObject(new
+                        TradeDoneEventBuyerDto(domainEvent.SellerId, domainEvent.BuyerId, domainEvent.SellerResources.Values.Sum(), domainEvent.BuyerResources, domainEvent.Offered, domainEvent.Desired))));
+                }
+
+                else
+                {
+                    updatesList.Add(new GameUpdateDto(type, entry.Key, JToken.FromObject(new
+                        TradeDoneEventPublicDto(domainEvent.SellerId, domainEvent.BuyerId, domainEvent.SellerResources.Values.Sum(), domainEvent.BuyerResources.Values.Sum(), domainEvent.Offered, 
+                        domainEvent.Desired))));
                 }
             }
 

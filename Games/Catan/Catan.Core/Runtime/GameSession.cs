@@ -102,7 +102,7 @@ namespace Catan.Core.Runtime
         public ResultCondition UsePrepareTrade(ResourceCostOrStock offered, int playerId) => _prepareTrade.Handle(offered, playerId);
         public ResultPlayerTrade UseOfferTrade(int buyerId, ResourceCostOrStock desired, int sellerId) => _offerTrade.Handle(buyerId, desired, sellerId);
         public ResultPlayerTrade UseReactToTrade() => _reactToTrade.Handle();
-        public ResultYearOfPlenty UseYearOfPlenty(ResourceCostOrStock resources) => _useYearOfPlenty.Handle(resources);
+        public ResultYearOfPlenty UseYearOfPlenty(ResourceCostOrStock resources, int playerId) => _useYearOfPlenty.Handle(resources, playerId);
 
 
         // GETTERS //
@@ -265,7 +265,7 @@ namespace Catan.Core.Runtime
         internal void BankTradeMutation(EnumResourceType offered, EnumResourceType desired, int ratio, int playerId) => _game.BankTradeMutation(offered, desired, ratio, playerId);
         internal void BlockHexMutation(HexTile hex) => _game.BlockHexMutation(hex);
         internal Dictionary<int, int> UseMonopolyMutation(EnumResourceType resource, Player player) => _game.UseMonopolyMutation(resource, player);
-        internal void UseYearOfPlentyMutation(ResourceCostOrStock resource) => _game.UseYearOfPlentyMutation(resource);
+        internal void UseYearOfPlentyMutation(ResourceCostOrStock resource, int playerId) => _game.UseYearOfPlentyMutation(resource, playerId);
         internal RoadChampionUpdateResult RoadBuiltMutation(Edge edge, Player player) => _game.RoadBuiltMutation(edge, player);
         internal void VillageBuiltMutation(Vertex vertex, bool secondVillage, Player player) => _game.VillageBuiltMutation(vertex, secondVillage, player);
         internal void TownPaidAndBuiltMutation(Vertex vertex, int playerId) => _game.TownPaidAndBuiltMutation(vertex, playerId);

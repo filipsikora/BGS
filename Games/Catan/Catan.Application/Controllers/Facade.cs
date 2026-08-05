@@ -102,7 +102,7 @@ namespace Catan.Application.Controllers
         public ResultCondition UsePrepareTrade(ResourceCostOrStock offered, int playerId) => _session.UsePrepareTrade(offered, playerId);
         public ResultPlayerTrade UseOfferTrade(int buyerId, ResourceCostOrStock desired, int sellerId) => _session.UseOfferTrade(buyerId, desired, sellerId);
         public ResultPlayerTrade UseReactToTrade() => _session.UseReactToTrade();
-        public ResultYearOfPlenty UseYearOfPlenty(ResourceCostOrStock resources) => _session.UseYearOfPlenty(resources);
+        public ResultYearOfPlenty UseYearOfPlenty(ResourceCostOrStock resources, int playerId) => _session.UseYearOfPlenty(resources, playerId);
 
         // queries //
 

@@ -4,8 +4,6 @@ using Catan.Shared.Data;
 
 namespace Catan.Application.Commands
 {
-    public class OfferTradeCommand : ICommand { }
-
     public class TradeOfferCanceledCommand : ICommand { }
 
     public class TradePartnerChosenCommand(int buyerId, Dictionary<EnumResourceType, int> resources) : ICommand
@@ -14,11 +12,8 @@ namespace Catan.Application.Commands
         public ResourceCostOrStock Resources = ResourceCostOrStock.FromDictionary(resources);
     }
 
-    public class TradeRequestAcceptedCommand : ICommand { }
-
     public class RefuseTradeRequestCommand : ICommand { }
 
-    public class RequestTradeDataCommand : ICommand { }
 
     public class AcceptTradeRequestCommand : ICommand { }
 }

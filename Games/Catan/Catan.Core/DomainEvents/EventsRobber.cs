@@ -3,15 +3,6 @@ using Catan.Shared.Data;
 
 namespace Catan.Core.DomainEvents
 {
-    public sealed class RobberPlacedEvent : IDomainEvent
-    {
-        public int HexId { get; }
-        public RobberPlacedEvent(int hexId)
-        {
-            HexId = hexId;
-        }
-    }
-
     public sealed class CardsDiscardedEvent(int playerId, Dictionary<EnumResourceType, int> resources, Dictionary<EnumResourceType, int> playerResources, Dictionary<EnumResourceType, int> bank) : IDomainEvent
     {
         public EnumDomainEvents Type => EnumDomainEvents.CardsDiscardedEvent;

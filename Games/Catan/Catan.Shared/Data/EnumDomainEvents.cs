@@ -19,6 +19,7 @@
         KnightChampionChangedEvent,
         DevCardBoughtEvent,
         VictoryCardUsedEvent,
-        KnightCardUsedEvent
+        KnightCardUsedEvent,
+        TradeDoneEvent
     }
 }

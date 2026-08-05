@@ -15,4 +15,17 @@ namespace Catan.Core.DomainEvents
         public Dictionary<EnumResourceType, int> Bank = bank;
         public Dictionary<EnumResourceType, int> PlayerResources = playerResources;
     }
+
+    public sealed class TradeDoneEvent(int sellerId, int buyerId, Dictionary<EnumResourceType, int> sellerResources, Dictionary<EnumResourceType, int> buyerResources, 
+        Dictionary<EnumResourceType, int> offered, Dictionary<EnumResourceType, int> desired) : IDomainEvent
+    {
+        public EnumDomainEvents Type => EnumDomainEvents.TradeDoneEvent;
+
+        public int SellerId = sellerId;
+        public int BuyerId = buyerId;
+        public Dictionary<EnumResourceType, int> SellerResources = sellerResources;
+        public Dictionary<EnumResourceType, int> BuyerResources = buyerResources;
+        public Dictionary<EnumResourceType, int> Offered = offered;
+        public Dictionary<EnumResourceType, int> Desired = desired;
+    }
 }

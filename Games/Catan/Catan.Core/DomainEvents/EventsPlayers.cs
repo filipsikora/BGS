@@ -3,15 +3,6 @@ using Catan.Shared.Data;
 
 namespace Catan.Core.DomainEvents
 {
-    public sealed class PlayerStateChangedEvent : IDomainEvent
-    {
-        public int PlayerId;
-        public PlayerStateChangedEvent(int playerId)
-        {
-            PlayerId = playerId;
-        }
-    }
-
     public sealed class PlayerResourcesReceivedEvent(int playerId, Dictionary<EnumResourceType, int> resourcesChange, Dictionary<EnumResourceType, int> playerResources,
         Dictionary<EnumResourceType, int> bank) : IDomainEvent
     {

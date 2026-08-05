@@ -651,9 +651,9 @@ namespace Catan.Core.Engine
             return victimsIdsAndAmounts;
         }
 
-        public void UseYearOfPlentyMutation(ResourceCostOrStock requested)
+        public void UseYearOfPlentyMutation(ResourceCostOrStock requested, int playerId)
         {
-            var player = GetCurrentPlayer();
+            var player = GetPlayerById(playerId);
 
             foreach (var (type, amount) in requested.ResourceDictionary)
             {

@@ -26,7 +26,7 @@ namespace Catan.Core.UseCases
             Session.RoadBuiltMutation(edge, player);
 
             var result = ResultBuildInitialRoad.Ok(player.ID, edgeId, null);
-            result.AddDomainEvent(new RoadPlacedEvent(edgeId, result.PlayerId, player.BuildingsLeftCount(EnumBuildings.Road), player.Resources.ToDictionary()));
+            result.AddDomainEvent(new RoadPlacedEvent(edgeId, result.PlayerId, player.BuildingsLeftCount(EnumBuildings.Road), player.Resources.ToDictionary(), Session.GetBank().ToDictionary()));
 
             return ApplyPhase(result);
         }

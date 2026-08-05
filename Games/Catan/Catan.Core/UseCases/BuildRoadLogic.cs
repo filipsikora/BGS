@@ -23,18 +23,16 @@ namespace Catan.Core.UseCases
 
             var edge = Session.GetEdgeById(edgeId);
 
-            var roadChampionUpdateResult = Session.RoadPaidAndBuiltMutation(edge, playerId);
+            var roadChampionResult = Session.RoadPaidAndBuiltMutation(edge, playerId);
 
             var result = ResultBuildRoad.Ok(player.ID, edgeId, null);
 
-            if (roadChampionUpdateResult.Changed)
-            {
+            if (roadChampionResult.Changed)
+                result.AddDomainEvent(new RoadChampionChangedEvent(roadChampionResult.OldChampion?.ID, roadChampionResult.NewChampion?.ID, roadChampionResult.OldChampion?.ExtraPoints,
+                    roadChampionResult.NewChampion?.ExtraPoints, roadChampionResult.OldChampion?.Points, roadChampionResult.NewChampion?.Points));
 
-                result.AddDomainEvent(new RoadChampionChangedEvent(roadChampionUpdateResult.OldChampion?.ID, roadChampionUpdateResult.NewChampion?.ID, roadChampionUpdateResult.OldChampion?.ExtraPoints, 
-                    roadChampionUpdateResult.NewChampion?.ExtraPoints, roadChampionUpdateResult.OldChampion?.Points, roadChampionUpdateResult.NewChampion?.Points);
-            }
 
-            result.AddDomainEvent(new RoadPlacedEvent(edgeId, playerId, player.BuildingsLeftCount(EnumBuildings.Road), player.Resources.ToDictionary()));
+            result.AddDomainEvent(new RoadPlacedEvent(edgeId, playerId, player.BuildingsLeftCount(EnumBuildings.Road), player.Resources.ToDictionary(), Session.GetBank().ToDictionary()));
 
             return ApplyPhase(result);
         }

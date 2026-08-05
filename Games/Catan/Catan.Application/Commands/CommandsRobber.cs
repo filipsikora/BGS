@@ -20,6 +20,4 @@ namespace Catan.Application.Commands
             Type = type;
         }
     }
-
-    public sealed class TryGetDiscardingVictimCommand : ICommand { }
 }

@@ -28,9 +28,10 @@ namespace Catan.Core.UseCases
             var result = ResultBuildVillage.Ok(player.ID, vertexId, null);
 
             if (roadChampionResult.Changed)
-                result.AddDomainEvent(new RoadChampionChangedEvent(roadChampionResult.OldChampionId, roadChampionResult.NewChampionId));
+                result.AddDomainEvent(new RoadChampionChangedEvent(roadChampionResult.OldChampion?.ID, roadChampionResult.NewChampion?.ID, roadChampionResult.OldChampion?.ExtraPoints, 
+                    roadChampionResult.NewChampion?.ExtraPoints, roadChampionResult.OldChampion?.Points, roadChampionResult.NewChampion?.Points));
 
-            result.AddDomainEvent(new VillagePlacedEvent(vertexId, playerId, player.Points, player.BuildingsLeftCount(EnumBuildings.Village), player.Resources.ToDictionary()));
+            result.AddDomainEvent(new VillagePlacedEvent(vertexId, playerId, player.Points, player.BuildingsLeftCount(EnumBuildings.Village), player.Resources.ToDictionary(), Session.GetBank().ToDictionary()));
 
             return ApplyPhase(result);
         }

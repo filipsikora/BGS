@@ -8,8 +8,6 @@ namespace Catan.Application.Commands
 
     public class DevelopmentCardsCanceledCommand : ICommand { }
 
-    public class CardSelectionAcceptedCommand : ICommand { }
-
     public class DevelopmentCardClickedPlayedCommand : ICommand
     {
         public int DevelopmentCardId;

@@ -11,7 +11,7 @@ namespace Catan.Core.UseCases
     {
         public UseYearOfPlentyLogic(GameSession session) : base(session) { }
 
-        public ResultYearOfPlenty Handle(ResourceCostOrStock requested)
+        public ResultYearOfPlenty Handle(ResourceCostOrStock requested, int playerId)
         {
             var validation = RulesDevCards.YearOfPlentyPlayedRight(Session.GetBank(), requested);
 
@@ -20,10 +20,12 @@ namespace Catan.Core.UseCases
                 return ResultYearOfPlenty.Fail(validation.Reason);
             }
 
-            Session.UseYearOfPlentyMutation(requested);
+            Session.UseYearOfPlentyMutation(requested, playerId);
 
+            var player = Session.GetPlayerById(playerId);
             var result = ResultYearOfPlenty.Ok(requested, EnumGamePhases.NormalRound);
-            result.AddDomainEvent(new PlayerStateChangedEvent(Session.GetCurrentPlayerId()));
+
+            result.AddDomainEvent(new PlayerResourcesReceivedEvent(playerId, requested.ToDictionary(), player.Resources.ToDictionary(), Session.GetBank().ToDictionary()));
 
             return ApplyPhase(result);
         }
