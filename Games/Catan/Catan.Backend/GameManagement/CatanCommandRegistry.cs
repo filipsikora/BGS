@@ -122,13 +122,6 @@ namespace Catan.Backend.GameManagement
                 return new DevelopmentCardsCanceledCommand();
             };
 
-            _commandDictionary[EnumCommandType.CardSelectionAcceptedCommand] = json =>
-            {
-                Deserialize<EmptyDto>(json);
-
-                return new CardSelectionAcceptedCommand();
-            };
-
             _commandDictionary[EnumCommandType.DevelopmentCardClickedPlayedCommand] = json =>
             {
                 var dto = Deserialize<DevelopmentCardClickedPlayedDto>(json);
@@ -143,15 +136,6 @@ namespace Catan.Backend.GameManagement
                 Deserialize<EmptyDto>(json);
 
                 return new StartGameCommand();
-            };
-
-            // ResourceCardsCommands
-
-            _commandDictionary[EnumCommandType.ResourceCardSelectedCommand] = json =>
-            {
-                var dto = Deserialize<ResourceCardSelectedDto>(json);
-
-                return new ResourceCardSelectedCommand(dto.IsSelected.Value, dto.Type.Value);
             };
 
             // RobberCommands
@@ -177,13 +161,6 @@ namespace Catan.Backend.GameManagement
                 return new StolenCardSelectedCommand(dto.Type.Value);
             };
 
-            _commandDictionary[EnumCommandType.TryGetDiscardingVictimCommand] = json =>
-            {
-                Deserialize<EmptyDto>(json);
-
-                return new TryGetDiscardingVictimCommand();
-            };
-
             // RollAndTurnCommands
 
             _commandDictionary[EnumCommandType.RollDiceCommand] = json =>
@@ -202,13 +179,6 @@ namespace Catan.Backend.GameManagement
 
             //TradeCommands
 
-            _commandDictionary[EnumCommandType.OfferTradeCommand] = json =>
-            {
-                Deserialize<EmptyDto>(json);
-
-                return new OfferTradeCommand();
-            };
-
             _commandDictionary[EnumCommandType.TradeOfferCanceledCommand] = json =>
             {
                 Deserialize<EmptyDto>(json);
@@ -216,25 +186,11 @@ namespace Catan.Backend.GameManagement
                 return new TradeOfferCanceledCommand();
             };
 
-            _commandDictionary[EnumCommandType.TradeRequestAcceptedCommand] = json =>
-            {
-                Deserialize<EmptyDto>(json);
-
-                return new TradeRequestAcceptedCommand();
-            };
-
             _commandDictionary[EnumCommandType.RefuseTradeRequestCommand] = json =>
             {
                 Deserialize<EmptyDto>(json);
 
                 return new RefuseTradeRequestCommand();
-            };
-
-            _commandDictionary[EnumCommandType.RequestTradeDataCommand] = json =>
-            {
-                Deserialize<EmptyDto>(json);
-
-                return new RequestTradeDataCommand();
             };
 
             _commandDictionary[EnumCommandType.AcceptTradeRequestCommand] = json =>

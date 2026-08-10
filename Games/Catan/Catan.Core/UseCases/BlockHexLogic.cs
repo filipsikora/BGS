@@ -27,7 +27,7 @@ namespace Catan.Core.UseCases
             var canSteal = potentialVictimsIds.Count > 0;
 
             var result = ResultBlockHex.Ok(hex.Id, canSteal, potentialVictimsIds, null);
-            result.AddDomainEvent(new RobberPlacedEvent(hexId));
+            result.AddDomainEvent(new RobberPlacedEvent(hexId, canSteal));
 
             return ApplyPhase(result);
         }

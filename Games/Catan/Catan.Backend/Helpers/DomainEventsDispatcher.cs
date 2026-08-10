@@ -15,24 +15,26 @@ namespace Catan.Backend.Helpers
 
             return domainEvent switch
             {
-                BankTradeDoneEvent e => BroadcastToAll(e, game, type),
-                RolledNumberChangedEvent e => BroadcastToAll(e, game, type),
+                BankTradeDoneEvent e => BroadcastToAll(new BankTradeDoneEventDto(e.PlayerId, e.Offered, e.Desired, e.Ratio, e.Bank, e.PlayerResources), game, type),
+                RolledNumberChangedEvent e => BroadcastToAll(new RolledNumberChangedEventDto(e.NewRolledNumber), game, type),
                 PlayerResourcesReceivedEvent e => DispatchPlayerResourcesReceivedEvent(e, game, type),
-                PhaseChangedEvent e => BroadcastToAll(e, game, type),
+                PhaseChangedEvent e => BroadcastToAll(new PhaseChangedEventDto(e.Phase, e.PlayersToMove), game, type),
                 CardsDiscardedEvent e => DispatchCardsDiscardedEvent(e, game, type),
-                PlayersToMoveChangedEvent e => BroadcastToAll(e, game, type),
+                PlayersToMoveChangedEvent e => BroadcastToAll(new PlayersToMoveChangedEventDto(e.PlayersToMove), game, type),
                 CardStolenEvent e => DispatchCardStolenEvent(e, game, type),
-                DevCardUsedEvent e => BroadcastToAll(e, game, type),
+                DevCardUsedEvent e => BroadcastToAll(new DevCardUsedEventDto(e.PlayerId, e.CardId, e.CardType, e.DevCardNumber), game, type),
                 VillagePlacedEvent e => DispatchVillagePlacedEvent(e, game, type),
                 RoadPlacedEvent e => DispatchRoadPlacedEvent(e, game, type),
                 TownPlacedEvent e => DispatchTownPlacedEvent(e, game, type),
-                GameWonEvent e => BroadcastToAll(e, game, type),
+                GameWonEvent e => BroadcastToAll(new GameWonEventDto(e.PlayerId, e.PlayerScoresToIds), game, type),
                 CardsStolenEvent e => DispatchCardsStolenEvent(e, game, type),
-                RoadChampionChangedEvent e => BroadcastToAll(e, game, type),
+                RoadChampionChangedEvent e => BroadcastToAll(new RoadChampionChangedEventDto(e.OldChampionId, e.NewChampionId, e.OldChampionExtraPoints, e.NewChampionExtraPoints,
+                e.OldChampionPoints, e.NewChampionPoints), game, type),
                 DevCardBoughtEvent e => DispatchDevCardBoughtEvent(e, game, type),
-                VictoryCardUsedEvent e => BroadcastToAll(e, game, type),
-                KnightCardUsedEvent e => BroadcastToAll(e, game, type),
+                VictoryCardUsedEvent e => BroadcastToAll(new VictoryCardUsedEventDto(e.PlayerId, e.ExtraPoints, e.VictoryCardsUsed), game, type),
+                KnightCardUsedEvent e => BroadcastToAll(new KnightCardUsedEventDto(e.PlayerId, e.KnightCardsUsed), game, type),
                 TradeDoneEvent e => DispatchTradeDoneEvent(e, game, type),
+                RobberPlacedEvent e => BroadcastToAll(new RobberPlacedEventDto(e.HexId, e.CanSteal), game, type),
                 _ => throw new NotSupportedException($"Unknown domain event: {type}")
             };
         }            
@@ -51,7 +53,7 @@ namespace Catan.Backend.Helpers
                 else
                 {
                     updatesList.Add(new GameUpdateDto(type, entry.Key, JToken.FromObject(new
-                        CardsDiscardedPuvlicEventDto(domainEvent.PlayerId, domainEvent.Resources, domainEvent.PlayerResources.Values.Sum(), domainEvent.Bank))));
+                        CardsDiscardedPublicEventDto(domainEvent.PlayerId, domainEvent.Resources, domainEvent.PlayerResources.Values.Sum(), domainEvent.Bank))));
                 }
             }
 
@@ -245,9 +247,9 @@ namespace Catan.Backend.Helpers
             return updatesList;
         }
 
-        private List<GameUpdateDto> BroadcastToAll(IDomainEvent domainEvent, CatanGameInstance game, string type)
+        private List<GameUpdateDto> BroadcastToAll<T>(T dto, CatanGameInstance game, string type)
         {
-            var payload = JToken.FromObject(domainEvent);
+            var payload = JToken.FromObject(dto);
             var updatesList = new List<GameUpdateDto>();
 
             foreach (var entry in game.PlayerTokens)

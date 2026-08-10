@@ -223,7 +223,6 @@ namespace Catan.Core.Runtime
         public EnumGamePhases GetCurrentCorePhase() => _game.CurrentPhase;
         public bool CheckIfIsCorePhase(EnumGamePhases phase) => _game.CurrentPhase == phase;
         public EnumGamePhases GetNextPhaseFromAfterRoll() => GetAfterRoll() ? EnumGamePhases.NormalRound : EnumGamePhases.BeforeRoll;
-        public EnumGamePhases? GetNextPhaseAfterDiscarding() => _game.GetCardDiscardingProgress() == 0 ? EnumGamePhases.RobberPlacing : null;
         public bool CheckIfInitialRoundsRemaining() => _game.FirstRoundsIndices.Count > 0;
 
         // trade //
@@ -267,7 +266,7 @@ namespace Catan.Core.Runtime
         internal Dictionary<int, int> UseMonopolyMutation(EnumResourceType resource, Player player) => _game.UseMonopolyMutation(resource, player);
         internal void UseYearOfPlentyMutation(ResourceCostOrStock resource, int playerId) => _game.UseYearOfPlentyMutation(resource, playerId);
         internal RoadChampionUpdateResult RoadBuiltMutation(Edge edge, Player player) => _game.RoadBuiltMutation(edge, player);
-        internal void VillageBuiltMutation(Vertex vertex, bool secondVillage, Player player) => _game.VillageBuiltMutation(vertex, secondVillage, player);
+        internal void VillageBuiltMutation(Vertex vertex, bool secondVillage, Player player) => _game.VillageBuiltMutation(vertex, player, secondVillage);
         internal void TownPaidAndBuiltMutation(Vertex vertex, int playerId) => _game.TownPaidAndBuiltMutation(vertex, playerId);
         internal RoadChampionUpdateResult RoadPaidAndBuiltMutation(Edge edge, int playerId) => _game.RoadPaidAndBuiltMutation(edge, playerId);
         internal RoadChampionUpdateResult VillagePaidAndBuiltMutation(Vertex vertex, int playerId) => _game.VillagePaidAndBuiltMutation(vertex, playerId);

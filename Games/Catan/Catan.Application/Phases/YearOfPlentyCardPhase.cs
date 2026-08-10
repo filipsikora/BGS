@@ -23,7 +23,7 @@ namespace Catan.Application.Phases
 
         private GameResult HandleResourcesSelected(CardsSelectedCommand signal, int playerId)
         {
-            var validation = Facade.UseYearOfPlenty(signal.Resources);
+            var validation = Facade.UseYearOfPlenty(signal.Resources, playerId);
 
             if (!validation.Success)
             {

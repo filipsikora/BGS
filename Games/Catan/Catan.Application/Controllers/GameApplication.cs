@@ -35,18 +35,10 @@ namespace Catan.Application
             {
                 var nextPhase = result.NextPhase.Value;
                 Current = CreateApplicationPhase(nextPhase);
-                IUIMessages uiMessage = Current.Enter();
-
-                if (uiMessage != null)
-                {
-                    result.AddUIMessage(uiMessage);
-                }
+                Current.Enter();
 
                 result.AddDomainEvent(new PhaseChangedEvent(result.NextPhase.Value, Facade.GetPlayersToMove()));
             }
-
-            var uiMessages = Helpers.Mappers.MapDomainEventToUiMessageList(result.DomainEvents);
-            result.AddUIMessagesList(uiMessages);
 
             return result;
         }

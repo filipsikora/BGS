@@ -348,11 +348,6 @@ namespace Catan.Core.Engine
 
         // getters //
 
-        public int GetCardDiscardingProgress()
-        {
-            return CardDiscardingProgress.PlayersToDiscard.Count();
-        }
-
         public List<int> GetCurrentPlayerDevelopmentCardIds()
         {
             return CurrentPlayer.DevelopmentCardsByID;
@@ -448,7 +443,7 @@ namespace Catan.Core.Engine
                     return new KnightChampionUpdateResult(false, null, null);
 
                 default:
-                    return new KnightChampionUpdateResult(false, null, null)
+                    return new KnightChampionUpdateResult(false, null, null);
             }
         }
 
@@ -522,7 +517,7 @@ namespace Catan.Core.Engine
             CardStealingProgress = null;
         }
 
-        public RoadChampionUpdateResult VillageBuiltMutation(Vertex vertex, bool secondVillage = false, Player player)
+        public RoadChampionUpdateResult VillageBuiltMutation(Vertex vertex, Player player, bool secondVillage = false)
         {
             var village = new BuildingVillage(player, vertex.X, vertex.Y, vertex);
 
@@ -579,7 +574,7 @@ namespace Catan.Core.Engine
         {
             var player = GetPlayerById(playerId);
             PayCostMutation(player, BuildingVillage.Cost);
-            return VillageBuiltMutation(vertex, false, player);
+            return VillageBuiltMutation(vertex, player, false);
         }
 
         public RoadChampionUpdateResult RoadPaidAndBuiltMutation(Edge edge, int playerId)

@@ -24,4 +24,12 @@ namespace Catan.Core.DomainEvents
         public Dictionary<EnumResourceType, int> ThiefResources = thiefResources;
         public Dictionary<EnumResourceType, int> VictimResources = victimResources;
     }
+
+    public sealed class RobberPlacedEvent(int hexId, bool canSteal) : IDomainEvent
+    {
+        public EnumDomainEvents Type => EnumDomainEvents.RobberPlacedEvent;
+
+        public int HexId = hexId;
+        public bool CanSteal = canSteal;
+    }
 }

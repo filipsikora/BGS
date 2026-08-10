@@ -20,6 +20,7 @@
         DevCardBoughtEvent,
         VictoryCardUsedEvent,
         KnightCardUsedEvent,
-        TradeDoneEvent
+        TradeDoneEvent,
+        RobberPlacedEvent
     }
 }

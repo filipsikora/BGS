@@ -49,7 +49,7 @@ namespace Catan.Application.Phases
         {
             if (!canSteal)
             {
-                return GameResult.Ok(EnumGamePhases.NormalRound).AddUIMessage(new LogMessageMessage(EnumLogTypes.Info, "Noone to steal from"));
+                return GameResult.Ok(EnumGamePhases.NormalRound);
             }
 
             else
