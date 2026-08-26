@@ -45,7 +45,7 @@ namespace Catan.Core.UseCases
                 result.AddDomainEvent(new PlayerResourcesReceivedEvent(distribution.PlayerId, resourcesChange, Session.GetPlayerCardsById(distribution.PlayerId).ToDictionary(), Session.GetBank().ToDictionary()));
             }
 
-            result.AddDomainEvent(new RolledNumberChangedEvent(resultRoll));
+            result.AddDomainEvent(new RolledNumberChangedEvent(resultRoll)).AddDomainEvent(new DevCardPlayabilityChangedEvent(Session.GetCurrentPlayerId(), Session.GetCurrentPlayerDevCardsData().Select(d => d.Id)));
 
             return ApplyPhase(result);
         }

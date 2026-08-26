@@ -8,14 +8,19 @@ namespace Catan.Core.Runtime
     {
         public DevCardsStateReader() { }
 
-        public IReadOnlyList<DevelopmentCardSnapshot> GetCurrentPlayerDevCardsData(IReadOnlyList<DevelopmentCard> currentPlayerDevCardw, bool afterRoll)
+        public IReadOnlyList<DevelopmentCardSnapshot> GetCurrentPlayerDevCardsData(IReadOnlyList<DevelopmentCard> currentPlayerDevCards, bool afterRoll)
         {
-            return currentPlayerDevCardw.Select(card => Map(card, afterRoll)).ToList();
+            return currentPlayerDevCards.Select(card => Map(card, afterRoll)).ToList();
         }
 
         public List<DevelopmentCardSnapshot> GetPlayerDevCardsByIdData(List<DevelopmentCard> playerDevCards, bool afterRoll)
         {
             return playerDevCards.Select(card => Map(card, afterRoll)).ToList();
+        }
+
+        public List<int> GetPlayersKnightCardsIds(IReadOnlyList<DevelopmentCard> playersDevCards)
+        {
+            return playersDevCards.Where(d => d.Type == EnumDevelopmentCardTypes.Knight).Select(d => d.ID).ToList();
         }
 
         private DevelopmentCardSnapshot Map(DevelopmentCard card, bool afterRoll)

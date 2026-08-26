@@ -15,7 +15,7 @@ namespace Catan.Backend.Mappers
                 RoadChampionId = snapshot.RoadChampionId,
                 RolledNumber = snapshot.RolledNumber,
                 TurnNumber = snapshot.TurnNumber,
-                Resources = snapshot.Resources,
+                Bank = snapshot.Bank,
                 PlayersToMove = snapshot.PlayersToMove
             };
         }

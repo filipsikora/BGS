@@ -2,7 +2,6 @@
 using Catan.Core.Results;
 using Catan.Core.Rules;
 using Catan.Core.Runtime;
-using Catan.Shared.Data;
 
 namespace Catan.Core.UseCases
 {
@@ -31,7 +30,7 @@ namespace Catan.Core.UseCases
                 result.AddDomainEvent(new RoadChampionChangedEvent(roadChampionResult.OldChampion?.ID, roadChampionResult.NewChampion?.ID, roadChampionResult.OldChampion?.ExtraPoints, 
                     roadChampionResult.NewChampion?.ExtraPoints, roadChampionResult.OldChampion?.Points, roadChampionResult.NewChampion?.Points));
 
-            result.AddDomainEvent(new VillagePlacedEvent(vertexId, playerId, player.Points, player.BuildingsLeftCount(EnumBuildings.Village), player.Resources.ToDictionary(), Session.GetBank().ToDictionary()));
+            result.AddDomainEvent(new VillagePlacedEvent(vertexId, playerId, player.Points, player.Resources.ToDictionary(), Session.GetBank().ToDictionary(), player.GetBuildingsLeft()));
 
             return ApplyPhase(result);
         }

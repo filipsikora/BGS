@@ -38,22 +38,7 @@ namespace Catan.Backend.Mappers
                 Knights = snapshot.Knights,
                 VictoryPoints = snapshot.VictoryPoints,
                 ExtraPoints = snapshot.ExtraPoints,
-                DevCards = snapshot.DevCards.Select(devCard => new DevelopmentCardDto
-                {
-                    Id = devCard.Id,
-                    IsNew = devCard.IsNew,
-                    IsPlayable = devCard.IsPlayable,
-                    Type = devCard.Type
-                }).ToList()
-            };
-        }
-
-        public static BasicPlayerDto MapBsaicPlayerDataToDto(BasicPlayerSnapshot snapshot)
-        {
-            return new BasicPlayerDto
-            {
-                Id = snapshot.Id,
-                Name = snapshot.Name,
+                DevCards = snapshot.DevCards.Select(MapDevCardToDto).ToList(),
                 ResourceCardsNumber = snapshot.ResourceCardsNumber,
                 DevCardsNumber = snapshot.DevCardsNumber,
                 VictoryCardsPlayed = snapshot.VictoryCardsPlayed,
@@ -61,11 +46,27 @@ namespace Catan.Backend.Mappers
             };
         }
 
+        public static BasicPlayerDto MapBasicPlayerDataToDto(BasicPlayerSnapshot snapshot)
+        {
+            return new BasicPlayerDto
+            {
+                Id = snapshot.Id,
+                Name = snapshot.Name,
+                Points = snapshot.Points,
+                ExtraPoints = snapshot.ExtraPoints,
+                ResourceCardsNumber = snapshot.ResourceCardsNumber,
+                DevCardsNumber = snapshot.DevCardsNumber,
+                VictoryCardsPlayed = snapshot.VictoryCardsPlayed,
+                KnightCardsPlayed = snapshot.KnightCardsPlayed,
+                BuildingsLeft = snapshot.BuildingsLeft
+            };
+        }
+
         public static OtherPlayersDto MapOtherPlayersDataToDto(OtherPlayersSnapshot snapshot)
         {
             return new OtherPlayersDto
             {
-                OtherPlayers = snapshot.OtherPlayers.Select(MapBsaicPlayerDataToDto).ToList()
+                OtherPlayers = snapshot.OtherPlayers.Select(MapBasicPlayerDataToDto).ToList()
             };
         }
 
@@ -76,6 +77,17 @@ namespace Catan.Backend.Mappers
                 PlayerResources = snapshot.PlayerResources.ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value)
+            };
+        }
+
+        public static DevelopmentCardDto MapDevCardToDto(DevelopmentCardSnapshot snapshot)
+        {
+            return new DevelopmentCardDto
+            {
+                Type = snapshot.Type,
+                Id = snapshot.Id,
+                IsNew = snapshot.IsNew,
+                IsPlayable = snapshot.IsPlayable
             };
         }
     }

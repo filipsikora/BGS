@@ -79,6 +79,28 @@ namespace Catan.Core.Runtime
 
         public FullPlayerSnapshot GetFullPlayerData(Player player, IReadOnlyList<DevelopmentCardSnapshot> playerDevCards)
         {
+            return new FullPlayerSnapshot(
+                GetPlayersCards(player),
+                new FullPlayerDataSnapshot(player.Name, player.ID, GetPlayerBuildingsLeft(player), player.Points, player.KnightsUsed, player.VictoryPointsCardsUsed, player.ExtraPoints, playerDevCards,
+                player.DevelopmentCardsByID.Count, player.Resources.Total(), player.VictoryPointsCardsUsed, player.KnightsUsed)
+                );
+        }
+
+        public BasicPlayerSnapshot GetBasicPlayerData(Player player)
+        {
+            return new BasicPlayerSnapshot(
+                player.ID, player.Name, player.Points, player.ExtraPoints, player.Resources.ResourceDictionary.Count, player.DevelopmentCardsByID.Count, player.VictoryPointsCardsUsed, player.KnightsUsed, 
+                GetPlayerBuildingsLeft(player)
+                );
+        }
+
+        public OtherPlayersSnapshot GetOtherPlayersData(IEnumerable<Player> otherPlayers)
+        {
+            return new OtherPlayersSnapshot(otherPlayers.Select(GetBasicPlayerData).ToList());
+        }
+
+        private Dictionary<string, int> GetPlayerBuildingsLeft(Player player)
+        {
             var playerBuildingsLeft = new Dictionary<string, int>();
 
             foreach (var buildingType in BuildingDataRegistry.MaxPerPlayer.Keys)
@@ -86,26 +108,10 @@ namespace Catan.Core.Runtime
                 int maxAvailable = BuildingDataRegistry.MaxPerPlayer[buildingType];
                 int playerUsed = player.BuildingCount(buildingType);
                 int playerLeft = maxAvailable - playerUsed;
-
                 playerBuildingsLeft.Add(BuildingDataRegistry.Name[buildingType], playerLeft);
             }
 
-            return new FullPlayerSnapshot(
-                GetPlayersCards(player),
-                new FullPlayerDataSnapshot(player.Name, player.ID, playerBuildingsLeft, player.Points, player.KnightsUsed, player.VictoryPointsCardsUsed, player.ExtraPoints, playerDevCards)
-                );
-        }
-
-        public BasicPlayerSnapshot GetBasicPlayerData(Player player)
-        {
-            return new BasicPlayerSnapshot(
-                player.ID, player.Name, player.Resources.ResourceDictionary.Count, player.DevelopmentCardsByID.Count, player.VictoryPointsCardsUsed, player.KnightsUsed
-                );
-        }
-
-        public OtherPlayersSnapshot GetOtherPlayersData(IEnumerable<Player> otherPlayers)
-        {
-            return new OtherPlayersSnapshot(otherPlayers.Select(GetBasicPlayerData).ToList());
+            return playerBuildingsLeft;
         }
     }
 }

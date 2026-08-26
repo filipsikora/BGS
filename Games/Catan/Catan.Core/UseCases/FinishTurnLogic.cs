@@ -40,6 +40,8 @@ namespace Catan.Core.UseCases
                 result.AddDomainEvent(new GameWonEvent(gameScore.WinnderId, gameScore.PlayerScoresToIds));
             }
 
+            result.AddDomainEvent(new DevCardPlayabilityChangedEvent(Session.GetCurrentPlayerId(), Session.GetPlayersKnightCardsIds(Session.GetCurrentPlayerId())));
+
             return ApplyPhase(result);
         }
     }

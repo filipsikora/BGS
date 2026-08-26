@@ -26,6 +26,11 @@ namespace Catan.Shared.Dtos
         public int ExtraPoints { get; set; }
 
         public List<DevelopmentCardDto> DevCards { get; set; }
+        public int ResourceCardsNumber { get; set; }
+        public int DevCardsNumber { get; set; }
+        public int VictoryCardsPlayed { get; set; }
+        public int KnightCardsPlayed { get; set; }
+
     }
 
     public sealed class BasicPlayerDto
@@ -33,11 +38,15 @@ namespace Catan.Shared.Dtos
         public int Id { get; set; }
         public string Name { get; set; }
 
+        public int Points { get; set; }
+        public int ExtraPoints { get; set; }
+
         public int ResourceCardsNumber { get; set; }
         public int DevCardsNumber { get; set; }
 
         public int VictoryCardsPlayed { get; set; }
         public int KnightCardsPlayed { get; set; }
+        public Dictionary<string, int> BuildingsLeft { get; set; }
     }
 
     public sealed class OtherPlayersDto

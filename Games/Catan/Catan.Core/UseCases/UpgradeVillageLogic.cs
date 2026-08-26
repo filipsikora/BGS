@@ -25,8 +25,7 @@ namespace Catan.Core.UseCases
             Session.TownPaidAndBuiltMutation(vertex, playerId);
 
             var result = ResultUpgradeVillage.Ok(player.ID, vertexId, null);
-            result.AddDomainEvent(new TownPlacedEvent(vertexId, result.PlayerId, player.Points, player.BuildingsLeftCount(EnumBuildings.Town), player.BuildingsLeftCount(EnumBuildings.Village),
-                player.Resources.ToDictionary(), Session.GetBank().ToDictionary()));
+            result.AddDomainEvent(new TownPlacedEvent(vertexId, result.PlayerId, player.Points, player.Resources.ToDictionary(), Session.GetBank().ToDictionary(), player.GetBuildingsLeft()));
 
             return ApplyPhase(result);
         }

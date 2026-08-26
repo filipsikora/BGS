@@ -100,16 +100,5 @@ namespace Catan.Backend.Mappers
                 BlockedHexId = snapshot.BlockedHexId
             };
         }
-
-        public static DevelopmentCardDto MapDevCardToDto(DevelopmentCardSnapshot snapshot)
-        {
-            return new DevelopmentCardDto
-            {
-                Type = snapshot.Type,
-                Id = snapshot.Id,
-                IsNew = snapshot.IsNew,
-                IsPlayable = snapshot.IsPlayable
-            };
-        }
     }
 }

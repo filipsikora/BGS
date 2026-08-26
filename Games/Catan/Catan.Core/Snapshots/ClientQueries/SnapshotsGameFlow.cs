@@ -13,10 +13,10 @@ namespace Catan.Core.Snapshots.ClientQueries
         public int? RoadChampionId;
 
         public EnumGamePhases CurrentPhase;
-        public Dictionary<EnumResourceType, int> Resources;
+        public Dictionary<EnumResourceType, int> Bank;
 
         public FullGameFlowSnapshot(int turnNumber, int rolledNumber, int? currentPlayerId, int? knightChampionId, int? roadChampionId, EnumGamePhases currentPhase, 
-            Dictionary<EnumResourceType, int> resources, List<int> playersToMove)
+            Dictionary<EnumResourceType, int> bank, List<int> playersToMove)
         {
             TurnNumber = turnNumber;
             RolledNumber = rolledNumber;
@@ -24,7 +24,7 @@ namespace Catan.Core.Snapshots.ClientQueries
             KnightChampionId = knightChampionId;
             RoadChampionId = roadChampionId;
             CurrentPhase = currentPhase;
-            Resources = resources;
+            Bank = bank;
             PlayersToMove = playersToMove;
         }
     }

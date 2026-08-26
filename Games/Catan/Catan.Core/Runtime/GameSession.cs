@@ -250,6 +250,7 @@ namespace Catan.Core.Runtime
         internal DevelopmentCard GetDevCardById(int cardId) => _game.GetDevCardById(cardId);
         internal List<DevelopmentCard> GetDevCardsLeft() => _game.DevelopmentCardsDeckAvailable;
 
+        public List<int> GetPlayersKnightCardsIds(int playerId) => _devCardsReader.GetPlayersKnightCardsIds(GetPlayerById(playerId).DevelopmentCardsByID.Select(id => GetDevCardById(id)).ToList());
         public List<DevelopmentCardSnapshot> GetDevCardsInBankData() => _gameFlowReader.GetDevCardsInBankData(_game.DevelopmentCardsDeckAvailable);
         public IReadOnlyList<DevelopmentCardSnapshot> GetCurrentPlayerDevCardsData() => _devCardsReader.GetCurrentPlayerDevCardsData(_game.CurrentPlayer.DevelopmentCardsByID.Select(id => GetDevCardById(id)).ToList(), GetAfterRoll());
         public IReadOnlyList<DevelopmentCardSnapshot> GetPlayerDevCardsByIdData(int playerId) => _devCardsReader.GetPlayerDevCardsByIdData(GetPlayerById(playerId).DevelopmentCardsByID.Select(id => GetDevCardById(id)).ToList(), GetAfterRoll());

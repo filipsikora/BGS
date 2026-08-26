@@ -29,7 +29,13 @@ namespace Catan.Core.Snapshots.ClientQueries
 
         public IReadOnlyList<DevelopmentCardSnapshot> DevCards;
 
-        public FullPlayerDataSnapshot(string name, int playerId, Dictionary<string, int> buildingsLeft, int points, int knights, int victoryPoints, int extraPoints, IReadOnlyList<DevelopmentCardSnapshot> devCards)
+        public int ResourceCardsNumber;
+        public int DevCardsNumber;
+        public int VictoryCardsPlayed;
+        public int KnightCardsPlayed;
+
+        public FullPlayerDataSnapshot(string name, int playerId, Dictionary<string, int> buildingsLeft, int points, int knights, int victoryPoints, int extraPoints, 
+            IReadOnlyList<DevelopmentCardSnapshot> devCards, int devCardsNumber, int resourceCardsNumber, int victoryCardsPlayed, int knightCardsPlayed)
         {
             Name = name;
             PlayerId = playerId;
@@ -39,6 +45,10 @@ namespace Catan.Core.Snapshots.ClientQueries
             VictoryPoints = victoryPoints;
             ExtraPoints = extraPoints;
             DevCards = devCards;
+            DevCardsNumber = devCardsNumber;
+            ResourceCardsNumber = resourceCardsNumber;
+            VictoryCardsPlayed = victoryCardsPlayed;
+            KnightCardsPlayed = knightCardsPlayed;
         }
     }
 
@@ -100,20 +110,27 @@ namespace Catan.Core.Snapshots.ClientQueries
         public int Id;
         public string Name;
 
+        public int Points;
+        public int ExtraPoints;
+
         public int ResourceCardsNumber;
         public int DevCardsNumber;
 
         public int VictoryCardsPlayed;
         public int KnightCardsPlayed;
+        public Dictionary<string, int> BuildingsLeft;
 
-        public BasicPlayerSnapshot(int id, string name, int resourceCardsNumber, int devCardsNumber, int victoryCardsPlayed, int knightCardsPlayed)
+        public BasicPlayerSnapshot(int id, string name, int points, int extraPoints, int resourceCardsNumber, int devCardsNumber, int victoryCardsPlayed, int knightCardsPlayed, Dictionary<string, int> buildingsLeft)
         {
             Id = id;
             Name = name;
+            Points = points;
+            ExtraPoints = extraPoints;
             ResourceCardsNumber = resourceCardsNumber;
             DevCardsNumber = devCardsNumber;
             VictoryCardsPlayed = victoryCardsPlayed;
             KnightCardsPlayed = knightCardsPlayed;
+            BuildingsLeft = buildingsLeft;
         }
     }
 

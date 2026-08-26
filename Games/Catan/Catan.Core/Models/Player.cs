@@ -59,6 +59,21 @@ namespace Catan.Core.Models
             return points;
         }
 
+        public Dictionary<string, int> GetBuildingsLeft()
+        {
+            var buildingsLeft = new Dictionary<string, int>();
+
+            foreach (var buildingType in BuildingDataRegistry.MaxPerPlayer.Keys)
+            {
+                int maxAvailable = BuildingDataRegistry.MaxPerPlayer[buildingType];
+                int playerUsed = BuildingCount(buildingType);
+                int playerLeft = maxAvailable - playerUsed;
+                buildingsLeft.Add(BuildingDataRegistry.Name[buildingType], playerLeft);
+            }
+
+            return buildingsLeft;
+        }
+
         public override string ToString()
         {
             return Name ?? "Unnamed Player";

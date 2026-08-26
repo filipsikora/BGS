@@ -1,6 +1,6 @@
 ﻿namespace Catan.Shared.Data
 {
-    public enum EnumDomainEventDto
+    public enum EnumDomainEventsDto
     {
         VillagePlacedEventPrivateDto,
         VillagePlacedEventPublicDto,
@@ -11,7 +11,8 @@
         TownPlacedEventPrivateDto,
         TownPlacedEventPublicDto,
 
-        DevCardUsedEventDto,
+        DevCardUsedEventPrivateDto,
+        DevCardUsedEventPublicDto,
 
         DevCardBoughtEventPrivateDto,
         DevCardBoughtEventPublicDto,
@@ -41,12 +42,16 @@
         PlayersToMoveChangedEventDto,
         GameWonEventDto,
 
-        BankTradeDoneEventDto,
+        BankTradeDoneEventPrivateDto,
+        BankTradeDoneEventPublicDto,
 
         TradeDoneEventSellerDto,
         TradeDoneEventBuyerDto,
         TradeDoneEventPublicDto,
 
-        RobberPlacedEventDto
+        RobberPlacedEventDto,
+
+        DevCardPlayabilityChangedEventPrivateDto,
+        DevCardPlayabilityChangedEventPublicDto
     }
 }

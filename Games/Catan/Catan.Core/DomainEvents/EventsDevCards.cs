@@ -1,26 +1,29 @@
 ﻿using Catan.Core.Interfaces;
+using Catan.Core.Snapshots.ClientQueries;
 using Catan.Shared.Data;
 
 namespace Catan.Core.DomainEvents
 {
-    public sealed class DevCardBoughtEvent(int playerId, int cardId, EnumDevelopmentCardTypes devCardType, int devCardNumber, Dictionary<EnumResourceType, int> resources) : IDomainEvent
+    public sealed class DevCardBoughtEvent(int playerId, int cardId, EnumDevelopmentCardTypes devCardType, int devCardNumber, Dictionary<EnumResourceType, int> resources, int playerResourcesCount) : IDomainEvent
     {
         public EnumDomainEvents Type => EnumDomainEvents.DevCardBoughtEvent;
 
         public int PlayerId = playerId;
         public int CardId = cardId;
+        public int PlayerResourcesCount = playerResourcesCount;
         public EnumDevelopmentCardTypes DevCardType = devCardType;
         public int DevCardNumber = devCardNumber;
         public Dictionary<EnumResourceType, int> Resources = resources;
     }
 
-    public sealed class DevCardUsedEvent(int playerId, int cardId, EnumDevelopmentCardTypes cardType, int devCardNumber) : IDomainEvent
+    public sealed class DevCardUsedEvent(int playerId, int cardId, EnumDevelopmentCardTypes cardType, int devCardNumber, List<DevelopmentCardSnapshot> devCards) : IDomainEvent
     {
         public EnumDomainEvents Type => EnumDomainEvents.DevCardPlayedEvent;
         public int PlayerId = playerId;
         public int CardId = cardId;
         public EnumDevelopmentCardTypes CardType = cardType;
         public int DevCardNumber = devCardNumber;
+        public List<DevelopmentCardSnapshot> DevCards = devCards;
     }
 
     public sealed class CardsStolenEvent(EnumResourceType resource, int quantity, int thiefId, int victimId, Dictionary<EnumResourceType, int> thiefResources,
@@ -51,5 +54,13 @@ namespace Catan.Core.DomainEvents
 
         public int PlayerId = playerId;
         public int KnightCardsUsed = knightCardsUsed;
+    }
+
+    public sealed class DevCardPlayabilityChangedEvent(int playerId, IEnumerable<int> devCardsPlayable) : IDomainEvent
+    {
+        public EnumDomainEvents Type => EnumDomainEvents.DevCardPlayabilityChangedEvent;
+
+        public int PlayerId = playerId;
+        public IEnumerable<int> DevCardsPlayable = devCardsPlayable;
     }
 }

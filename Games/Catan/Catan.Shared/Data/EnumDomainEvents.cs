@@ -21,6 +21,7 @@
         VictoryCardUsedEvent,
         KnightCardUsedEvent,
         TradeDoneEvent,
-        RobberPlacedEvent
+        RobberPlacedEvent,
+        DevCardPlayabilityChangedEvent
     }
 }

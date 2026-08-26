@@ -13,6 +13,6 @@ namespace Catan.Shared.Dtos
         public int? RoadChampionId;
 
         public EnumGamePhases CurrentPhase;
-        public Dictionary<EnumResourceType, int> Resources;
+        public Dictionary<EnumResourceType, int> Bank;
     }
 }

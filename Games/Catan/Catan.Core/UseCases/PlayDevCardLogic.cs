@@ -70,7 +70,7 @@ namespace Catan.Core.UseCases
 
             var result = ResultPlayDevCard.Ok(player.ID, card.ID, card.Type, nextPhase);
 
-            result.AddDomainEvent(new DevCardUsedEvent(player.ID, card.ID, card.Type, player.DevelopmentCardsByID.Count));
+            result.AddDomainEvent(new DevCardUsedEvent(player.ID, card.ID, card.Type, player.DevelopmentCardsByID.Count, Session.GetPlayerDevCardsByIdData(playerId).ToList()));
 
             if (victoryCardPlayed)
                 result.AddDomainEvent(new VictoryCardUsedEvent(playerId, player.ExtraPoints, player.VictoryPointsCardsUsed));

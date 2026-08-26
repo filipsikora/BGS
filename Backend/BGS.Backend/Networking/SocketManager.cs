@@ -29,7 +29,7 @@ namespace BGS.Backend.Networking
 
             var json = JsonConvert.SerializeObject(new
             {
-                gameUpdate.Type,
+                gameUpdate.DtoType,
                 gameUpdate.Payload
             });
 

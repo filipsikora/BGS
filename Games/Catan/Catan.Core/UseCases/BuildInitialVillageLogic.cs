@@ -28,8 +28,7 @@ namespace Catan.Core.UseCases
 
             var result = ResultBuildInitialVillage.Ok(player.ID, vertexId, null);
 
-            result.AddDomainEvent(new VillagePlacedEvent(vertexId, result.PlayerId, player.Points, player.BuildingsLeftCount(EnumBuildings.Village), player.Resources.ToDictionary(),
-                Session.GetBank().ToDictionary()));
+            result.AddDomainEvent(new VillagePlacedEvent(vertexId, result.PlayerId, player.Points, player.Resources.ToDictionary(), Session.GetBank().ToDictionary(), player.GetBuildingsLeft()));
 
             return ApplyPhase(result);
         }

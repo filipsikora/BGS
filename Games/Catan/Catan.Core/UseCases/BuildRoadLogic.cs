@@ -32,7 +32,7 @@ namespace Catan.Core.UseCases
                     roadChampionResult.NewChampion?.ExtraPoints, roadChampionResult.OldChampion?.Points, roadChampionResult.NewChampion?.Points));
 
 
-            result.AddDomainEvent(new RoadPlacedEvent(edgeId, playerId, player.BuildingsLeftCount(EnumBuildings.Road), player.Resources.ToDictionary(), Session.GetBank().ToDictionary()));
+            result.AddDomainEvent(new RoadPlacedEvent(edgeId, playerId, player.Resources.ToDictionary(), Session.GetBank().ToDictionary(), player.GetBuildingsLeft()));
 
             return ApplyPhase(result);
         }
