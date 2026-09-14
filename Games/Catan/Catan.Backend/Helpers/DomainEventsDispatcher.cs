@@ -415,10 +415,6 @@ namespace Catan.Backend.Helpers
                     updatesList.Add(new GameUpdateDto(EnumDomainEventsDto.DevCardPlayabilityChangedEventPrivateDto.ToString(), entry.Key, JToken.FromObject(new DevCardPlayabilityChangedEventPrivateDto(
                         domainEvent.DevCardsPlayable))));
                 }
-                else
-                {
-                    updatesList.Add(new GameUpdateDto(EnumDomainEventsDto.DevCardPlayabilityChangedEventPublicDto.ToString(), entry.Key, JToken.FromObject(new DevCardPlayabilityChangedEventPublicDto())));
-                }
             }
 
             return updatesList;

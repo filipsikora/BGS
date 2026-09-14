@@ -88,6 +88,4 @@ namespace Catan.Shared.Dtos.DomainEvents
     {
         public IEnumerable<int> DevCardsPlayable = devCardsPlayable;
     }
-
-    public sealed class DevCardPlayabilityChangedEventPublicDto() { }
 }

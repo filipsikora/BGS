@@ -52,6 +52,8 @@
         RobberPlacedEventDto,
 
         DevCardPlayabilityChangedEventPrivateDto,
-        DevCardPlayabilityChangedEventPublicDto
+        DevCardPlayabilityChangedEventPublicDto,
+
+        ResourcesDistributionDonePrivateEventDto
     }
 }

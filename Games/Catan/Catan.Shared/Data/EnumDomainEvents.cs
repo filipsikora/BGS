@@ -22,6 +22,7 @@
         KnightCardUsedEvent,
         TradeDoneEvent,
         RobberPlacedEvent,
-        DevCardPlayabilityChangedEvent
+        DevCardPlayabilityChangedEvent,
+        ResourcesDistributionDoneEvent
     }
 }
