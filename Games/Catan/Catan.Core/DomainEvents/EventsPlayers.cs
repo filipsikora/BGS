@@ -1,5 +1,6 @@
 ﻿using Catan.Core.Interfaces;
 using Catan.Shared.Data;
+using Catan.Shared.Interfaces;
 
 namespace Catan.Core.DomainEvents
 {
@@ -36,5 +37,15 @@ namespace Catan.Core.DomainEvents
         public int? NewChampionExtraPoints = newChampionExtraPoints;
         public int? OldChampionPoints = oldChampionPoints;
         public int? NewChampionPoints = newChampionPoints;
+    }
+
+    public sealed class ResourcesDistributionDoneEvent(Dictionary<int, Dictionary<EnumResourceType, int>> playersIdsToResources, Dictionary<int, Dictionary<EnumResourceType, int>> playersIdsToResourceChange, 
+        Dictionary<EnumResourceType, int> bank) : IDomainEvent
+    {
+        public EnumDomainEvents Type => EnumDomainEvents.ResourcesDistributionDoneEvent;
+
+        public Dictionary<int, Dictionary<EnumResourceType, int>> PlayersIdsToResources { get; } = playersIdsToResources;
+        public Dictionary<int, Dictionary<EnumResourceType, int>> PlayersIdsToResourceChange { get; } = playersIdsToResourceChange;
+        public Dictionary<EnumResourceType, int> Bank { get; } = bank;
     }
 }

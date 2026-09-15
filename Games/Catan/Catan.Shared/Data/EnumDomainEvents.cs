@@ -23,6 +23,7 @@
         TradeDoneEvent,
         RobberPlacedEvent,
         DevCardPlayabilityChangedEvent,
-        ResourcesDistributionDoneEvent
+        ResourcesDistributionDoneEvent,
+        TurnNumberChanged
     }
 }

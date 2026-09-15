@@ -9,6 +9,12 @@ namespace Catan.Core.DomainEvents
         public int NewRolledNumber = newRolledNumber;
     }
 
+    public sealed class TurnNumberChanged(int newTurnNumber) : IDomainEvent
+    {
+        public EnumDomainEvents Type => EnumDomainEvents.TurnNumberChanged;
+        public int NewTurnNumber = newTurnNumber;
+    }
+
     public sealed class GameWonEvent(int playerId, Dictionary<int, int> playerScoresToIds) : IDomainEvent
     {
         public EnumDomainEvents Type => EnumDomainEvents.GameWonEvent;
@@ -27,6 +33,7 @@ namespace Catan.Core.DomainEvents
     public sealed class PlayersToMoveChangedEvent(List<int> playersToMove) : IDomainEvent
     {
         public EnumDomainEvents Type => EnumDomainEvents.PlayersToMoveChangedEvent;
+
         public List<int> PlayersToMove = playersToMove;
     }
 }

@@ -13,8 +13,7 @@ namespace Catan.Core.DomainEvents
         public Dictionary<EnumResourceType, int> Bank = bank;
     }
 
-    public sealed class CardStolenEvent(EnumResourceType resource, int thiefId, int victimId, Dictionary<EnumResourceType, int> thiefResources, Dictionary<EnumResourceType, 
-        int> victimResources) : IDomainEvent
+    public sealed class CardStolenEvent(EnumResourceType resource, int thiefId, int victimId, Dictionary<EnumResourceType, int> thiefResources, Dictionary<EnumResourceType, int> victimResources) : IDomainEvent
     {
         public EnumDomainEvents Type => EnumDomainEvents.CardStolenEvent;
 

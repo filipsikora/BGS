@@ -26,17 +26,14 @@ namespace Catan.Core.DomainEvents
         public List<DevelopmentCardSnapshot> DevCards = devCards;
     }
 
-    public sealed class CardsStolenEvent(EnumResourceType resource, int quantity, int thiefId, int victimId, Dictionary<EnumResourceType, int> thiefResources,
-    Dictionary<EnumResourceType, int> victimResources) : IDomainEvent
+    public sealed class CardsStolenEvent(EnumResourceType resource, int thiefId, Dictionary<int, int> VictimsIdsToResourcesStolen, Dictionary<int, Dictionary<EnumResourceType, int>> playersIdsToResources) : IDomainEvent
     {
-        public EnumDomainEvents Type => EnumDomainEvents.CardsStolenEvent;
+        public EnumDomainEvents Type => EnumDomainEvents.CardStolenEvent;
 
         public EnumResourceType Resource = resource;
-        public int Quantity = quantity;
         public int ThiefId = thiefId;
-        public int VictimId = victimId;
-        public Dictionary<EnumResourceType, int> ThiefResources = thiefResources;
-        public Dictionary<EnumResourceType, int> VictimResources = victimResources;
+        public Dictionary<int, int> VictimsIdsToAmountStolen = VictimsIdsToResourcesStolen;
+        public Dictionary<int, Dictionary<EnumResourceType, int>> PlayersIdsToResources = playersIdsToResources;
     }
 
     public sealed class VictoryCardUsedEvent(int playerId, int extraPoints, int victoryCardsUsed) : IDomainEvent

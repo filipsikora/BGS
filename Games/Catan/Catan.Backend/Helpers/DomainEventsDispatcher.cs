@@ -6,7 +6,6 @@ using Catan.Core.Interfaces;
 using Catan.Shared.Data;
 using Catan.Shared.Dtos.DomainEvents;
 using Newtonsoft.Json.Linq;
-using System.Dynamic;
 
 namespace Catan.Backend.Helpers
 {
@@ -37,6 +36,8 @@ namespace Catan.Backend.Helpers
                 TradeDoneEvent e => DispatchTradeDoneEvent(e, game),
                 RobberPlacedEvent e => BroadcastToAll(new RobberPlacedEventDto(e.HexId, e.CanSteal), game, EnumDomainEventsDto.RobberPlacedEventDto),
                 DevCardPlayabilityChangedEvent e => DispatchDevCardPlayabilityChangedEvent(e, game),
+                ResourcesDistributionDoneEvent e => DispatchResourcesDistributionDoneEvent(e, game),
+                TurnNumberChanged e => BroadcastToAll(new TurnNumberChangedEventDto(e.NewTurnNumber), game, EnumDomainEventsDto.TurnNumberChangedEventDto),
                 _ => throw new NotSupportedException($"Unknown domain event: {domainEvent.GetType().Name}")
             };
         }
@@ -92,7 +93,8 @@ namespace Catan.Backend.Helpers
                 {
                     updatesList.Add(new GameUpdateDto(EnumDomainEventsDto.DevCardUsedEventPublicDto.ToString(), entry.Key, JToken.FromObject(new DevCardUsedEventPublicDto(
                         domainEvent.PlayerId,
-                        domainEvent.DevCardNumber))));
+                        domainEvent.DevCardNumber,
+                        domainEvent.CardType))));
                 }
             }
 
@@ -295,38 +297,15 @@ namespace Catan.Backend.Helpers
 
             foreach (var entry in game.PlayerTokens)
             {
-                if (entry.Value == domainEvent.ThiefId)
-                {
-                    updatesList.Add(new GameUpdateDto(EnumDomainEventsDto.CardsStolenEventThiefDto.ToString(), entry.Key, JToken.FromObject(new CardsStolenEventThiefDto(
-                        domainEvent.Resource,
-                        domainEvent.Quantity,
-                        domainEvent.ThiefId,
-                        domainEvent.VictimId,
-                        domainEvent.ThiefResources,
-                        domainEvent.VictimResources.Values.Sum(),
-                        domainEvent.ThiefResources.Values.Sum()))));
-                }
-                else if (entry.Value == domainEvent.VictimId)
-                {
-                    updatesList.Add(new GameUpdateDto(EnumDomainEventsDto.CardsStolenEventVictimDto.ToString(), entry.Key, JToken.FromObject(new CardsStolenEventVictimDto(
-                        domainEvent.Resource,
-                        domainEvent.Quantity,
-                        domainEvent.ThiefId,
-                        domainEvent.VictimId,
-                        domainEvent.ThiefResources.Values.Sum(),
-                        domainEvent.VictimResources,
-                        domainEvent.VictimResources.Values.Sum()))));
-                }
-                else
-                {
-                    updatesList.Add(new GameUpdateDto(EnumDomainEventsDto.CardsStolenEventPublicDto.ToString(), entry.Key, JToken.FromObject(new CardsStolenEventPublicDto(
-                        domainEvent.Resource,
-                        domainEvent.Quantity,
-                        domainEvent.ThiefId,
-                        domainEvent.VictimId,
-                        domainEvent.ThiefResources.Values.Sum(),
-                        domainEvent.VictimResources.Values.Sum()))));
-                }
+                var playerId = entry.Value;
+
+                updatesList.Add(new GameUpdateDto(EnumDomainEventsDto.CardsStolenEventDto.ToString(), entry.Key, JToken.FromObject(new CardsStolenEventDto(
+                    domainEvent.Resource,
+                    domainEvent.ThiefId,
+                    domainEvent.VictimsIdsToAmountStolen,
+                    domainEvent.PlayersIdsToResources[playerId],
+                    domainEvent.PlayersIdsToResources[playerId].Values.Sum(),
+                    domainEvent.PlayersIdsToResources.ToDictionary(x => x.Key, x => x.Value.Values.Sum())))));
             }
 
             return updatesList;
@@ -417,6 +396,24 @@ namespace Catan.Backend.Helpers
                 }
             }
 
+            return updatesList;
+        }
+
+        private List<GameUpdateDto> DispatchResourcesDistributionDoneEvent(ResourcesDistributionDoneEvent domainEvent, CatanGameInstance game)
+        {
+            var updatesList = new List<GameUpdateDto>();
+
+            foreach (var entry in game.PlayerTokens)
+            {
+                var playerId = entry.Value;
+
+                updatesList.Add(new GameUpdateDto(EnumDomainEventsDto.ResourcesDistributionDonePrivateEventDto.ToString(), entry.Key, JToken.FromObject(new ResourcesDistributionDonePrivateEventDto(
+                    domainEvent.PlayersIdsToResources[playerId],
+                    domainEvent.PlayersIdsToResources[playerId].Values.Sum(),
+                    domainEvent.PlayersIdsToResources.Where(x => x.Key != playerId).ToDictionary(x => x.Key, x => x.Value.Values.Sum()),
+                    domainEvent.PlayersIdsToResourceChange,
+                    domainEvent.Bank))));
+            }
             return updatesList;
         }
 

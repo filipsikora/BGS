@@ -24,4 +24,9 @@ namespace Catan.Shared.Dtos.DomainEvents
         public int PlayerId = playerId;
         public Dictionary<int, int> PlayerScoresToIds = playerScoresToIds;
     }
+
+    public sealed class  TurnNumberChangedEventDto(int newTurnNumber) : IDomainEventDto
+    {
+        public int NewTurnNumber = newTurnNumber;
+    }
 }

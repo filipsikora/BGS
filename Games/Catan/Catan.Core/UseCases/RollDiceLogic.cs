@@ -35,15 +35,19 @@ namespace Catan.Core.UseCases
 
             result = ResultRollDice.Ok(resultRoll, resultDistributionList, nextPhase, rolledSevenButNoVictims);
 
-            foreach (var distribution in resultDistributionList)
-            {
-                var resourcesChange = new Dictionary<EnumResourceType, int>
-                {
-                    { distribution.Type, distribution.Granted }
-                };
+            var playersIdsToResourceChange = resultDistributionList.GroupBy(x => x.PlayerId).ToDictionary(
+                x => x.Key,
+                x => x.GroupBy(y => y.Type).ToDictionary(
+                    y => y.Key,
+                    y => y.Sum(z => z.Granted))
+            );
 
-                result.AddDomainEvent(new PlayerResourcesReceivedEvent(distribution.PlayerId, resourcesChange, Session.GetPlayerCardsById(distribution.PlayerId).ToDictionary(), Session.GetBank().ToDictionary()));
-            }
+            var playersIdsToResources = resultDistributionList.Select(x => x.PlayerId).Distinct().ToDictionary(
+                x => x,
+                x => Session.GetPlayerCardsById(x).ToDictionary()
+            );
+
+            result.AddDomainEvent(new ResourcesDistributionDoneEvent(playersIdsToResources, playersIdsToResourceChange, Session.GetBank().ToDictionary()));
 
             result.AddDomainEvent(new RolledNumberChangedEvent(resultRoll)).AddDomainEvent(new DevCardPlayabilityChangedEvent(Session.GetCurrentPlayerId(), Session.GetCurrentPlayerDevCardsData().Select(d => d.Id)));
 

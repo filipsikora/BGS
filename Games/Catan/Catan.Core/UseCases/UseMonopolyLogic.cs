@@ -25,12 +25,12 @@ namespace Catan.Core.UseCases
 
             var result = ResultMonopolyCard.Ok(player.ID, victimsIdsAndAmounts, resource, EnumGamePhases.NormalRound);
 
-            foreach (var idToAmount in victimsIdsAndAmounts)
-            {
-                var id = idToAmount.Key;
+            var playersIdsToResources = victimsIdsAndAmounts.ToDictionary(
+                x => x.Key,
+                x => Session.GetPlayerById(x.Key).Resources.ToDictionary());
+            playersIdsToResources.Add(player.ID, player.Resources.ToDictionary());
 
-                result.AddDomainEvent(new CardsStolenEvent(resource, idToAmount.Value, player.ID, id, player.Resources.ToDictionary(), Session.GetPlayerById(id).Resources.ToDictionary()));
-            }
+            result.AddDomainEvent(new CardsStolenEvent(resource, playerId, victimsIdsAndAmounts, playersIdsToResources));
 
             return ApplyPhase(result);
         }
