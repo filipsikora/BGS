@@ -76,14 +76,8 @@ namespace Catan.Backend.GameManagement
 
                 return query switch
                 {
-                    EnumQueryName.Board => HandleBoardQuery(),
-                    EnumQueryName.PlayerData => HandlePlayerDataQuery(ParseInt(dict, "playerId")),
-                    EnumQueryName.ResourcesAvailability => HandleResourcesAvailabilityQuery(),
                     EnumQueryName.VictimCards => HandleVictimCardsQuery(),
-                    EnumQueryName.CurrentPlayerDevCards => HandleCurrentPlayerDevCardsQuery(),
-                    EnumQueryName.NotCurrentPlayerNames => HandlerNotCurrentPlayerNamesQuery(),
                     EnumQueryName.TradeOfferData => HandleTradeOfferDataQuery(),
-                    EnumQueryName.SomePlayersNames => HandleSomePlayersNamesQuery(ParseListInt(dict, "playerIds")),
                     _ => throw new Exception($"Unknown query: {query}")
                 };
             }
@@ -149,34 +143,7 @@ namespace Catan.Backend.GameManagement
             return new JoinResult(EnumJoinStatus.Success, null, playerToken, initialStateJson);
         }
 
-        private BoardDto HandleBoardQuery()
-        {
-            var snapshot = _gameApplication.Facade.GetBoardData();
-            var dto = BoardMappers.MapBoardToDto(snapshot);
-
-            return dto;
-        }
-
-        private PlayerDataDto HandlePlayerDataQuery(object? param)
-        {
-            if (param is not int playerId)
-                throw new Exception("PlayerId is required");
-
-            var snapshot = _gameApplication.Facade.GetPlayersData(playerId);
-            var dto = PlayerMappers.MapPlayerDataToDto(snapshot);
-
-            return dto;
-        }
-
-        private ResourcesAvailabilityDto HandleResourcesAvailabilityQuery()
-        {
-            var snapshot = _gameApplication.Facade.GetResourcesAvailability();
-            var dto = QueryMappers.MapResourcesAvailabilityToDto(snapshot);
-
-            return dto;
-        }
-
-        private PlayerCardsDto HandleVictimCardsQuery()
+        private PlayerResourcesDto HandleVictimCardsQuery() // exists in Card Stealing
         {
             var snapshot = _gameApplication.Facade.GetVictimsCards();
             var dto = PlayerMappers.MapPlayerCardsToDto(snapshot);
@@ -184,54 +151,12 @@ namespace Catan.Backend.GameManagement
             return dto;
         }
 
-        private IReadOnlyList<DevelopmentCardDto> HandleCurrentPlayerDevCardsQuery()
-        {
-            var snapshot = _gameApplication.Facade.GetCurrentPlayerDevCards();
-            var dto = QueryMappers.MapCurrentPlayerDevCardsToDto(snapshot);
-
-            return dto;
-        }
-
-        private IReadOnlyList<PlayerNameDto> HandlerNotCurrentPlayerNamesQuery()
-        {
-            var snapshot = _gameApplication.Facade.GetNotCurrentPlayersNames();
-            var dto = QueryMappers.MapNotCurrentPlayerNamesToDto(snapshot);
-
-            return dto;
-        }
-
-        private TradeOfferedDto HandleTradeOfferDataQuery()
+        private TradeOfferedDto HandleTradeOfferDataQuery() // exists in Trade Request
         {
             var snapshot = _gameApplication.Facade.GetTradeOfferData();
             var dto = QueryMappers.MapTradeOfferToDto(snapshot);
 
             return dto;
-        }
-
-        private IReadOnlyList<PlayerNameDto> HandleSomePlayersNamesQuery(List<int> potentialVictimsIds)
-        {
-            var snapshot = _gameApplication.Facade.GetSomePlayersNames(potentialVictimsIds);
-            var dto = QueryMappers.MapSomePlayersNamesToDto(snapshot);
-
-            return dto;
-        }
-
-        private int ParseInt(IQueryCollection dict, string key)
-        {
-            if (!dict.TryGetValue(key, out var value))
-                throw new Exception($"Missing parameter: {key}");
-
-            if (!int.TryParse(value.ToString(), out var result))
-                throw new Exception($"Invalid int for {key}");
-
-            return result;
-        }
-
-        private List<int> ParseListInt(IQueryCollection dict, string key)
-        {
-            return dict[key]
-                .Select(v => int.Parse(v))
-                .ToList();
         }
     }
 }

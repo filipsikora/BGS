@@ -45,10 +45,12 @@ namespace Catan.Core.Engine
     public sealed class CardStealingContext
     {
         public int VictimId { get; }
+        public int TheifId { get; set; }
 
-        public CardStealingContext(int victimId)
+        public CardStealingContext(int victimId, int thiefId)
         {
             VictimId = victimId;
+            TheifId = thiefId;
         }
     }
 }

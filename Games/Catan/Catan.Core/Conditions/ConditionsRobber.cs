@@ -7,22 +7,7 @@ namespace Catan.Core.Conditions
 {
     public class ConditionsRobber
     {
-        public static ResultCondition DiscardContextIsValid(CardDiscardContext context, Queue<int> playersToDiscard)
-        {
-            if (context == null)
-            {
-                return ResultCondition.Fail(ConditionFailureReason.DoesNotExist);
-            }
-
-            if (context.PlayersToDiscard != playersToDiscard)
-            {
-                return ResultCondition.Fail(ConditionFailureReason.DiscardContextInvalid);
-            }
-
-            return ResultCondition.Ok();
-        }
-
-        public static ResultCondition StealContextIsValid(CardStealingContext context, int victimId)
+        public static ResultCondition StealContextIsValid(CardStealingContext context, int thiefId, int victimId)
         {
             if (context == null)
             {
@@ -32,6 +17,11 @@ namespace Catan.Core.Conditions
             if (context.VictimId != victimId)
             {
                 return ResultCondition.Fail(ConditionFailureReason.VictimInvalid);
+            }
+
+            if (context.TheifId != thiefId)
+            {
+                return ResultCondition.Fail(ConditionFailureReason.ThiefInvalid);
             }
 
             return ResultCondition.Ok();

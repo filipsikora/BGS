@@ -8,10 +8,10 @@ namespace Catan.Core.Rules
 {
     public static class RulesRobber
     {
-        public static ResultCondition CanSteal(Player victim, CardStealingContext context)
+        public static ResultCondition CanSteal(Player victim, Player thief, CardStealingContext context)
         {
             return ResultCondition.Combine(
-                ConditionsRobber.StealContextIsValid(context, victim.ID),
+                ConditionsRobber.StealContextIsValid(context, thief.ID, victim.ID),
                 ConditionsResources.HasAnyResources(victim),
                 ConditionsPlayer.PlayerExists(victim));
         }

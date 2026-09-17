@@ -1,4 +1,7 @@
 ﻿namespace Catan.Application.Interfaces
 {
-    public interface ICommand { }
+    public interface ICommand
+    {
+        bool RequiresPlayerTurn { get; }
+    }
 }

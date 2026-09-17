@@ -14,19 +14,6 @@ namespace Catan.Backend.Mappers
             };
         }
 
-        public static PlayerDataDto MapPlayerDataToDto(PlayerDataSnapshot snapshot)
-        {
-            return new PlayerDataDto
-            {
-                Name = snapshot.Name,
-                BuildingsLeft = snapshot.BuildingsLeft,
-                Points = snapshot.Points,
-                Knights = snapshot.Knights,
-                VictoryPoints = snapshot.VictoryPoints,
-                ExtraPoints = snapshot.ExtraPoints
-            };
-        }
-
         public static FullPlayerDataDto MapFullPlayerDataToDto(FullPlayerDataSnapshot snapshot)
         {
             return new FullPlayerDataDto

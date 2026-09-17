@@ -1,5 +1,4 @@
 ﻿using Catan.Application.Controllers;
-using Catan.Application.Interfaces;
 using Catan.Application.UIMessages;
 using Catan.Application.Commands;
 using Catan.Core.DomainEvents;

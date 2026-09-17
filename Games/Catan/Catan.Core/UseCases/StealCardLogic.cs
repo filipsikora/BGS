@@ -20,7 +20,7 @@ namespace Catan.Core.UseCases
             if (!exists)
                 return ResultStealResource.Fail(thief.ID, victim.ID, ConditionFailureReason.DoesNotExist);
 
-            var validation = RulesRobber.CanSteal(victim, context);
+            var validation = RulesRobber.CanSteal(victim, thief, context);
 
             if (!validation.Success)
             {

@@ -59,18 +59,6 @@ namespace Catan.Core.Queries.GameStateSnapshotBuilders
                 );
         }
 
-        private CardDiscardContextSnapshot? GetCardDiscardingContextSnapshot()
-        {
-            CardDiscardContext? context = _session.GetCardDiscardingContext();
-
-            if (context == null)
-                return null;
-
-            return new CardDiscardContextSnapshot(
-                context.PlayersToDiscard
-                );
-        }
-
         private CardStealingContextSnapshot? GetCardStealingContextSnapshot()
         {
             CardStealingContext? context = _session.GetCardStealingContext();

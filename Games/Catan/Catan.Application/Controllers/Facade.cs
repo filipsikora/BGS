@@ -40,8 +40,6 @@ namespace Catan.Application.Controllers
 
         // getters//
         public EnumGamePhases GetNextPhaseFromAfterRoll() => _session.GetNextPhaseFromAfterRoll();
-        public EnumGamePhases? GetNextPhaseAfterDiscarding() => _session.GetNextPhaseAfterDiscarding();
-
         public int GetPlayerTradeRatioById(EnumResourceType resource, int playerId) => _session.GetPlayerTradeRatioById(resource, playerId);
         public bool PlayerHasEnoughResources(int playerAmount, int neededAmount) => _session.PlayerHasEnoughResources(playerAmount, neededAmount);
         public int GetPlayerResourceAmountById(EnumResourceType resource, int playerId) => _session.GetPlayerResourceAmountById(resource, playerId);

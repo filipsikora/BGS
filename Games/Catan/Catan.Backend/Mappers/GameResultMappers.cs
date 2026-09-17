@@ -34,9 +34,9 @@ namespace Catan.Backend.Mappers
                 VertexHighlightedMessage m => new VertexHighlightedDto(m.VertexId),
                 EdgeHighlightedMessage m => new EdgeHighlightedDto(m.EdgeId),
                 BuildOptionsSentMessage m => new BuildOptionsSentDto(m.CanBuildVillage, m.CanBuildRoad, m.CanUpgradeVillage),
-                ActionRejectedMessage m => new ActionRejectedDto(m.PlayerId, m.Reason.ToString()),
+                ActionRejectedMessage m => new ActionRejectedDto(m.PlayerId, m.Reason),
                 PotentialVictimsFoundMessage m => new PotentialVictimsFoundDto(m.VictimsIds),
-                BankTradeRatioChangedMessage m => new BankTradeRatioChangedDto(m.Ratio, m.PossibleForPlayer, m.Resource.ToString()),
+                BankTradeRatioChangedMessage m => new BankTradeRatioChangedDto(m.Ratio, m.PossibleForPlayer, m.Resource),
                 _ => throw new Exception($"Unknown UI message: {message}")
             };
         }

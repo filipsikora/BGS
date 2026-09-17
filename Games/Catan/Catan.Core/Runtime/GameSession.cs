@@ -282,7 +282,7 @@ namespace Catan.Core.Runtime
         internal int DiceRolledMutation() => _game.DiceRolledMutation();
         internal void CardStolenMutation(Player victim, EnumResourceType resource, Player thief) => _game.CardStolenMutation(victim, resource, thief);
 
-        internal void CreateCardsStealingContext(int victimId) => _game.CreateCardsStealingContext(victimId);
+        internal void CreateCardsStealingContext(int victimId, int thiefId) => _game.CreateCardsStealingContext(victimId, thiefId);
         internal void CreatePlayerTradeOfferedContext(int sellerId, int buyerId, string sellerName, string buyerName, ResourceCostOrStock offered, ResourceCostOrStock desired) =>
             _game.CreatePlayerTradeOfferedContext(sellerId, buyerId, sellerName, buyerName, offered, desired);
         internal void CreateTradeDraftContext(ResourceCostOrStock offered) => _game.CreateTradeDraftContext(offered);

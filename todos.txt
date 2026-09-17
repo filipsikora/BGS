@@ -42,3 +42,17 @@ ISSUE: saving db on create is in controller, i'd like to move it to manager, but
 SOLUTION: implemetn an interface to fix it 
 
 STATE: would be cool to do it once the whole db issue is done and fixed.
+
+7.
+ISSUE: all commands in not turn are rejected
+
+SOLUTION: add requiresTurn to ICommand, make application check it first before rejecting
+
+STATE: to do once current refactor is done
+
+8.
+ISSUE: devCards is a phase
+
+SOLUTION: let normal round and before roll absorb using dev cards and add display of dev cards to main ui
+
+STATE: later on

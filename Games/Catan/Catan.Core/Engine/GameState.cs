@@ -504,9 +504,9 @@ namespace Catan.Core.Engine
             PayCostMutation(player, selectedCards);
         }
 
-        public void CreateCardsStealingContext(int victimId)
+        public void CreateCardsStealingContext(int victimId, int thiefId)
         {
-            CardStealingProgress = new CardStealingContext(victimId);
+            CardStealingProgress = new CardStealingContext(victimId, thiefId);
         }
 
         public void CardStolenMutation(Player victim, EnumResourceType resource, Player thief)

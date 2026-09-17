@@ -1,5 +1,5 @@
 ﻿using Catan.Core.Models;
-using Catan.Core.Data;
+using Catan.Shared.Data;
 
 namespace Catan.Core.Helpers
 {

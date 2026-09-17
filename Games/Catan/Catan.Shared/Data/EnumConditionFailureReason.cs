@@ -24,6 +24,7 @@
         HexAlreadyBlocked,
         SamePlayer,
         VictimInvalid,
+        ThiefInvalid,
         TradeContextInvalid,
         DiscardContextInvalid,
         NotRoadsLeft,

@@ -20,7 +20,7 @@ namespace Catan.Core.UseCases
                 return ResultCondition.Fail(validation.Reason);
             }
 
-            Session.CreateCardsStealingContext(victim.ID);
+            Session.CreateCardsStealingContext(victim.ID, Session.GetCurrentPlayerId());
 
             return ApplyPhase(ResultCondition.Ok(EnumGamePhases.CardStealing));
         }

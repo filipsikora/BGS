@@ -6,45 +6,6 @@ namespace Catan.Backend.Mappers
 {
     public static class QueryMappers
     {
-        public static ResourcesAvailabilityDto MapResourcesAvailabilityToDto(ResourcesAvailabilitySnapshot snapshot)
-        {
-            return new ResourcesAvailabilityDto
-            {
-                ResourcesAvailability = snapshot.ResourcesAvailability.ToDictionary(
-                    kvp => kvp.Key,
-                    kvp => kvp.Value)
-            };
-        }
-
-        public static IReadOnlyList<DevelopmentCardDto> MapCurrentPlayerDevCardsToDto(IReadOnlyList<DevelopmentCardSnapshot> snapshot)
-        {
-            return snapshot.Select(devCard => new DevelopmentCardDto
-            {
-                Id = devCard.Id,
-                IsNew = devCard.IsNew,
-                IsPlayable = devCard.IsPlayable,
-                Type = devCard.Type
-            }).ToList();
-        }
-
-        public static IReadOnlyList<PlayerNameDto> MapNotCurrentPlayerNamesToDto(IReadOnlyList<PlayerNameSnapshot> snapshot)
-        {
-            return snapshot.Select(playerName => new PlayerNameDto
-            {
-                Id = playerName.Id,
-                Name = playerName.Name
-            }).ToList();
-        }
-
-        public static IReadOnlyList<PlayerNameDto> MapSomePlayersNamesToDto(IReadOnlyList<PlayerNameSnapshot> snapshot)
-        {
-            return snapshot.Select(playerName => new PlayerNameDto
-            {
-                Id = playerName.Id,
-                Name = playerName.Name
-            }).ToList();
-        }
-
         public static TradeOfferedDto MapTradeOfferToDto(TradeOfferedSnapshot snapshot)
         {
             return new TradeOfferedDto
@@ -53,12 +14,8 @@ namespace Catan.Backend.Mappers
                 BuyerId = snapshot.BuyerId,
                 SellerName = snapshot.SellerName,
                 BuyerName = snapshot.BuyerName,
-                Offered = snapshot.Offered.ToDictionary(
-                    kvp => kvp.Key.ToString(),
-                    kvp => kvp.Value),
-                Desired = snapshot.Desired.ToDictionary(
-                    kvp => kvp.Key.ToString(),
-                    kvp => kvp.Value),
+                Offered = snapshot.Offered,
+                Desired = snapshot.Desired,
                 CanTrade = snapshot.CanTrade
             };
         }
@@ -67,15 +24,8 @@ namespace Catan.Backend.Mappers
         {
             return queryName switch
             {
-                "board" => EnumQueryName.Board,
-                "current-player-dev-cards" => EnumQueryName.CurrentPlayerDevCards,
-                "not-current-player-names" => EnumQueryName.NotCurrentPlayerNames,
-                "player-cards" => EnumQueryName.PlayerCards,
-                "player-data" => EnumQueryName.PlayerData,
-                "resources-availability" => EnumQueryName.ResourcesAvailability,
                 "trade-offer-data" => EnumQueryName.TradeOfferData,
                 "victim-cards" => EnumQueryName.VictimCards,
-                "some-players-names" => EnumQueryName.SomePlayersNames,
                 _ => throw new Exception($"Unknown query name: {queryName}")
             };
         }
